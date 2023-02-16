@@ -1,6 +1,9 @@
-# aacademic
+# AACademic
 
-A new Flutter project.
+AACademic is a free and feature-rich AAC (Augmentative Alternative Communication) application that is available on both iOS and Android. This application is targeted at kids with disabilities that prevent them from verbal communication, including language, speech, child-onset fluency, and social communications disorders. 
+
+This application was created for the flagship Software Engineering project at Sam Houston State University
+
 
 ## Getting Started
 
