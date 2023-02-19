@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>1062028064938-e4inidfj0v6eho6mm7r4n4u6qa4m821f.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.1062028064938-e4inidfj0v6eho6mm7r4n4u6qa4m821f</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCJSWl7e1FP93cK2PnIrkPfinrckIvVSSI</string>
+	<key>GCM_SENDER_ID</key>
+	<string>1062028064938</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.aacademic</string>
+	<key>PROJECT_ID</key>
+	<string>aacademic-e5df3</string>
+	<key>STORAGE_BUCKET</key>
+	<string>aacademic-e5df3.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:1062028064938:ios:a1f48345f4ac6811f238d3</string>
+	<key>DATABASE_URL</key>
+	<string>https://aacademic-e5df3-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>
