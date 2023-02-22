@@ -33,11 +33,16 @@ dependencies:
   camera:
   path_provider:
   path:
+  image_picker:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   firebase_core: ^2.6.1
+  cloud_firestore: ^4.4.2
+  firebase_auth: ^4.2.8
+  firebase_performance: ^0.9.0+13
+  firebase_storage: ^11.0.14
 
 dependency_overrides:
   camera_android: 0.9.7+1
