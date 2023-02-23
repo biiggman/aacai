@@ -81,9 +81,10 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void _onItemTapped(int index) {
+  void _onItemTapped(int index) async {
     setState(() {
       _selectedIndex = index;
+    });
 
       switch (index) {
         case 0:
@@ -94,12 +95,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
         case 2:
           {
-            () async {
-              await availableCameras().then((value) => Navigator.push(
+          await availableCameras().then((value) => Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (_) => CameraPage(cameras: value))));
-            };
+          
           }
           break;
 
@@ -107,8 +107,8 @@ class _MyHomePageState extends State<MyHomePage> {
           Navigator.of(context).pushNamed('/settings');
           break;
       }
-    });
-  }
+    }
+  
 
   @override
   Widget build(BuildContext context) {
