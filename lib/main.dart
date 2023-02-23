@@ -1,4 +1,5 @@
 import 'package:aacademic/camera_page.dart';
+import 'package:aacademic/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -16,7 +17,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      //Material App Constructor
       title: 'Flutter Demo',
+
+      initialRoute: '/', //Route logic for navigation
+      routes: {
+        //'/': (context) => const MyApp(),
+        '/settings': (context) => const SettingsPage(),
+        //'/camera':(context) => const CameraPage(cameras: value);
+      },
+
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -39,8 +49,10 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   int _selectedIndex = 0;
+  final navKey = GlobalKey();
 
   static const TextStyle optionStyle = TextStyle(
+      color: Colors.black,
       fontSize: 30,
       fontWeight:
           FontWeight.bold); //define font/size for text refernced in List
@@ -54,7 +66,11 @@ class _MyHomePageState extends State<MyHomePage> {
       style: optionStyle,
     ),
     Text(
-      'Index 2: Settings',
+      'Index 2: Camera',
+      style: optionStyle,
+    ),
+    Text(
+      'Index 3: Settings',
       style: optionStyle,
     ),
   ];
@@ -68,6 +84,29 @@ class _MyHomePageState extends State<MyHomePage> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+
+      switch (index) {
+        case 0:
+          break;
+
+        case 1:
+          break;
+
+        case 2:
+          {
+            () async {
+              await availableCameras().then((value) => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => CameraPage(cameras: value))));
+            };
+          }
+          break;
+
+        case 3:
+          Navigator.of(context).pushNamed('/settings');
+          break;
+      }
     });
   }
 
@@ -102,6 +141,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        key: navKey,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.list),
@@ -112,9 +152,11 @@ class _MyHomePageState extends State<MyHomePage> {
             label: 'Imageboard',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
+            icon: Icon(Icons.camera),
+            label: 'Camera',
           ),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.settings), label: 'Settings'),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.amber[800], //color options
