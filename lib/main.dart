@@ -86,29 +86,25 @@ class _MyHomePageState extends State<MyHomePage> {
       _selectedIndex = index;
     });
 
-      switch (index) {
-        case 0:
-          break;
+    switch (index) {
+      case 0:
+        break;
 
-        case 1:
-          break;
+      case 1:
+        break;
 
-        case 2:
-          {
-          await availableCameras().then((value) => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (_) => CameraPage(cameras: value))));
-          
-          }
-          break;
+      case 2:
+        {
+          await availableCameras().then((value) => Navigator.push(context,
+              MaterialPageRoute(builder: (_) => CameraPage(cameras: value))));
+        }
+        break;
 
-        case 3:
-          Navigator.of(context).pushNamed('/settings');
-          break;
-      }
+      case 3:
+        Navigator.of(context).pushNamed('/settings');
+        break;
     }
-  
+  }
 
   @override
   Widget build(BuildContext context) {
