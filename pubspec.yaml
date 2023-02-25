@@ -1,5 +1,5 @@
 name: aacademic
-description: A new Flutter project.
+description: A free and feature-rich AAC (Augmentative Alternative Communication) application that is available on both iOS and Android.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -43,6 +43,8 @@ dependencies:
   firebase_auth: ^4.2.8
   firebase_performance: ^0.9.0+13
   firebase_storage: ^11.0.14
+  flutter_tts:
+  tflite: ^1.1.2
 
 dependency_overrides:
   camera_android: 0.9.7+1
