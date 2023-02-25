@@ -1,4 +1,5 @@
 import 'package:aacademic/camera_page.dart';
+import 'package:aacademic/login_page.dart';
 import 'package:aacademic/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
@@ -21,10 +22,10 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
 
       initialRoute: '/', //Route logic for navigation
+
       routes: {
-        //'/': (context) => const MyApp(),
+        '/login': (context) => const LoginPage(),
         '/settings': (context) => const SettingsPage(),
-        //'/camera':(context) => const CameraPage(cameras: value);
       },
 
       theme: ThemeData(
@@ -50,30 +51,6 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   int _selectedIndex = 0;
   final navKey = GlobalKey();
-
-  static const TextStyle optionStyle = TextStyle(
-      color: Colors.black,
-      fontSize: 30,
-      fontWeight:
-          FontWeight.bold); //define font/size for text refernced in List
-  static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Index 0: List',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 1: Dashboard',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 2: Camera',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 3: Settings',
-      style: optionStyle,
-    ),
-  ];
 
   void _incrementCounter() {
     setState(() {
@@ -116,22 +93,11 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            _widgetOptions.elementAt(_selectedIndex),
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
             ElevatedButton(
               onPressed: () async {
-                await availableCameras().then((value) => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) => CameraPage(cameras: value))));
+                Navigator.of(context).pushNamed('/login');
               },
-              child: const Text('Camera'),
+              child: const Text('Login Page'),
             ),
           ],
         ),
@@ -157,11 +123,6 @@ class _MyHomePageState extends State<MyHomePage> {
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.amber[800], //color options
         onTap: _onItemTapped,
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
       ),
     );
   }
