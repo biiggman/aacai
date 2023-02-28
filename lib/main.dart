@@ -1,4 +1,6 @@
 import 'package:aacademic/camera_page.dart';
+import 'package:aacademic/login_page.dart';
+import 'package:aacademic/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -16,11 +18,22 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      //Material App Constructor
       title: 'Flutter Demo',
+
+      initialRoute: '/', //Route logic for navigation
+
+      routes: {
+        '/login': (context) => const LoginPage(),
+        '/settings': (context) => const SettingsPage(),
+      },
+
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-    home: MyHomePage(title: 'AACademic Demo',),
+      home: MyHomePage(
+        title: 'AACademic Demo',
+      ),
     );
   }
 }
@@ -36,11 +49,38 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  int _selectedIndex = 0;
+  final navKey = GlobalKey();
 
   void _incrementCounter() {
     setState(() {
       _counter++;
     });
+  }
+
+  void _onItemTapped(int index) async {
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    switch (index) {
+      case 0:
+        break;
+
+      case 1:
+        break;
+
+      case 2:
+        {
+          await availableCameras().then((value) => Navigator.push(context,
+              MaterialPageRoute(builder: (_) => CameraPage(cameras: value))));
+        }
+        break;
+
+      case 3:
+        Navigator.of(context).pushNamed('/settings');
+        break;
+    }
   }
 
   @override
@@ -53,24 +93,36 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+            ElevatedButton(
+              onPressed: () async {
+                Navigator.of(context).pushNamed('/login');
+              },
+              child: const Text('Login Page'),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-            ElevatedButton(onPressed: () async {
-              await availableCameras().then((value) => Navigator.push(context,
-              MaterialPageRoute(builder: (_) => CameraPage(cameras: value))));
-            }, child: const Text('Camera'),),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+      bottomNavigationBar: BottomNavigationBar(
+        key: navKey,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.list),
+            label: 'Menu',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.dashboard),
+            label: 'Imageboard',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.camera),
+            label: 'Camera',
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.settings), label: 'Settings'),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.amber[800], //color options
+        onTap: _onItemTapped,
       ),
     );
   }
