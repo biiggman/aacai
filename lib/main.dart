@@ -1,6 +1,6 @@
-import 'dart:async';
-
-import 'package:flutter/foundation.dart';
+import 'package:aacademic/camera_page.dart';
+import 'package:aacademic/login_page.dart';
+import 'package:aacademic/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:text_to_speech/text_to_speech.dart';
 
@@ -10,7 +10,26 @@ void main() {
 
 class MyApp extends StatefulWidget {
   @override
-  _MyAppState createState() => _MyAppState();
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      //Material App Constructor
+      title: 'Flutter Demo',
+
+      initialRoute: '/', //Route logic for navigation
+
+      routes: {
+        '/login': (context) => const LoginPage(),
+        '/settings': (context) => const SettingsPage(),
+      },
+
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: MyHomePage(
+        title: 'AACademic Demo',
+      ),
+    );
+  }
 }
 
 class _MyAppState extends State<MyApp> {
@@ -33,238 +52,85 @@ class _MyAppState extends State<MyApp> {
   TextEditingController textEditingController = TextEditingController();
 
   @override
-  void initState() {
-    super.initState();
-    textEditingController.text = text;
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
-      initLanguages();
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  int _counter = 0;
+  int _selectedIndex = 0;
+  final navKey = GlobalKey();
+
+  void _incrementCounter() {
+    setState(() {
+      _counter++;
     });
   }
 
-  Future<void> initLanguages() async {
-    /// populate lang code (i.e. en-US)
-    languageCodes = await tts.getLanguages();
+  void _onItemTapped(int index) async {
+    setState(() {
+      _selectedIndex = index;
+    });
 
-    /// populate displayed language (i.e. English)
-    final List<String>? displayLanguages = await tts.getDisplayLanguages();
-    if (displayLanguages == null) {
-      return;
+    switch (index) {
+      case 0:
+        break;
+
+      case 1:
+        break;
+
+      case 2:
+        {
+          await availableCameras().then((value) => Navigator.push(context,
+              MaterialPageRoute(builder: (_) => CameraPage(cameras: value))));
+        }
+        break;
+
+      case 3:
+        Navigator.of(context).pushNamed('/settings');
+        break;
     }
-
-    languages.clear();
-    for (final dynamic lang in displayLanguages) {
-      languages.add(lang as String);
-    }
-
-    final String? defaultLangCode = await tts.getDefaultLanguage();
-    if (defaultLangCode != null && languageCodes.contains(defaultLangCode)) {
-      languageCode = defaultLangCode;
-    } else {
-      languageCode = defaultLanguage;
-    }
-    language = await tts.getDisplayLanguageByCode(languageCode!);
-
-    /// get voice
-    voice = await getVoiceByLang(languageCode!);
-
-    if (mounted) {
-      setState(() {});
-    }
-  }
-
-  Future<String?> getVoiceByLang(String lang) async {
-    final List<String>? voices = await tts.getVoiceByLang(languageCode!);
-    if (voices != null && voices.isNotEmpty) {
-      return voices.first;
-    }
-    return null;
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Text-to-Speech Example'),
-        ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Center(
-              child: Column(
-                children: <Widget>[
-                  TextField(
-                    controller: textEditingController,
-                    maxLines: 5,
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'Enter some text here...'),
-                    onChanged: (String newText) {
-                      setState(() {
-                        text = newText;
-                      });
-                    },
-                  ),
-                  Row(
-                    children: <Widget>[
-                      const Text('Volume'),
-                      Expanded(
-                        child: Slider(
-                          value: volume,
-                          min: 0,
-                          max: 1,
-                          label: volume.round().toString(),
-                          onChanged: (double value) {
-                            initLanguages();
-                            setState(() {
-                              volume = value;
-                            });
-                          },
-                        ),
-                      ),
-                      Text('(${volume.toStringAsFixed(2)})'),
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      const Text('Rate'),
-                      Expanded(
-                        child: Slider(
-                          value: rate,
-                          min: 0,
-                          max: 2,
-                          label: rate.round().toString(),
-                          onChanged: (double value) {
-                            setState(() {
-                              rate = value;
-                            });
-                          },
-                        ),
-                      ),
-                      Text('(${rate.toStringAsFixed(2)})'),
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      const Text('Pitch'),
-                      Expanded(
-                        child: Slider(
-                          value: pitch,
-                          min: 0,
-                          max: 2,
-                          label: pitch.round().toString(),
-                          onChanged: (double value) {
-                            setState(() {
-                              pitch = value;
-                            });
-                          },
-                        ),
-                      ),
-                      Text('(${pitch.toStringAsFixed(2)})'),
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      const Text('Language'),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      DropdownButton<String>(
-                        value: language,
-                        icon: const Icon(Icons.arrow_downward),
-                        iconSize: 24,
-                        elevation: 16,
-                        style: const TextStyle(color: Colors.deepPurple),
-                        underline: Container(
-                          height: 2,
-                          color: Colors.deepPurpleAccent,
-                        ),
-                        onChanged: (String? newValue) async {
-                          languageCode =
-                              await tts.getLanguageCodeByName(newValue!);
-                          voice = await getVoiceByLang(languageCode!);
-                          setState(() {
-                            language = newValue;
-                          });
-                        },
-                        items: languages
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    children: <Widget>[
-                      const Text('Voice'),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      Text(voice ?? '-'),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.only(right: 10),
-                          child: ElevatedButton(
-                            child: const Text('Stop'),
-                            onPressed: () {
-                              tts.stop();
-                            },
-                          ),
-                        ),
-                      ),
-                      if (supportPause)
-                        Expanded(
-                          child: Container(
-                            padding: const EdgeInsets.only(right: 10),
-                            child: ElevatedButton(
-                              child: const Text('Pause'),
-                              onPressed: () {
-                                tts.pause();
-                              },
-                            ),
-                          ),
-                        ),
-                      if (supportResume)
-                        Expanded(
-                          child: Container(
-                            padding: const EdgeInsets.only(right: 10),
-                            child: ElevatedButton(
-                              child: const Text('Resume'),
-                              onPressed: () {
-                                tts.resume();
-                              },
-                            ),
-                          ),
-                        ),
-                      Expanded(
-                          child: Container(
-                        child: ElevatedButton(
-                          child: const Text('Speak'),
-                          onPressed: () {
-                            speak();
-                          },
-                        ),
-                      ))
-                    ],
-                  )
-                ],
-              ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            ElevatedButton(
+              onPressed: () async {
+                Navigator.of(context).pushNamed('/login');
+              },
+              child: const Text('Login Page'),
             ),
-          ),
+          ],
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        key: navKey,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.list),
+            label: 'Menu',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.dashboard),
+            label: 'Imageboard',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.camera),
+            label: 'Camera',
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.settings), label: 'Settings'),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.amber[800], //color options
+        onTap: _onItemTapped,
       ),
     );
   }
