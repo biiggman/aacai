@@ -1,14 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.aacademic">
-    package="com.example.speech_to_text_demo">
-
-
-    <queries>
-        <package android:name="com.google.android.googlequicksearch"/>
-        <intent>
-            <action android:name="com"
-
-   <application
+    <application
         android:label="aacademic"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
