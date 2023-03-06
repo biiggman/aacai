@@ -126,6 +126,5 @@ class _MyHomePageState extends State<MyHomePage> {
         onTap: _onItemTapped,
       ),
     );
-    return GoogleSignInButton();
   }
 }
