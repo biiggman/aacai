@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'widgets/google_signin_button.dart';
 
 void main() async {
   runApp(const MyApp());
@@ -125,5 +126,6 @@ class _MyHomePageState extends State<MyHomePage> {
         onTap: _onItemTapped,
       ),
     );
+    return GoogleSignInButton();
   }
 }
