@@ -1,7 +1,12 @@
+import 'dart:async';
+import 'dart:math' as math;
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:aacademic/preview_page.dart';
+import 'package:flutter/services.dart';
+import 'package:tflite/tflite.dart';
 
 class CameraPage extends StatefulWidget {
   const CameraPage({Key? key, required this.cameras}) : super(key: key);
@@ -15,10 +20,13 @@ class CameraPage extends StatefulWidget {
 class _CameraPageState extends State<CameraPage> {
   late CameraController _cameraController;
   bool _isRearCameraSelected = true;
+  bool _isDetecting = false;
+  List<dynamic>? _recognitions;
 
   @override
   void dispose() {
     _cameraController.dispose();
+    Tflite.close();
     super.dispose();
   }
 
@@ -26,7 +34,51 @@ class _CameraPageState extends State<CameraPage> {
   void initState() {
     super.initState();
     initCamera(widget.cameras![0]);
+    loadModel().then((value) {
+      setState(() {});
+    });
   }
+
+  Future<void> loadModel() async {
+    String? result;
+    try {
+      result = await Tflite.loadModel(
+          model: "assets/yolov2_tiny.tflite",
+          labels: "assets/yolov2_tiny.txt",
+          numThreads: 1);
+    } on PlatformException {
+      print("Failed to load model.");
+    }
+    print("Result after loading the model: $result");
+  }
+
+  Future<void> _detect(CameraImage image) async {
+    if (!_isDetecting) {
+      _isDetecting = true;
+
+      int startTime = new DateTime.now().millisecondsSinceEpoch;
+      await Tflite.runModelOnFrame(
+        bytesList: image.planes.map((plane) {
+          return plane.bytes;
+        }).toList(),
+        imageHeight: image.height,
+        imageWidth: image.width,
+        imageMean: 127.5,
+        imageStd: 127.5,
+        rotation: -90,
+        numResults: 5,
+        threshold: 0.5,
+      ).then((value) {
+        _recognitions = value;
+      });
+      int endTime = new DateTime.now().millisecondsSinceEpoch;
+      print("Detection took ${endTime - startTime}");
+
+      _isDetecting = false;
+      setState(() {});
+    }
+  }
+
 
   Future takePicture() async {
     if (!_cameraController.value.isInitialized) {
@@ -56,12 +108,18 @@ class _CameraPageState extends State<CameraPage> {
     try {
       await _cameraController.initialize().then((_) {
         if (!mounted) return;
+        _cameraController.startImageStream((image) {
+          if (!_isDetecting) {
+            _detect(image);
+          }
+        });
         setState(() {});
       });
     } on CameraException catch (e) {
       debugPrint("camera error $e");
     }
   }
+  
 
   @override
   Widget build(BuildContext context) {

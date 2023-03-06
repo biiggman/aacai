@@ -34,6 +34,11 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    aaptOptions {
+        noCompress 'tflite'
+        noCompress 'lite'
+    }
+
     kotlinOptions {
         jvmTarget = '1.8'
     }
@@ -61,10 +66,6 @@ android {
         }
     }
 
-    aaptOptions {
-        noCompress 'tflite'
-        noCompress 'lite'
-    }
 }
 
 flutter {
