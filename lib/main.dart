@@ -1,11 +1,11 @@
-import 'package:aacademic/camera_page.dart';
-import 'package:aacademic/login_page.dart';
-import 'package:aacademic/settings_page.dart';
+import 'package:aacademic/camera/camera_page.dart';
+import 'package:aacademic/ui/login_page.dart';
+import 'package:aacademic/ui/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:aacademic/firebase_options.dart';
-import 'package:aacademic/upload_image.dart';
+import 'package:aacademic/firebase/firebase_options.dart';
+import 'package:aacademic/utils/upload_image.dart';
 
 void main() async {
   runApp(const MyApp());
@@ -49,15 +49,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
   int _selectedIndex = 0;
   final navKey = GlobalKey();
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
 
   void _onItemTapped(int index) async {
     setState(() {
