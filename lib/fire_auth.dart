@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:async';
 
 class FireAuth {
   // For registering a new user
@@ -33,7 +34,49 @@ class FireAuth {
     return user;
   }
 
-  // For signing in an user (have already registered)
+  //Guest Login
+  // static Future<User?> anonSignIn() async {
+  //   FirebaseUser user = await FirebaseAuth.signInAnonymously();
+  //   print("Signed in as ${user.uid}");
+  //   return user;
+
+  static Future<User?> anonSignIn() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? user;
+
+    try {
+      UserCredential userCredential = await auth.signInAnonymously();
+
+      user = userCredential.user;
+      await user!.updateProfile(displayName: user.uid);
+      await user.reload();
+      user = auth.currentUser;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'User-not-found') {
+        print('No user found for that Guest ID');
+      }
+    } catch (e) {
+      print(e);
+    }
+
+    return user;
+  }
+  //almost working method, copied from signInUsingEmailPword
+  // FirebaseAuth auth = FirebaseAuth.instance;
+  // User? user;
+
+  // try {
+  //   UserCredential userCredential = await auth.signInAnonymously();
+  //   user = userCredential.user;
+  // } on FirebaseAuthException catch (e) {
+  //   if (e.code == 'user-not-found') {
+  //     print('No user found for that Guest ID.');
+  //   }
+
+  //   return user;
+  // }
+
+  // For signing in a user (have already registered)
   static Future<User?> signInUsingEmailPassword({
     required String email,
     required String password,
@@ -58,6 +101,7 @@ class FireAuth {
     return user;
   }
 
+  //Refresh user
   static Future<User?> refreshUser(User user) async {
     FirebaseAuth auth = FirebaseAuth.instance;
 

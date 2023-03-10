@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'widgets/google_signin_button.dart';
 
 void main() async {
   runApp(const MyApp());
@@ -38,6 +37,30 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+//route to google sign in if neeeded
+// class FirstRoute extends StatelessWidget {
+//   const FirstRoute({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: const Text('Le google'),
+//       ),
+//       body: Center(
+//         child: ElevatedButton(
+//           child: const Text('Open route'),
+//           onPressed: () {
+//             Navigator.push(
+//               context,
+//               MaterialPageRoute(builder: (context) => GoogleSignInButton()),
+//             ); // Navigate to second route when tapped.
+//           },
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});

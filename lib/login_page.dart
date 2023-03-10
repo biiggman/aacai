@@ -6,7 +6,6 @@ import 'profile_page.dart';
 import 'register_page.dart';
 import 'fire_auth.dart';
 import 'validator.dart';
-import 'dart:async';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -29,13 +28,6 @@ class _LoginPageState extends State<LoginPage> {
     FirebaseApp firebaseApp = await Firebase.initializeApp();
 
     User? user = FirebaseAuth.instance.currentUser;
-
-    //Guest Login
-    Future<UserCredential> anonSignIn() async {
-      UserCredential guest = await FirebaseAuth.signInAnonymously();
-
-      return guest;
-    }
 
     if (user != null) {
       Navigator.of(context).pushReplacement(
@@ -179,6 +171,31 @@ class _LoginPageState extends State<LoginPage> {
                                         ),
                                       ),
                                     ),
+                                    Expanded(
+                                      child: ElevatedButton(
+                                        onPressed: () async {
+                                          User? user =
+                                              await FireAuth.anonSignIn();
+                                          setState(() {
+                                            _isProcessing = false;
+                                          });
+
+                                          if (user != null) {
+                                            Navigator.of(context)
+                                                .pushReplacement(
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ProfilePage(user: user),
+                                              ),
+                                            );
+                                          }
+                                        },
+                                        child: Text(
+                                          'Guest Sign In',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ),
+                                    ),
                                   ],
                                 )
                         ],
@@ -187,7 +204,6 @@ class _LoginPageState extends State<LoginPage> {
                   ],
                 ),
               );
-              //return GoogleSignInButton();
             }
 
             return Center(
