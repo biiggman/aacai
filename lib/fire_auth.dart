@@ -35,11 +35,6 @@ class FireAuth {
   }
 
   //Guest Login
-  // static Future<User?> anonSignIn() async {
-  //   FirebaseUser user = await FirebaseAuth.signInAnonymously();
-  //   print("Signed in as ${user.uid}");
-  //   return user;
-
   static Future<User?> anonSignIn() async {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user;
@@ -61,20 +56,6 @@ class FireAuth {
 
     return user;
   }
-  //almost working method, copied from signInUsingEmailPword
-  // FirebaseAuth auth = FirebaseAuth.instance;
-  // User? user;
-
-  // try {
-  //   UserCredential userCredential = await auth.signInAnonymously();
-  //   user = userCredential.user;
-  // } on FirebaseAuthException catch (e) {
-  //   if (e.code == 'user-not-found') {
-  //     print('No user found for that Guest ID.');
-  //   }
-
-  //   return user;
-  // }
 
   // For signing in a user (have already registered)
   static Future<User?> signInUsingEmailPassword({
