@@ -65,7 +65,7 @@ class _LoginPageState extends State<LoginPage> {
                       padding: const EdgeInsets.only(bottom: 24.0),
                       child: Text(
                         'Login',
-                        style: Theme.of(context).textTheme.headline1,
+                        style: Theme.of(context).textTheme.displayMedium,
                       ),
                     ),
                     Form(
@@ -110,6 +110,7 @@ class _LoginPageState extends State<LoginPage> {
                           _isProcessing
                               ? CircularProgressIndicator()
                               : Row(
+                                  mainAxisSize: MainAxisSize.min,
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
@@ -156,23 +157,6 @@ class _LoginPageState extends State<LoginPage> {
                                     SizedBox(width: 24.0),
                                     Expanded(
                                       child: ElevatedButton(
-                                        onPressed: () {
-                                          Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  RegisterPage(),
-                                            ),
-                                          );
-                                        },
-                                        child: Text(
-                                          'Register',
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(width: 24.0),
-                                    Expanded(
-                                      child: ElevatedButton(
                                         onPressed: () async {
                                           User? user =
                                               await FireAuth.anonSignIn();
@@ -197,71 +181,105 @@ class _LoginPageState extends State<LoginPage> {
                                       ),
                                     ),
                                     SizedBox(width: 24.0),
-                                    OutlinedButton(
-                                      style: ButtonStyle(
-                                        backgroundColor:
-                                            MaterialStateProperty.all(
-                                                Colors.white),
-                                        shape: MaterialStateProperty.all(
-                                          RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(40),
+                                  ],
+                                ),
+                          _isProcessing
+                              ? CircularProgressIndicator()
+                              : Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                      OutlinedButton(
+                                        style: ButtonStyle(
+                                          backgroundColor:
+                                              MaterialStateProperty.all(
+                                                  Colors.white),
+                                          shape: MaterialStateProperty.all(
+                                            RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(40),
+                                            ),
+                                          ),
+                                        ),
+                                        onPressed: () async {
+                                          setState(() {
+                                            _isProcessing = true;
+                                          });
+                                          User? user =
+                                              await FireAuth.signInWithGoogle(
+                                                  context: context);
+                                          setState(() {
+                                            _isProcessing = false;
+                                          });
+
+                                          if (user != null) {
+                                            Navigator.of(context)
+                                                .pushReplacement(
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ProfilePage(
+                                                  user: user,
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              0, 10, 0, 10),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: <Widget>[
+                                              Image(
+                                                image: AssetImage(
+                                                    "assets/google_logo.png"),
+                                                height: 35.0,
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 10),
+                                                child: Text(
+                                                  'Sign in with Google',
+                                                  style: TextStyle(
+                                                    fontSize: 20,
+                                                    color: Colors.black54,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                ),
+                                              )
+                                            ],
                                           ),
                                         ),
                                       ),
-                                      onPressed: () async {
-                                        setState(() {
-                                          _isProcessing = true;
-                                        });
-                                        User? user =
-                                            await FireAuth.signInWithGoogle(
-                                                context: context);
-                                        setState(() {
-                                          _isProcessing = false;
-                                        });
-
-                                        if (user != null) {
-                                          Navigator.of(context).pushReplacement(
-                                            MaterialPageRoute(
-                                              builder: (context) => ProfilePage(
-                                                user: user,
+                                      SizedBox(width: 24.0),
+                                    ]),
+                          _isProcessing
+                              ? CircularProgressIndicator()
+                              : Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                      Expanded(
+                                        child: ElevatedButton(
+                                          onPressed: () {
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    RegisterPage(),
                                               ),
-                                            ),
-                                          );
-                                        }
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            0, 10, 0, 10),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: <Widget>[
-                                            Image(
-                                              image: AssetImage(
-                                                  "assets/google_logo.png"),
-                                              height: 35.0,
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 10),
-                                              child: Text(
-                                                'Sign in with Google',
-                                                style: TextStyle(
-                                                  fontSize: 20,
-                                                  color: Colors.black54,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                              ),
-                                            )
-                                          ],
+                                            );
+                                          },
+                                          child: Text(
+                                            'Register',
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    SizedBox(width: 24.0),
-                                  ],
-                                )
+                                      SizedBox(width: 24.0),
+                                    ]),
                         ],
                       ),
                     )
