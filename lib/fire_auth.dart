@@ -112,7 +112,9 @@ class FireAuth {
         print(e);
       }
     } else {
-      final GoogleSignIn googleSignIn = GoogleSignIn();
+      final GoogleSignIn googleSignIn = GoogleSignIn(
+          clientId:
+              "1062028064938-e4inidfj0v6eho6mm7r4n4u6qa4m821f.apps.googleusercontent.com");
 
       final GoogleSignInAccount? googleSignInAccount =
           await googleSignIn.signIn();
