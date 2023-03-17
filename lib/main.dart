@@ -1,14 +1,24 @@
 import 'package:aacademic/camera_page.dart';
 import 'package:aacademic/login_page.dart';
 import 'package:aacademic/settings_page.dart';
+import  'package:aacademic/tts.dart';
 import 'package:flutter/material.dart';
-import 'package:text_to_speech/text_to_speech.dart';
+import 'package:camera/camera.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_tts/flutter_tts.dart';
+import 'firebase_options.dart';
 
-void main() {
-  runApp(MyApp());
+
+void main() async {
+  runApp(const MyApp());
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 }
+  
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -20,6 +30,8 @@ class MyApp extends StatefulWidget {
       routes: {
         '/login': (context) => const LoginPage(),
         '/settings': (context) => const SettingsPage(),
+
+
       },
 
       theme: ThemeData(
@@ -32,24 +44,10 @@ class MyApp extends StatefulWidget {
   }
 }
 
-class _MyAppState extends State<MyApp> {
-  final String defaultLanguage = 'en-US';
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key, required this.title});
 
-  
-  TextToSpeech tts = TextToSpeech();
-
-  String text = '';
-  double volume = 1; // Range: 0-1
-  double rate = 1.0; // Range: 0-2
-  double pitch = 1.0; // Range: 0-2
-
-  String? language;
-  String? languageCode;
-  List<String> languages = <String>[];
-  List<String> languageCodes = <String>[];
-  String? voice;
-
-  TextEditingController textEditingController = TextEditingController();
+  final String title;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -110,6 +108,15 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
+
+      RaisedButton(
+        onPressed: () =>speak(textEditingController.text),{
+         FlutterTts();
+        },
+        child: Text('TTS'),
+      );
+
+      
       bottomNavigationBar: BottomNavigationBar(
         key: navKey,
         items: const <BottomNavigationBarItem>[
@@ -134,18 +141,5 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
-
-  bool get supportPause => defaultTargetPlatform != TargetPlatform.android;
-
-  bool get supportResume => defaultTargetPlatform != TargetPlatform.android;
-
-  void speak() {
-    tts.setVolume(volume);
-    tts.setRate(rate);
-    if (languageCode != null) {
-      tts.setLanguage(languageCode!);
-    }
-    tts.setPitch(pitch);
-    tts.speak(text);
-  }
 }
+
