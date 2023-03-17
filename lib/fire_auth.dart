@@ -1,3 +1,5 @@
+import 'dart:js';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
@@ -180,7 +182,7 @@ class FireAuth {
     }
   }
 
-  //handle google login errors
+  //handle login errors
   static SnackBar customSnackBar({required String content}) {
     return SnackBar(
       backgroundColor: Colors.black,
@@ -190,5 +192,24 @@ class FireAuth {
             color: Color.fromARGB(255, 22, 2, 246), letterSpacing: 0.5),
       ),
     );
+  }
+
+  //forgot password
+  //not showing snackbar messages for confirmation and invalid email
+  static Future<void> forgotPassword({
+    required String email,
+  }) async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      ScaffoldMessenger.of(context as BuildContext).showSnackBar(
+        FireAuth.customSnackBar(
+          content: 'Passwod reset email sent',
+        ),
+      );
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print('No user found for that email.');
+      }
+    }
   }
 }

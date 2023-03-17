@@ -5,6 +5,7 @@ import 'profile_page.dart';
 import 'register_page.dart';
 import 'fire_auth.dart';
 import 'validator.dart';
+import 'forgot_password_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -273,6 +274,24 @@ class _LoginPageState extends State<LoginPage> {
                                           },
                                           child: Text(
                                             'Register',
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(width: 24.0),
+                                      Expanded(
+                                        child: ElevatedButton(
+                                          onPressed: () {
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ForgotPasswordPage(),
+                                              ),
+                                            );
+                                          },
+                                          child: Text(
+                                            'Forgot Password',
                                             style:
                                                 TextStyle(color: Colors.white),
                                           ),
