@@ -30,7 +30,7 @@ class FireAuth {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');
       } else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
+        print('An account already exists for that email.');
       }
     } catch (e) {
       print(e);
@@ -80,7 +80,7 @@ class FireAuth {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
       } else if (e.code == 'wrong-password') {
-        print('Wrong password provided.');
+        print('Incorrect password provided.');
       }
     }
 
@@ -140,7 +140,7 @@ class FireAuth {
             ScaffoldMessenger.of(context).showSnackBar(
               FireAuth.customSnackBar(
                 content:
-                    'The account already exists with a different credential',
+                    'An account already exists with a different credential',
               ),
             );
           } else if (e.code == 'invalid-credential') {
@@ -182,7 +182,7 @@ class FireAuth {
     }
   }
 
-  //handle login errors
+  //handle authorization errors
   static SnackBar customSnackBar({required String content}) {
     return SnackBar(
       backgroundColor: Colors.black,
