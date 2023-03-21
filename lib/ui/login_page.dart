@@ -3,8 +3,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'profile_page.dart';
 import 'register_page.dart';
-import 'fire_auth.dart';
-import 'validator.dart';
+import '../firebase/fire_auth.dart';
+import '../firebase/validator.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);

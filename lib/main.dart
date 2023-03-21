@@ -1,6 +1,6 @@
-import 'package:aacademic/camera_page.dart';
-import 'package:aacademic/login_page.dart';
-import 'package:aacademic/settings_page.dart';
+import 'package:aacademic/camera/camera_page.dart';
+import 'package:aacademic/ui/login_page.dart';
+import 'package:aacademic/ui/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
