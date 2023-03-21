@@ -6,9 +6,12 @@ import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:aacademic/firebase_options.dart';
 import 'package:aacademic/upload_image.dart';
+import 'package:aacademic/tts.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 
 void main() async {
   runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -25,7 +28,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/', //Route logic for navigation
 
       routes: {
-        '/login': (context) =>  const LoginPage(),
+        '/login': (context) => const LoginPage(),
         '/settings': (context) => const SettingsPage(),
       },
 
@@ -49,15 +52,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
   int _selectedIndex = 0;
   final navKey = GlobalKey();
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
 
   void _onItemTapped(int index) async {
     setState(() {
@@ -84,6 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  String buttonName = "TEST";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,6 +97,11 @@ class _MyHomePageState extends State<MyHomePage> {
               },
               child: const Text('Login Page'),
             ),
+            ElevatedButton(
+                child: Text(buttonName),
+                onPressed: () async {
+                  TextToSpeech.speak(buttonName);
+                })
           ],
         ),
       ),
