@@ -201,8 +201,8 @@ class FireAuth {
   }) async {
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
-      ScaffoldMessenger.of(context as BuildContext).showSnackBar(
-        FireAuth.customSnackBar(
+      ScaffoldMessenger.of(BuildContext as BuildContext).showSnackBar(
+       FireAuth.customSnackBar(
           content: 'Passwod reset email sent',
         ),
       );
