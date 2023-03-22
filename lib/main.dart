@@ -6,7 +6,7 @@ import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:aacademic/firebase/firebase_options.dart';
 import 'package:aacademic/utils/upload_image.dart';
-import 'package:aacademic/tts.dart';
+import 'package:aacademic/utils/tts.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
 void main() async {

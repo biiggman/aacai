@@ -1,7 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:tflite/tflite.dart';
-import 'package:aacademic/tts.dart';
+import 'package:aacademic/utils/tts.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
