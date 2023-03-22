@@ -1,3 +1,4 @@
+import 'package:aacademic/login_page.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -30,12 +31,11 @@ class _SettingsPageState extends State<SettingsPage> {
                 title: const Text('Language'),
                 value: const Text('English'),
               ),
-              SettingsTile.switchTile(
-                onToggle: (value) {},
-                initialValue: true,
-                leading: const Icon(Icons.format_paint),
-                title: const Text('Enable custom theme'),
-              ),
+              SettingsTile.navigation(
+                leading: const Icon(Icons.lock),
+                title: const Text('Log-in Page'),
+                // onPressed: () {};
+              )
             ],
           ),
         ],
