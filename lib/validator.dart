@@ -22,7 +22,7 @@ class Validator {
     if (email.isEmpty) {
       return 'Email can\'t be empty';
     } else if (!emailRegExp.hasMatch(email)) {
-      return 'Enter a correct email';
+      return 'Enter a valid email';
     }
 
     return null;
@@ -36,7 +36,7 @@ class Validator {
     if (password.isEmpty) {
       return 'Password can\'t be empty';
     } else if (password.length < 6) {
-      return 'Enter a password with length at least 6';
+      return 'Enter a password of at least 6 characters';
     }
 
     return null;
