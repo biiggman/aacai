@@ -1,5 +1,8 @@
+import 'package:aacademic/main.dart';
+import 'package:camera/camera.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../camera/camera_page.dart';
 import 'login_page.dart';
 import '../firebase/fire_auth.dart';
 
@@ -28,7 +31,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile'),
+        title: const Text('Profile'),
       ),
       body: Center(
         child: Column(
@@ -38,12 +41,12 @@ class _ProfilePageState extends State<ProfilePage> {
               'NAME: ${_currentUser.displayName}',
               style: Theme.of(context).textTheme.bodyText1,
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             Text(
               'EMAIL: ${_currentUser.email}',
               style: Theme.of(context).textTheme.bodyText1,
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             _currentUser.emailVerified
                 ? Text(
                     'Email verified',
@@ -59,9 +62,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         .bodyText1!
                         .copyWith(color: Colors.red),
                   ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             _isSendingVerification
-                ? CircularProgressIndicator()
+                ? const CircularProgressIndicator()
                 : Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -75,11 +78,11 @@ class _ProfilePageState extends State<ProfilePage> {
                             _isSendingVerification = false;
                           });
                         },
-                        child: Text('Verify email'),
+                        child: const Text('Verify email'),
                       ),
-                      SizedBox(width: 8.0),
+                      const SizedBox(width: 8.0),
                       IconButton(
-                        icon: Icon(Icons.refresh),
+                        icon: const Icon(Icons.refresh),
                         onPressed: () async {
                           User? user = await FireAuth.refreshUser(_currentUser);
 
@@ -92,9 +95,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ],
                   ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             _isSigningOut
-                ? CircularProgressIndicator()
+                ? const CircularProgressIndicator()
                 : ElevatedButton(
                     onPressed: () async {
                       setState(() {
@@ -106,18 +109,31 @@ class _ProfilePageState extends State<ProfilePage> {
                       });
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
-                          builder: (context) => LoginPage(),
+                          builder: (context) => const LoginPage(),
                         ),
                       );
                     },
-                    child: Text('Sign out'),
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.red,
+                      backgroundColor: Colors.red,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
                     ),
+                    child: const Text('Sign out'),
                   ),
+            const SizedBox(height: 16.0),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const MyHomePage(
+                            title: '',
+                          )),
+                );
+              },
+              child: const Text('Go to Home'),
+            ),
           ],
         ),
       ),

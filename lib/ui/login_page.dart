@@ -51,7 +51,7 @@ class _LoginPageState extends State<LoginPage> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Firebase Authentication'),
+          title: const Text('Login Page'),
         ),
         body: FutureBuilder(
           future: _initializeFirebase(),
@@ -83,13 +83,13 @@ class _LoginPageState extends State<LoginPage> {
                               hintText: "Email",
                               errorBorder: UnderlineInputBorder(
                                 borderRadius: BorderRadius.circular(6.0),
-                                borderSide: BorderSide(
+                                borderSide: const BorderSide(
                                   color: Colors.red,
                                 ),
                               ),
                             ),
                           ),
-                          SizedBox(height: 8.0),
+                          const SizedBox(height: 8.0),
                           TextFormField(
                             controller: _passwordTextController,
                             focusNode: _focusPassword,
@@ -101,15 +101,15 @@ class _LoginPageState extends State<LoginPage> {
                               hintText: "Password",
                               errorBorder: UnderlineInputBorder(
                                 borderRadius: BorderRadius.circular(6.0),
-                                borderSide: BorderSide(
+                                borderSide: const BorderSide(
                                   color: Colors.red,
                                 ),
                               ),
                             ),
                           ),
-                          SizedBox(height: 24.0),
+                          const SizedBox(height: 24.0),
                           _isProcessing
-                              ? CircularProgressIndicator()
+                              ? const CircularProgressIndicator()
                               : Row(
                                   mainAxisSize: MainAxisSize.min,
                                   mainAxisAlignment:
@@ -149,13 +149,13 @@ class _LoginPageState extends State<LoginPage> {
                                             }
                                           }
                                         },
-                                        child: Text(
+                                        child: const Text(
                                           'Sign In',
                                           style: TextStyle(color: Colors.white),
                                         ),
                                       ),
                                     ),
-                                    SizedBox(width: 24.0),
+                                    const SizedBox(width: 24.0),
                                     Expanded(
                                       child: ElevatedButton(
                                         onPressed: () async {
@@ -175,17 +175,17 @@ class _LoginPageState extends State<LoginPage> {
                                             );
                                           }
                                         },
-                                        child: Text(
+                                        child: const Text(
                                           'Guest Sign In',
                                           style: TextStyle(color: Colors.white),
                                         ),
                                       ),
                                     ),
-                                    SizedBox(width: 24.0),
+                                    const SizedBox(width: 24.0),
                                   ],
                                 ),
                           _isProcessing
-                              ? CircularProgressIndicator()
+                              ? const CircularProgressIndicator()
                               : Row(
                                   mainAxisSize: MainAxisSize.min,
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -232,14 +232,14 @@ class _LoginPageState extends State<LoginPage> {
                                             mainAxisSize: MainAxisSize.min,
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
-                                            children: <Widget>[
+                                            children: const <Widget>[
                                               Image(
                                                 image: AssetImage(
                                                     "assets/google_logo.png"),
                                                 height: 35.0,
                                               ),
                                               Padding(
-                                                padding: const EdgeInsets.only(
+                                                padding: EdgeInsets.only(
                                                     left: 10),
                                                 child: Text(
                                                   'Sign in with Google',
@@ -254,10 +254,10 @@ class _LoginPageState extends State<LoginPage> {
                                           ),
                                         ),
                                       ),
-                                      SizedBox(width: 24.0),
+                                      const SizedBox(width: 24.0),
                                     ]),
                           _isProcessing
-                              ? CircularProgressIndicator()
+                              ? const CircularProgressIndicator()
                               : Row(
                                   mainAxisSize: MainAxisSize.min,
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -272,14 +272,14 @@ class _LoginPageState extends State<LoginPage> {
                                               ),
                                             );
                                           },
-                                          child: Text(
+                                          child: const Text(
                                             'Register',
                                             style:
                                                 TextStyle(color: Colors.white),
                                           ),
                                         ),
                                       ),
-                                      SizedBox(width: 24.0),
+                                      const SizedBox(width: 24.0),
                                       Expanded(
                                         child: ElevatedButton(
                                           onPressed: () {
@@ -290,14 +290,14 @@ class _LoginPageState extends State<LoginPage> {
                                               ),
                                             );
                                           },
-                                          child: Text(
+                                          child: const Text(
                                             'Forgot Password',
                                             style:
                                                 TextStyle(color: Colors.white),
                                           ),
                                         ),
                                       ),
-                                      SizedBox(width: 24.0),
+                                      const SizedBox(width: 24.0),
                                     ]),
                         ],
                       ),
@@ -307,7 +307,7 @@ class _LoginPageState extends State<LoginPage> {
               );
             }
 
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           },

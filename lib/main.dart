@@ -7,8 +7,6 @@ import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:aacademic/firebase/firebase_options.dart';
 import 'package:aacademic/utils/upload_image.dart';
-import 'package:aacademic/utils/tts.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 
 void main() async {
   runApp(const MyApp());
@@ -24,7 +22,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       //Material App Constructor
-      title: 'Flutter Demo',
+      title: 'AAC',
 
       initialRoute: '/', //Route logic for navigation
 
@@ -33,11 +31,9 @@ class MyApp extends StatelessWidget {
         '/settings': (context) => const SettingsPage(),
       },
 
-      theme: MyThemes.lightTheme,
+      theme: MyThemes.darkTheme,
 
-      home: const MyHomePage(
-        title: '',
-      ),
+      home: const LoginPage(),
     );
   }
 }
@@ -58,6 +54,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Color colorVariable = Colors.blue;
   String imageURLTest = '';
   String buttonTestTitle = '';
+
+  String buttonName = "TEST";
 
   //keys here
   final navKey = GlobalKey();
@@ -152,7 +150,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                               child: const Text('Camera Roll'))
                                         ],
                                       ),
-                                      SizedBox(height: 20),
+                                      const SizedBox(height: 20),
                                       const Text('Button Color: '),
                                       ButtonBar(
                                         key: _buttonColorKey,
@@ -253,7 +251,6 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  String buttonName = "TEST";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -383,7 +380,7 @@ class imageboardButton extends RawMaterialButton {
 }
 
 class imageboardModel extends ChangeNotifier {
-  List<imageboardButton> _buttonList = [];
+  final List<imageboardButton> _buttonList = [];
 
   List<imageboardButton> get buttonList => _buttonList;
 
