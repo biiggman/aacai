@@ -8,6 +8,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:aacademic/firebase/firebase_options.dart';
 import 'package:aacademic/utils/upload_image.dart';
 
+
 void main() async {
   runApp(const MyApp());
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
         '/settings': (context) => const SettingsPage(),
       },
 
-      theme: MyThemes.darkTheme,
+      theme: MyThemes.lightTheme,
 
       home: const LoginPage(),
     );

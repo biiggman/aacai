@@ -3,17 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:tflite/tflite.dart';
 import 'package:aacademic/utils/tts.dart';
 
-
-
 class CameraPage extends StatefulWidget {
   final List<CameraDescription> cameras;
 
-  CameraPage({required this.cameras});
+  const CameraPage({super.key, required this.cameras});
 
   @override
   _CameraPageState createState() => _CameraPageState();
 }
-
 
 class _CameraPageState extends State<CameraPage> {
   late CameraController cameraController;
@@ -97,7 +94,7 @@ class _CameraPageState extends State<CameraPage> {
             },
             child: Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                borderRadius: const BorderRadius.all(Radius.circular(10.0)),
                 border: Border.all(color: Colors.pink, width: 2.0),
               ),
               child: Text(
@@ -124,10 +121,10 @@ class _CameraPageState extends State<CameraPage> {
         left: 0.0,
         width: size.width,
         height: size.height - 100,
-        child: Container(
+        child: SizedBox(
           height: size.height - 100,
           child: (!cameraController.value.isInitialized)
-              ? new Container()
+              ? Container()
               : AspectRatio(
                   aspectRatio: cameraController.value.aspectRatio,
                   child: CameraPreview(cameraController),
@@ -142,7 +139,7 @@ class _CameraPageState extends State<CameraPage> {
       child: Scaffold(
         backgroundColor: Colors.black,
         body: Container(
-          margin: EdgeInsets.only(top: 50),
+          margin: const EdgeInsets.only(top: 50),
           color: Colors.black,
           child: Stack(
             children: list,
