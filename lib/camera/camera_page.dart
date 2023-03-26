@@ -8,7 +8,7 @@ import 'package:aacademic/utils/tts.dart';
 class CameraPage extends StatefulWidget {
   final List<CameraDescription> cameras;
 
-  CameraPage({required this.cameras});
+  const CameraPage({super.key, required this.cameras});
 
   @override
   _CameraPageState createState() => _CameraPageState();

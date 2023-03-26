@@ -1,4 +1,8 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -24,6 +28,26 @@ class FireAuth {
       await user!.updateProfile(displayName: name);
       await user.reload();
       user = auth.currentUser;
+
+
+      //create user documents in Firestore Database
+
+      // Create user document with imageboard subcollection
+      CollectionReference userCollection = FirebaseFirestore.instance.collection('user-information');
+      await userCollection.doc(user!.uid).set({
+        'name': name,
+        'email': email,
+      });
+      CollectionReference imageboardCollection = userCollection.doc(user.uid).collection('imageboard');
+      await imageboardCollection.add({
+        'image_location': '',
+        'image_name': '',
+      });
+      
+      //create a new folder in Cloud Storage
+      final storageRef = FirebaseStorage.instance.ref().child('users/${user.uid}');
+
+
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');
