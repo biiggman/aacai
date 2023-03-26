@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       //Material App Constructor
-      title: 'AAC',
+      title: 'AACademic',
 
       initialRoute: '/', //Route logic for navigation
 
