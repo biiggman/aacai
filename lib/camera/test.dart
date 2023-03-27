@@ -136,7 +136,7 @@ class _HomePageState extends State<HomePage> {
         child: Container(
           height: size.height - 100,
           child: (!cameraController.value.isInitialized)
-              ? new Container()
+              ? Container()
               : AspectRatio(
                   aspectRatio: cameraController.value.aspectRatio,
                   child: CameraPreview(cameraController),
@@ -151,7 +151,7 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         backgroundColor: Colors.black,
         body: Container(
-          margin: EdgeInsets.only(top: 50),
+          margin: const EdgeInsets.only(top: 50),
           color: Colors.black,
           child: Stack(
             children: list,

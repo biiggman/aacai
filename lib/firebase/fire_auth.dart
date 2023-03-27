@@ -1,5 +1,6 @@
 import 'dart:io';
-
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -29,25 +30,27 @@ class FireAuth {
       await user.reload();
       user = auth.currentUser;
 
-
-      //create user documents in Firestore Database
-
-      // Create user document with imageboard subcollection
-      CollectionReference userCollection = FirebaseFirestore.instance.collection('user-information');
+      // Create user document with imageboard subcollection upon user creation
+      CollectionReference userCollection =
+          FirebaseFirestore.instance.collection('user-information');
       await userCollection.doc(user!.uid).set({
-        'name': name,
+        'username': name,
         'email': email,
       });
-      CollectionReference imageboardCollection = userCollection.doc(user.uid).collection('imageboard');
+      CollectionReference imageboardCollection =
+          userCollection.doc(user.uid).collection('imageboard');
       await imageboardCollection.add({
         'image_location': '',
         'image_name': '',
       });
-      
-      //create a new folder in Cloud Storage
-      final storageRef = FirebaseStorage.instance.ref().child('users/${user.uid}');
 
-
+      // create a folder in Cloud Storage upon user creation
+      final storageRef =
+          FirebaseStorage.instance.ref().child('users/${user.uid}');
+      final ByteData blankFileData =
+          await rootBundle.load('assets/welcome.txt');
+      final Uint8List blankFileBytes = blankFileData.buffer.asUint8List();
+      await storageRef.child('welcome.txt').putData(blankFileBytes);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');
@@ -122,6 +125,7 @@ class FireAuth {
   //google login
   static Future<User?> signInWithGoogle({required BuildContext context}) async {
     FirebaseAuth auth = FirebaseAuth.instance;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
     User? user;
 
     if (kIsWeb) {
@@ -157,6 +161,39 @@ class FireAuth {
               await auth.signInWithCredential(credential);
 
           user = userCredential.user;
+
+          // Create user document with imageboard subcollection upon user creation
+          CollectionReference userCollection =
+              FirebaseFirestore.instance.collection('user-information');
+          DocumentSnapshot userDocument =
+              await userCollection.doc(user!.uid).get();
+
+          if (userDocument.exists) {
+            //User already exists
+            print('User already exists in Firestore');
+          } else {
+            //User does not exist, create respected documents in Firestore
+
+            await userCollection.doc(user.uid).set({
+              'username': user.displayName,
+              'email': user.email,
+            });
+
+            CollectionReference imageboardCollection =
+                userCollection.doc(user.uid).collection('imageboard');
+            await imageboardCollection.add({
+              'image_location': '',
+              'image_name': '',
+            });
+
+            // create a folder in Cloud Storage upon user creation
+            final storageRef =
+                FirebaseStorage.instance.ref().child('users/${user.uid}');
+            final ByteData blankFileData =
+                await rootBundle.load('assets/welcome.txt');
+            final Uint8List blankFileBytes = blankFileData.buffer.asUint8List();
+            await storageRef.child('welcome.txt').putData(blankFileBytes);
+          }
         } on FirebaseAuthException catch (e) {
           if (e.code == 'account-exists-with-different-credential') {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -210,7 +247,7 @@ class FireAuth {
       backgroundColor: Colors.black,
       content: Text(
         content,
-        style: TextStyle(
+        style: const TextStyle(
             color: Color.fromARGB(255, 22, 2, 246), letterSpacing: 0.5),
       ),
     );
@@ -224,7 +261,7 @@ class FireAuth {
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
       ScaffoldMessenger.of(BuildContext as BuildContext).showSnackBar(
-       FireAuth.customSnackBar(
+        FireAuth.customSnackBar(
           content: 'Passwod reset email sent',
         ),
       );

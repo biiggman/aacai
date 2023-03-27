@@ -1,73 +1,40 @@
 import 'dart:io';
-import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:path/path.dart' as Path;
 
-class UploadImage extends StatefulWidget {
-  const UploadImage ({super.key});
-  
-  @override
-  State<UploadImage> createState() => _UploadImageState();
-}
-
-
-class _UploadImageState extends State<UploadImage> {
-  File? _imageFile = null;
-
+class ImageUploader {
   final picker = ImagePicker();
 
-  Future<void> chooseImage() async {
+  Future<String?> chooseImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
-
     if (pickedFile != null) {
-      setState(() {
-      _imageFile = File(pickedFile.path);
-    });
+      File imageFile = File(pickedFile.path);
+      return imageFile.path;
     }
+    return null;
   }
 
-  Future<void> uploadImage() async {
 
-    if (_imageFile == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Please select an image to upload.'),
-      ));
-      return;
-    }
+Future<void> uploadImage(File imageFile, String fileName) async {
+  String uid = FirebaseAuth.instance.currentUser!.uid;
 
-    String fileName = Path.basename(_imageFile!.path);
-    Reference firebaseStorageRef = FirebaseStorage.instance.ref().child(fileName);
-    UploadTask uploadTask = firebaseStorageRef.putFile(_imageFile!);
-    TaskSnapshot taskSnapshot = await uploadTask;
-    taskSnapshot.ref.getDownloadURL().then(
-          (value) => print("Done: $value"),
-    );
-  }
-  
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return Scaffold(
-      appBar: AppBar(title: Text("Upload Image"),
-      ),
-    body: Center (
-      child: _imageFile == null
-    ? Text("No image selected.")
-    : Image.file(_imageFile!),
-    ),
-    floatingActionButton: Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        FloatingActionButton(
-          onPressed: chooseImage,
-          tooltip: "Pick Image",
-          child: Icon(Icons.add_a_photo),
-          ),
-          SizedBox(height:16),
-          FloatingActionButton(
-            onPressed: uploadImage,
-            tooltip: "Upload Image",
-            child: Icon(Icons.cloud_upload),)],),);
-  }
+  Reference firebaseStorageRef = FirebaseStorage.instance.ref().child('users/$uid/$fileName');
+  UploadTask uploadTask = firebaseStorageRef.putFile(imageFile);
+  TaskSnapshot taskSnapshot = await uploadTask;
+  String imageUrl = await taskSnapshot.ref.getDownloadURL();
+
+  CollectionReference imageboardRef = FirebaseFirestore.instance
+      .collection('user-information')
+      .doc(uid)
+      .collection('imageboard');
+
+  await imageboardRef.add({
+    'name': fileName,
+    'location': imageUrl,
+  });
+
+  print('Image uploaded to $imageUrl');
+}
 }
