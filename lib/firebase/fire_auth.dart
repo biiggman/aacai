@@ -42,6 +42,7 @@ class FireAuth {
       await imageboardCollection.add({
         'image_location': '',
         'image_name': '',
+        'button_color': '',
       });
 
       // create a folder in Cloud Storage upon user creation
