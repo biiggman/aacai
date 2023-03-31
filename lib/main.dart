@@ -31,9 +31,10 @@ class MyApp extends StatelessWidget {
 
       theme: MyThemes.lightTheme,
 
-      home: const MyHomePage(
-        title: '',
-      ),
+//CHANGE THIS BACK TO MYHOMEPAGE, USING IT TO TEST LOGIN PAGE
+      home: const LoginPage(
+          //title: '',
+          ),
     );
   }
 }

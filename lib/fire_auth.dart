@@ -38,29 +38,6 @@ class FireAuth {
     return user;
   }
 
-  //Guest Login
-  static Future<User?> anonSignIn() async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    User? user;
-
-    try {
-      UserCredential userCredential = await auth.signInAnonymously();
-
-      user = userCredential.user;
-      await user!.updateProfile(displayName: user.uid);
-      await user.reload();
-      user = auth.currentUser;
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'User-not-found') {
-        print('No user found for that Guest ID');
-      }
-    } catch (e) {
-      print(e);
-    }
-
-    return user;
-  }
-
   // For signing in a user (have already registered)
   static Future<User?> signInUsingEmailPassword({
     required String email,
@@ -159,7 +136,6 @@ class FireAuth {
         }
       }
     }
-
     return user;
   }
 
@@ -181,7 +157,7 @@ class FireAuth {
     }
   }
 
-  //handle authorization errors
+  //handle google authorization errors
   static SnackBar customSnackBar({required String content}) {
     return SnackBar(
       backgroundColor: Colors.black,
