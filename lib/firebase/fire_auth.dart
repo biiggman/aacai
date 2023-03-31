@@ -39,10 +39,15 @@ class FireAuth {
       });
       CollectionReference imageboardCollection =
           userCollection.doc(user.uid).collection('imageboard');
-      await imageboardCollection.add({
-        'image_location': '',
-        'image_name': '',
-        'button_color': '',
+
+      DocumentReference initialDocument = imageboardCollection.doc('initial');
+
+      //set default values for initial value NOTE: Firebase Firestore requires a document to be present to create a subfolder. pain :/
+
+      await initialDocument.set({
+        'image_color': '0xff000000',
+        'image_name': 'Initial',
+        'image_location': 'example.com/pleaseGiveMeAGoodGradeDrIslam',
       });
 
       // create a folder in Cloud Storage upon user creation
@@ -57,29 +62,6 @@ class FireAuth {
         print('The password provided is too weak.');
       } else if (e.code == 'email-already-in-use') {
         print('An account already exists for that email.');
-      }
-    } catch (e) {
-      print(e);
-    }
-
-    return user;
-  }
-
-  //Guest Login
-  static Future<User?> anonSignIn() async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    User? user;
-
-    try {
-      UserCredential userCredential = await auth.signInAnonymously();
-
-      user = userCredential.user;
-      await user!.updateProfile(displayName: user.uid);
-      await user.reload();
-      user = auth.currentUser;
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'User-not-found') {
-        print('No user found for that Guest ID');
       }
     } catch (e) {
       print(e);

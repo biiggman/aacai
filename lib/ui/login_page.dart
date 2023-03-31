@@ -151,33 +151,7 @@ class _LoginPageState extends State<LoginPage> {
                                         },
                                         child: const Text(
                                           'Sign In',
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 24.0),
-                                    Expanded(
-                                      child: ElevatedButton(
-                                        onPressed: () async {
-                                          User? user =
-                                              await FireAuth.anonSignIn();
-                                          setState(() {
-                                            _isProcessing = false;
-                                          });
-
-                                          if (user != null) {
-                                            Navigator.of(context)
-                                                .pushReplacement(
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ProfilePage(user: user),
-                                              ),
-                                            );
-                                          }
-                                        },
-                                        child: const Text(
-                                          'Guest Sign In',
-                                          style: TextStyle(color: Colors.white),
+                                          style: TextStyle(color: Colors.black),
                                         ),
                                       ),
                                     ),
@@ -239,8 +213,8 @@ class _LoginPageState extends State<LoginPage> {
                                                 height: 35.0,
                                               ),
                                               Padding(
-                                                padding: EdgeInsets.only(
-                                                    left: 10),
+                                                padding:
+                                                    EdgeInsets.only(left: 10),
                                                 child: Text(
                                                   'Sign in with Google',
                                                   style: TextStyle(
@@ -275,7 +249,7 @@ class _LoginPageState extends State<LoginPage> {
                                           child: const Text(
                                             'Register',
                                             style:
-                                                TextStyle(color: Colors.white),
+                                                TextStyle(color: Colors.black),
                                           ),
                                         ),
                                       ),
@@ -293,7 +267,7 @@ class _LoginPageState extends State<LoginPage> {
                                           child: const Text(
                                             'Forgot Password',
                                             style:
-                                                TextStyle(color: Colors.white),
+                                                TextStyle(color: Colors.black),
                                           ),
                                         ),
                                       ),

@@ -2,6 +2,8 @@ import 'package:aacademic/camera/camera_page.dart';
 import 'package:aacademic/ui/login_page.dart';
 import 'package:aacademic/ui/settings_page.dart';
 import 'package:aacademic/utils/themes.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -55,6 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String imageURLTest = '';
   String buttonTestTitle = '';
   String buttonName = "";
+  ButtonUtils buttonUtils = ButtonUtils();
 
   //keys here
   final navKey = GlobalKey();
@@ -147,12 +150,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                             const EdgeInsets.all(10.0),
                                         buttonAlignedDropdown: true,
                                         children: <Widget>[
-                                          ElevatedButton(
-                                              onPressed: () {
-                                                imageboardUtils
-                                                    .loadAssetImages();
-                                              },
-                                              child: const Text('Stock')),
                                           ElevatedButton(
                                               onPressed: () {
                                                 imageboardUtils.chooseImage();
@@ -273,14 +270,22 @@ class _MyHomePageState extends State<MyHomePage> {
                                           ),
                                         ],
                                       ),
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          imageboardUtils.uploadImage(
-                                              buttonName, buttonColor);
-                                        },
-                                        child: const Text(
-                                            'Add Button to Imageboard!!'),
-                                      ),
+                                      ButtonBar(
+                                          alignment: MainAxisAlignment.center,
+                                          buttonPadding:
+                                              const EdgeInsets.all(10.0),
+                                          buttonAlignedDropdown: true,
+                                          children: <Widget>[
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                imageboardUtils.uploadImage(
+                                                    buttonName, buttonColor);
+                                                Navigator.of(context)
+                                                    .pushNamed('/');
+                                              },
+                                              child: const Text('Add to '),
+                                            ),
+                                          ]),
                                     ],
                                   ),
                                 ))
@@ -312,90 +317,22 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-          child: GridView.count(
-        primary: false,
-        padding: const EdgeInsets.all(20),
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
-        crossAxisCount: 2,
-        children: <Widget>[
-          RawMaterialButton(
-            onPressed: () {},
-            constraints: const BoxConstraints(minHeight: 80, minWidth: 80),
-            fillColor: Colors.red,
-            padding: const EdgeInsets.all(3.0),
-            shape: const CircleBorder(),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Icon(Icons.emoji_emotions),
-                SizedBox(height: 5),
-                Text('My Button')
-              ],
-            ),
-          ),
-          RawMaterialButton(
-            onPressed: () {},
-            constraints: const BoxConstraints(minHeight: 60, minWidth: 60),
-            fillColor: Colors.red,
-            padding: const EdgeInsets.all(3.0),
-            shape: const CircleBorder(),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Icon(Icons.emoji_emotions),
-                SizedBox(height: 5),
-                Text('My Button')
-              ],
-            ),
-          ),
-          RawMaterialButton(
-            onPressed: () {},
-            constraints: const BoxConstraints(minHeight: 60, minWidth: 60),
-            fillColor: Colors.blue,
-            padding: const EdgeInsets.all(3.0),
-            shape: const CircleBorder(),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Icon(Icons.emoji_emotions),
-                SizedBox(height: 5),
-                Text('My Button')
-              ],
-            ),
-          ),
-          RawMaterialButton(
-            onPressed: () {},
-            constraints: const BoxConstraints(minHeight: 60, minWidth: 60),
-            fillColor: Colors.yellow,
-            padding: const EdgeInsets.all(3.0),
-            shape: const CircleBorder(),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Icon(Icons.emoji_emotions),
-                SizedBox(height: 5),
-                Text('My Button')
-              ],
-            ),
-          ),
-          RawMaterialButton(
-            onPressed: () {},
-            constraints: const BoxConstraints(minHeight: 60, minWidth: 60),
-            fillColor: Colors.green,
-            padding: const EdgeInsets.all(3.0),
-            shape: const CircleBorder(),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Icon(Icons.emoji_emotions),
-                SizedBox(height: 5),
-                Text('My Button')
-              ],
-            ),
-          )
-        ],
-      )),
+        child: FutureBuilder(
+            future: buttonUtils.makeButtons(),
+            builder: (BuildContext context,
+                AsyncSnapshot<List<RawMaterialButton>> imageboardRef) {
+              if (imageboardRef.connectionState == ConnectionState.waiting) {
+                return const CircularProgressIndicator();
+              } else if (imageboardRef.hasError) {
+                return Text('Error: ${imageboardRef.error}');
+              } else {
+                return GridView.count(
+                  crossAxisCount: 3,
+                  children: imageboardRef.data!,
+                );
+              }
+            }),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         key: navKey,
