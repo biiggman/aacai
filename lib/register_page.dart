@@ -103,10 +103,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                 Expanded(
                                   child: ElevatedButton(
                                     onPressed: () async {
-                                      // setState(() {
-                                      //   _isProcessing = true;
-                                      // });
-
                                       if (_registerFormKey.currentState!
                                           .validate()) {
                                         setState(() {
