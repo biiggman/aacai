@@ -1,5 +1,5 @@
 name: aacademic
-description: A new Flutter project.
+description: A free and feature-rich AAC (Augmentative Alternative Communication) application that is available on both iOS and Android.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -33,20 +33,24 @@ dependencies:
   camera:
   path_provider:
   path:
+  image_picker:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   firebase_core: ^2.6.1
   firebase_auth: ^4.2.9
+  cloud_firestore: ^4.4.2
+  firebase_performance: ^0.9.0+13
+  firebase_storage: ^11.0.14
+  flutter_tts:
+  tflite:
   settings_ui: ^2.0.2
   google_sign_in: ^6.0.2
-
-dependency_overrides:
   camera_android: 0.9.7+1
   camera_avfoundation: 0.9.7+1
 
-  
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

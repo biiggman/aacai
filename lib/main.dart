@@ -1,14 +1,18 @@
-import 'package:aacademic/camera_page.dart';
-import 'package:aacademic/login_page.dart';
-import 'package:aacademic/settings_page.dart';
-import 'package:aacademic/themes.dart';
+import 'package:aacademic/camera/camera_page.dart';
+import 'package:aacademic/ui/login_page.dart';
+import 'package:aacademic/ui/settings_page.dart';
+import 'package:aacademic/utils/themes.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
+import 'package:aacademic/firebase/firebase_options.dart';
+import 'package:aacademic/utils/imageboard_utils.dart';
 
 void main() async {
   runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -20,7 +24,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       //Material App Constructor
-      title: 'Flutter Demo',
+      title: 'AACademic',
 
       initialRoute: '/', //Route logic for navigation
 
@@ -31,9 +35,7 @@ class MyApp extends StatelessWidget {
 
       theme: MyThemes.lightTheme,
 
-      home: const MyHomePage(
-        title: '',
-      ),
+      home: const LoginPage(),
     );
   }
 }
@@ -48,25 +50,20 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
   int _selectedIndex = 0;
 
   //dummy variables
   Color colorVariable = Colors.blue;
   String imageURLTest = '';
   String buttonTestTitle = '';
+  String buttonName = "";
+  ButtonUtils buttonUtils = ButtonUtils();
 
   //keys here
   final navKey = GlobalKey();
   final _addButtonKey = GlobalKey<FormState>();
   final _sourceImageKey = GlobalKey();
   final _buttonColorKey = GlobalKey();
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
 
   void _onItemTapped(int index) async {
     setState(() {
@@ -82,6 +79,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
       case 2:
         {
+          ImageboardUtils imageboardUtils = ImageboardUtils();
+          Color buttonColor = Colors.red;
           showDialog(
               context: context,
               builder: (BuildContext context) {
@@ -102,17 +101,16 @@ class _MyHomePageState extends State<MyHomePage> {
                                 elevation: 2.0,
                                 constraints: const BoxConstraints(
                                     minHeight: 100, minWidth: 100),
-                                fillColor: Colors.green,
+                                fillColor: buttonColor,
                                 padding: const EdgeInsets.all(3.0),
                                 shape: const CircleBorder(),
                                 child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: const [
-                                    Icon(Icons.emoji_emotions),
-                                    SizedBox(height: 5),
-                                    Text('My Button')
-                                  ],
-                                ),
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: const [
+                                      Icon(Icons.emoji_emotions),
+                                      SizedBox(height: 5),
+                                      Text('My Button')
+                                    ]),
                               ),
                             ),
                             Flexible(
@@ -131,6 +129,17 @@ class _MyHomePageState extends State<MyHomePage> {
                                         decoration: const InputDecoration(
                                           labelText: 'Button Name',
                                         ),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            buttonName = value;
+                                          });
+                                        },
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return "Please enter a name.";
+                                          }
+                                          return null;
+                                        },
                                       ),
                                       const SizedBox(height: 20),
                                       const Text('Picture: '),
@@ -143,19 +152,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                         children: <Widget>[
                                           ElevatedButton(
                                               onPressed: () {
-                                                Navigator.of(context)
-                                                    .pushNamed('/');
-                                              },
-                                              child: const Text('Gallery')),
-                                          ElevatedButton(
-                                              onPressed: () {
-                                                Navigator.of(context)
-                                                    .pushNamed('/');
+                                                imageboardUtils.chooseImage();
                                               },
                                               child: const Text('Camera Roll'))
                                         ],
                                       ),
-                                      SizedBox(height: 20),
+                                      const SizedBox(height: 20),
                                       const Text('Button Color: '),
                                       ButtonBar(
                                         key: _buttonColorKey,
@@ -168,63 +170,99 @@ class _MyHomePageState extends State<MyHomePage> {
                                         buttonAlignedDropdown: true,
                                         children: <Widget>[
                                           RawMaterialButton(
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              setState(() {
+                                                buttonColor = Colors.red;
+                                              });
+                                            },
                                             elevation: 2.0,
                                             fillColor: Colors.red,
                                             padding: const EdgeInsets.all(3.0),
                                             shape: const CircleBorder(),
                                           ),
                                           RawMaterialButton(
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              setState(() {
+                                                buttonColor = Colors.orange;
+                                              });
+                                            },
                                             elevation: 2.0,
                                             fillColor: Colors.orange,
                                             padding: const EdgeInsets.all(3.0),
                                             shape: const CircleBorder(),
                                           ),
                                           RawMaterialButton(
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              setState(() {
+                                                buttonColor = Colors.yellow;
+                                              });
+                                            },
                                             elevation: 2.0,
                                             fillColor: Colors.yellow,
                                             padding: const EdgeInsets.all(3.0),
                                             shape: const CircleBorder(),
                                           ),
                                           RawMaterialButton(
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              setState(() {
+                                                buttonColor = Colors.green;
+                                              });
+                                            },
                                             elevation: 2.0,
                                             fillColor: Colors.green,
                                             padding: const EdgeInsets.all(3.0),
                                             shape: const CircleBorder(),
                                           ),
                                           RawMaterialButton(
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              setState(() {
+                                                buttonColor = Colors.blue;
+                                              });
+                                            },
                                             elevation: 2.0,
                                             fillColor: Colors.blue,
                                             padding: const EdgeInsets.all(3.0),
                                             shape: const CircleBorder(),
                                           ),
                                           RawMaterialButton(
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              setState(() {
+                                                buttonColor = Colors.purple;
+                                              });
+                                            },
                                             elevation: 2.0,
                                             fillColor: Colors.purple,
                                             padding: const EdgeInsets.all(3.0),
                                             shape: const CircleBorder(),
                                           ),
                                           RawMaterialButton(
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              setState(() {
+                                                buttonColor = Colors.white;
+                                              });
+                                            },
                                             elevation: 2.0,
                                             fillColor: Colors.white,
                                             padding: const EdgeInsets.all(3.0),
                                             shape: const CircleBorder(),
                                           ),
                                           RawMaterialButton(
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              setState(() {
+                                                buttonColor = Colors.black;
+                                              });
+                                            },
                                             elevation: 2.0,
                                             fillColor: Colors.black,
                                             padding: const EdgeInsets.all(3.0),
                                             shape: const CircleBorder(),
                                           ),
                                           RawMaterialButton(
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              setState(() {
+                                                buttonColor = Colors.grey;
+                                              });
+                                            },
                                             elevation: 2.0,
                                             fillColor: Colors.grey,
                                             padding: const EdgeInsets.all(3.0),
@@ -232,6 +270,22 @@ class _MyHomePageState extends State<MyHomePage> {
                                           ),
                                         ],
                                       ),
+                                      ButtonBar(
+                                          alignment: MainAxisAlignment.center,
+                                          buttonPadding:
+                                              const EdgeInsets.all(10.0),
+                                          buttonAlignedDropdown: true,
+                                          children: <Widget>[
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                imageboardUtils.uploadImage(
+                                                    buttonName, buttonColor);
+                                                Navigator.of(context)
+                                                    .pushNamed('/');
+                                              },
+                                              child: const Text('Add to '),
+                                            ),
+                                          ]),
                                     ],
                                   ),
                                 ))
@@ -263,90 +317,22 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-          child: GridView.count(
-        primary: false,
-        padding: const EdgeInsets.all(20),
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
-        crossAxisCount: 2,
-        children: <Widget>[
-          RawMaterialButton(
-            onPressed: () {},
-            constraints: const BoxConstraints(minHeight: 80, minWidth: 80),
-            fillColor: Colors.red,
-            padding: const EdgeInsets.all(3.0),
-            shape: const CircleBorder(),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Icon(Icons.emoji_emotions),
-                SizedBox(height: 5),
-                Text('My Button')
-              ],
-            ),
-          ),
-          RawMaterialButton(
-            onPressed: () {},
-            constraints: const BoxConstraints(minHeight: 60, minWidth: 60),
-            fillColor: Colors.red,
-            padding: const EdgeInsets.all(3.0),
-            shape: const CircleBorder(),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Icon(Icons.emoji_emotions),
-                SizedBox(height: 5),
-                Text('My Button')
-              ],
-            ),
-          ),
-          RawMaterialButton(
-            onPressed: () {},
-            constraints: const BoxConstraints(minHeight: 60, minWidth: 60),
-            fillColor: Colors.blue,
-            padding: const EdgeInsets.all(3.0),
-            shape: const CircleBorder(),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Icon(Icons.emoji_emotions),
-                SizedBox(height: 5),
-                Text('My Button')
-              ],
-            ),
-          ),
-          RawMaterialButton(
-            onPressed: () {},
-            constraints: const BoxConstraints(minHeight: 60, minWidth: 60),
-            fillColor: Colors.yellow,
-            padding: const EdgeInsets.all(3.0),
-            shape: const CircleBorder(),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Icon(Icons.emoji_emotions),
-                SizedBox(height: 5),
-                Text('My Button')
-              ],
-            ),
-          ),
-          RawMaterialButton(
-            onPressed: () {},
-            constraints: const BoxConstraints(minHeight: 60, minWidth: 60),
-            fillColor: Colors.green,
-            padding: const EdgeInsets.all(3.0),
-            shape: const CircleBorder(),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Icon(Icons.emoji_emotions),
-                SizedBox(height: 5),
-                Text('My Button')
-              ],
-            ),
-          )
-        ],
-      )),
+        child: FutureBuilder(
+            future: buttonUtils.makeButtons(),
+            builder: (BuildContext context,
+                AsyncSnapshot<List<RawMaterialButton>> imageboardRef) {
+              if (imageboardRef.connectionState == ConnectionState.waiting) {
+                return const CircularProgressIndicator();
+              } else if (imageboardRef.hasError) {
+                return Text('Error: ${imageboardRef.error}');
+              } else {
+                return GridView.count(
+                  crossAxisCount: 3,
+                  children: imageboardRef.data!,
+                );
+              }
+            }),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         key: navKey,
@@ -385,7 +371,7 @@ class imageboardButton extends RawMaterialButton {
 }
 
 class imageboardModel extends ChangeNotifier {
-  List<imageboardButton> _buttonList = [];
+  final List<imageboardButton> _buttonList = [];
 
   List<imageboardButton> get buttonList => _buttonList;
 
