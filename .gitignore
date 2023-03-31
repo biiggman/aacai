@@ -31,8 +31,8 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
-lib/firebase/firebase_options.dart
-android/app/google-services.json
+/lib/firebase/firebase_options.dart
+/android/app/google-services.json
 
 # Symbolication related
 app.*.symbols
