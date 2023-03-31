@@ -1,4 +1,5 @@
 import 'package:aacademic/validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'fire_auth.dart';
 
@@ -56,9 +57,22 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       _isProcessing
                           ? CircularProgressIndicator()
                           : ElevatedButton(
-                              onPressed: () {
-                                FireAuth.forgotPassword(
-                                    email: _emailTextController.text);
+                              onPressed: () async {
+                                _focusEmail.unfocus();
+
+                                if (_registerFormKey.currentState!.validate()) {
+                                  setState(() {
+                                    _isProcessing = true;
+                                  });
+
+                                  FireAuth.forgotPassword(
+                                      email: _emailTextController.text.trim(),
+                                      context: context);
+
+                                  setState(() {
+                                    _isProcessing = false;
+                                  });
+                                }
                               },
                               child: Text(
                                 'Reset Password',

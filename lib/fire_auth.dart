@@ -7,11 +7,12 @@ import 'package:path/path.dart';
 
 class FireAuth {
   // For registering a new user
-  static Future<User?> registerUsingEmailPassword({
-    required String name,
-    required String email,
-    required String password,
-  }) async {
+  //add snackbar
+  static Future<User?> registerUsingEmailPassword(
+      {required String name,
+      required String email,
+      required String password,
+      required BuildContext context}) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user;
 
@@ -29,7 +30,11 @@ class FireAuth {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');
       } else if (e.code == 'email-already-in-use') {
-        print('An account already exists for that email.');
+        ScaffoldMessenger.of(context).showSnackBar(
+          FireAuth.customSnackBar(
+            content: 'Account already exists for that email',
+          ),
+        );
       }
     } catch (e) {
       print(e);
@@ -39,6 +44,7 @@ class FireAuth {
   }
 
   // For signing in a user (have already registered)
+  //add snackbar for errors
   static Future<User?> signInUsingEmailPassword({
     required String email,
     required String password,
@@ -157,33 +163,33 @@ class FireAuth {
     }
   }
 
-  //handle google authorization errors
+  //snackbar to handle authorization errors
   static SnackBar customSnackBar({required String content}) {
     return SnackBar(
-      backgroundColor: Colors.black,
+      backgroundColor: Color.fromRGBO(246, 197, 2, 1),
       content: Text(
         content,
-        style: TextStyle(
-            color: Color.fromARGB(255, 22, 2, 246), letterSpacing: 0.5),
+        style:
+            TextStyle(color: Color.fromARGB(255, 1, 4, 0), letterSpacing: 0.5),
       ),
     );
   }
 
-  //forgot password
-  //not showing snackbar messages for confirmation and invalid email
-  static Future<void> forgotPassword({
-    required String email,
-  }) async {
+  //forgot password with snackbar
+  static Future<void> forgotPassword(
+      {required String email, required BuildContext context}) async {
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
-      ScaffoldMessenger.of(context as BuildContext).showSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(
         FireAuth.customSnackBar(
-          content: 'Passwod reset email sent',
+          content: 'Password reset email sent',
         ),
       );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        print('No user found for that email.');
+        ScaffoldMessenger.of(context).showSnackBar(FireAuth.customSnackBar(
+          content: 'No user found for that email',
+        ));
       }
     }
   }

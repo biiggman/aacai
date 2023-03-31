@@ -51,7 +51,7 @@ class _LoginPageState extends State<LoginPage> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Firebase Authentication'),
+          title: Text('Logo here'),
         ),
         body: FutureBuilder(
           future: _initializeFirebase(),
@@ -115,6 +115,7 @@ class _LoginPageState extends State<LoginPage> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
+                                    //sign in =>
                                     Expanded(
                                       child: ElevatedButton(
                                         onPressed: () async {
@@ -164,6 +165,7 @@ class _LoginPageState extends State<LoginPage> {
                                   mainAxisSize: MainAxisSize.min,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
+                                      //google sign in =>
                                       OutlinedButton(
                                         style: ButtonStyle(
                                           backgroundColor:
@@ -236,6 +238,7 @@ class _LoginPageState extends State<LoginPage> {
                                   mainAxisSize: MainAxisSize.min,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
+                                      //register =>
                                       Expanded(
                                         child: ElevatedButton(
                                           onPressed: () {
@@ -254,6 +257,7 @@ class _LoginPageState extends State<LoginPage> {
                                         ),
                                       ),
                                       SizedBox(width: 24.0),
+                                      //forgot password =>
                                       Expanded(
                                         child: ElevatedButton(
                                           onPressed: () {
