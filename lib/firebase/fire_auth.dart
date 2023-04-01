@@ -48,6 +48,7 @@ class FireAuth {
         'image_color': '0xff000000',
         'image_name': 'Initial',
         'image_location': 'example.com/pleaseGiveMeAGoodGradeDrIslam',
+        'image_size': '1x1',
       });
 
       // create a folder in Cloud Storage upon user creation
@@ -119,6 +120,45 @@ class FireAuth {
             await auth.signInWithPopup(authProvider);
 
         user = userCredential.user;
+
+        // Create user document with imageboard subcollection upon user creation
+        CollectionReference userCollection =
+            FirebaseFirestore.instance.collection('user-information');
+        DocumentSnapshot userDocument =
+            await userCollection.doc(user!.uid).get();
+
+        if (userDocument.exists) {
+          //User already exists
+          print("User already exists in Firestore");
+        } else {
+          //User does not exist, create respected documents in Firestore
+
+          await userCollection.doc(user.uid).set({
+            'username': user.displayName,
+            'email': user.email,
+          });
+
+          CollectionReference imageboardCollection =
+              userCollection.doc(user.uid).collection('imageboard');
+
+          DocumentReference initialDocument =
+              imageboardCollection.doc('initial');
+          await initialDocument.set({
+            'image_color': '0xff000000',
+            'image_name': 'Initial',
+            'image_location': 'example.com/pleaseGiveMeAGoodGradeDrIslam',
+            'image_size': '1x1',
+          });
+
+          // create a folder in Cloud Storage upon user creation
+          final storageRef =
+              FirebaseStorage.instance.ref().child('users/${user.uid}');
+          final ByteData blankFileData =
+              await rootBundle.load('assets/welcome.txt');
+          final Uint8List blankFileBytes = blankFileData.buffer.asUint8List();
+          await storageRef.child('welcome.txt').putData(blankFileBytes);
+          print("Complete");
+        }
       } catch (e) {
         print(e);
       }
@@ -153,7 +193,7 @@ class FireAuth {
 
           if (userDocument.exists) {
             //User already exists
-            print('User already exists in Firestore');
+            print("User already exists in Firestore");
           } else {
             //User does not exist, create respected documents in Firestore
 
@@ -164,9 +204,14 @@ class FireAuth {
 
             CollectionReference imageboardCollection =
                 userCollection.doc(user.uid).collection('imageboard');
-            await imageboardCollection.add({
-              'image_location': '',
-              'image_name': '',
+
+            DocumentReference initialDocument =
+                imageboardCollection.doc('initial');
+            await initialDocument.set({
+              'image_color': '0xff000000',
+              'image_name': 'Initial',
+              'image_location': 'example.com/pleaseGiveMeAGoodGradeDrIslam',
+              'image_size': '1x1',
             });
 
             // create a folder in Cloud Storage upon user creation
@@ -176,6 +221,7 @@ class FireAuth {
                 await rootBundle.load('assets/welcome.txt');
             final Uint8List blankFileBytes = blankFileData.buffer.asUint8List();
             await storageRef.child('welcome.txt').putData(blankFileBytes);
+            print("Complete");
           }
         } on FirebaseAuthException catch (e) {
           if (e.code == 'account-exists-with-different-credential') {

@@ -7,6 +7,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:aacademic/utils/tts.dart';
 
+
+
 class ImageboardUtils {
   File? _selectedImage;
 
@@ -33,7 +35,7 @@ class ImageboardUtils {
   //  return imagePaths;
   //}
 
-  Future<void> uploadImage(String name, Color buttonColor) async {
+  Future<void> uploadImage(String name, String size, Color buttonColor) async {
     String uid = FirebaseAuth.instance.currentUser!.uid;
 
     CollectionReference imageboardRef = FirebaseFirestore.instance
@@ -56,6 +58,7 @@ class ImageboardUtils {
       'image_name': name,
       'image_location': imageUrl,
       'image_color': buttonColorValue,
+      'image_size': size,
     });
 
     print('Image uploaded to $imageUrl');
@@ -79,21 +82,59 @@ class ButtonUtils {
       if (doc.id == 'initial') {
         continue;
       }
+
       int colorValue = doc['image_color'];
       String buttonName = doc['image_name'];
       String buttonLocation = doc['image_location'];
+      String buttonSize = doc['image_size'];
       Color buttonColor = Color(colorValue);
+
+      List<int> sizeParts = buttonSize.split('x').map(int.parse).toList();
+      double baseSize = 100.0;
+      double scaleX = sizeParts[0].toDouble();
+      double scaleY = sizeParts.length > 1 ? sizeParts[1].toDouble() : scaleX;
+
       buttons.add(RawMaterialButton(
         onPressed: () {
           TextToSpeech.speak(buttonName);
         },
-        onLongPress: () {},
+        onLongPress: () {
+
+          //ADD EDIT MENU HERE???
+          //          
+          //showDialog(
+          //  context: context,
+          //  builder: (BuildContext context) {
+          //    return AlertDialog(
+          //      scrollable: true,
+          //      title: Text("Edit $buttonName"),
+          //      content: Padding(
+          //        padding: const EdgeInsets.all(10.0),
+          //        child: Form(
+          //          child: Row(
+          //            crossAxisAlignment: CrossAxisAlignment.center,
+          //            children: [
+          //             Expanded(
+          //                flex: 4,
+          //                child: 
+          //              )
+          //            ],
+          //          ),))
+          //    );
+          //    
+          //  }
+        //  );
+        },
         elevation: 0.0,
-        constraints: const BoxConstraints(minHeight: 100, minWidth: 100),
+        constraints: BoxConstraints(
+            minHeight: baseSize * scaleY, 
+            minWidth: baseSize * scaleX,
+        ),
+        
         shape: RoundedRectangleBorder(
             side: BorderSide(color: buttonColor, width: 2),
             borderRadius: BorderRadius.circular(18)),
-            fillColor: buttonColor,
+        fillColor: buttonColor,
         padding: const EdgeInsets.all(3.0),
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           Image.network(

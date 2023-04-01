@@ -51,7 +51,7 @@ class _SettingsPageState extends State<SettingsPage> {
               SettingsTile.navigation(
                 leading: const Icon(Icons.lock),
                 title: const Text('Log-in Page'),
-                // onPressed: () {};
+                //onPressed: () {}
               )
             ],
           ),

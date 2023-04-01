@@ -11,11 +11,11 @@ import 'package:aacademic/firebase/firebase_options.dart';
 import 'package:aacademic/utils/imageboard_utils.dart';
 
 void main() async {
-  runApp(const MyApp());
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -23,20 +23,32 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      //Material App Constructor
-      title: 'AACademic',
+        //Material App Constructor
+        title: 'AAC.AI',
+        initialRoute: '/', //Route logic for navigation
 
-      initialRoute: '/', //Route logic for navigation
+        routes: {
+          '/login': (context) => const LoginPage(),
+          '/settings': (context) => const SettingsPage(),
+        },
+        theme: MyThemes.lightTheme,
+        home: const LoginPage()
 
-      routes: {
-        '/login': (context) => const LoginPage(),
-        '/settings': (context) => const SettingsPage(),
-      },
-
-      theme: MyThemes.lightTheme,
-
-      home: const LoginPage(),
-    );
+        //ROUTE FOR HOMEPAGE THAT CHECKS FOR LOGIN. NEEDS ROUTE TO ACCOUNT IN SETTINGS TO AVOID SOFTLOCK OUT OF LOGIN PAGE
+        //FutureBuilder(
+        //future: FirebaseAuth.instance.authStateChanges().first,
+        //builder: (context, AsyncSnapshot<User?> snapshot) {
+        //  if (snapshot.connectionState == ConnectionState.waiting) {
+        //    return const CircularProgressIndicator();
+        //  } else if (snapshot.hasData) {
+        //    return const MyHomePage(
+        //      title: 'AAC.AI',
+        //    );
+        //  } else {
+        //    return const LoginPage();
+        //  }
+        //}),
+        );
   }
 }
 
@@ -57,6 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String imageURLTest = '';
   String buttonTestTitle = '';
   String buttonName = "";
+  String buttonSize = "";
   ButtonUtils buttonUtils = ButtonUtils();
 
   //keys here
@@ -155,6 +168,25 @@ class _MyHomePageState extends State<MyHomePage> {
                                                 imageboardUtils.chooseImage();
                                               },
                                               child: const Text('Camera Roll'))
+                                        ],
+                                      ),
+                                      const Text('Size: '),
+                                      ButtonBar(
+                                        alignment: MainAxisAlignment.center,
+                                        buttonPadding:
+                                            const EdgeInsets.all(10.0),
+                                        buttonAlignedDropdown: true,
+                                        children: <Widget>[
+                                          ElevatedButton(
+                                              onPressed: () {
+                                                buttonSize = "1x1";
+                                              },
+                                              child: const Text('1x1')),
+                                          ElevatedButton(
+                                              onPressed: () {
+                                                buttonSize = "2x2";
+                                              },
+                                              child: const Text('2x2')),
                                         ],
                                       ),
                                       const SizedBox(height: 20),
@@ -279,9 +311,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                             ElevatedButton(
                                               onPressed: () {
                                                 imageboardUtils.uploadImage(
-                                                    buttonName, buttonColor);
-                                                Navigator.of(context)
-                                                    .pushNamed('/');
+                                                    buttonName,
+                                                    buttonSize,
+                                                    buttonColor);
+                                                Navigator.pop(context);
                                               },
                                               child: const Text('Add to '),
                                             ),

@@ -49,6 +49,9 @@ dependencies:
   google_sign_in: ^6.0.2
   camera_android: 0.9.7+1
   camera_avfoundation: 0.9.7+1
+  flutter_translate:
+  flutter_localizations:
+    sdk: flutter
 
 
 dev_dependencies:
