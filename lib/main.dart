@@ -122,7 +122,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                     children: const [
                                       Icon(Icons.emoji_emotions),
                                       SizedBox(height: 5),
-                                      Text('My Button')
                                     ]),
                               ),
                             ),
@@ -181,12 +180,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                               onPressed: () {
                                                 buttonSize = "1x1";
                                               },
-                                              child: const Text('1x1')),
+                                              child: const Text('Small: 1x1')),
                                           ElevatedButton(
                                               onPressed: () {
                                                 buttonSize = "2x2";
                                               },
-                                              child: const Text('2x2')),
+                                              child: const Text('Large: 2x2')),
                                         ],
                                       ),
                                       const SizedBox(height: 20),
@@ -316,7 +315,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                     buttonColor);
                                                 Navigator.pop(context);
                                               },
-                                              child: const Text('Add to '),
+                                              child: const Text('Add'),
                                             ),
                                           ]),
                                     ],
@@ -361,6 +360,7 @@ class _MyHomePageState extends State<MyHomePage> {
               } else {
                 return GridView.count(
                   crossAxisCount: 3,
+                  crossAxisSpacing: 5,
                   children: imageboardRef.data!,
                 );
               }

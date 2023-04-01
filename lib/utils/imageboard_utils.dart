@@ -141,7 +141,7 @@ class ButtonUtils {
             buttonLocation,
             height: 125,
             width: 125,
-            fit: BoxFit.cover,
+            fit: BoxFit.fill,
           ),
         ]),
       ));
