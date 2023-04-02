@@ -23,6 +23,7 @@ class _LoginPageState extends State<LoginPage> {
   final _focusPassword = FocusNode();
 
   bool _isProcessing = false;
+  var _isObscured = true;
 
   Future<FirebaseApp> _initializeFirebase() async {
     FirebaseApp firebaseApp = await Firebase.initializeApp();
@@ -93,12 +94,25 @@ class _LoginPageState extends State<LoginPage> {
                           TextFormField(
                             controller: _passwordTextController,
                             focusNode: _focusPassword,
-                            obscureText: true,
+                            obscureText: _isObscured,
                             validator: (value) => Validator.validatePassword(
                               password: value,
                             ),
                             decoration: InputDecoration(
                               hintText: "Password",
+                              //Icon button toggles password visibility
+                              suffixIcon: IconButton(
+                                padding:
+                                    const EdgeInsetsDirectional.only(end: 12.0),
+                                icon: _isObscured
+                                    ? const Icon(Icons.visibility)
+                                    : const Icon(Icons.visibility_off),
+                                onPressed: () {
+                                  setState(() {
+                                    _isObscured = !_isObscured;
+                                  });
+                                },
+                              ),
                               errorBorder: UnderlineInputBorder(
                                 borderRadius: BorderRadius.circular(6.0),
                                 borderSide: BorderSide(
@@ -150,7 +164,7 @@ class _LoginPageState extends State<LoginPage> {
                                             }
                                           }
                                         },
-                                        child: Text(
+                                        child: const Text(
                                           'Sign In',
                                           style: TextStyle(color: Colors.white),
                                         ),
@@ -208,15 +222,15 @@ class _LoginPageState extends State<LoginPage> {
                                             mainAxisSize: MainAxisSize.min,
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
-                                            children: <Widget>[
+                                            children: const <Widget>[
                                               Image(
                                                 image: AssetImage(
                                                     "assets/google_logo.png"),
                                                 height: 35.0,
                                               ),
                                               Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 10),
+                                                padding:
+                                                    EdgeInsets.only(left: 10),
                                                 child: Text(
                                                   'Sign in with Google',
                                                   style: TextStyle(
@@ -249,7 +263,7 @@ class _LoginPageState extends State<LoginPage> {
                                               ),
                                             );
                                           },
-                                          child: Text(
+                                          child: const Text(
                                             'Register',
                                             style:
                                                 TextStyle(color: Colors.white),
@@ -268,7 +282,7 @@ class _LoginPageState extends State<LoginPage> {
                                               ),
                                             );
                                           },
-                                          child: Text(
+                                          child: const Text(
                                             'Forgot Password',
                                             style:
                                                 TextStyle(color: Colors.white),

@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'profile_page.dart';
 import 'fire_auth.dart';
 import 'validator.dart';
+import 'package:flutter_pw_validator/flutter_pw_validator.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -21,6 +22,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final _focusPassword = FocusNode();
 
   bool _isProcessing = false;
+  var _isObscured = true;
 
   @override
   Widget build(BuildContext context) {
@@ -81,12 +83,25 @@ class _RegisterPageState extends State<RegisterPage> {
                       TextFormField(
                         controller: _passwordTextController,
                         focusNode: _focusPassword,
-                        obscureText: true,
+                        obscureText: _isObscured,
                         validator: (value) => Validator.validatePassword(
                           password: value,
                         ),
                         decoration: InputDecoration(
                           hintText: "Password",
+                          //Icon button toggles password visibility
+                          suffixIcon: IconButton(
+                            padding:
+                                const EdgeInsetsDirectional.only(end: 12.0),
+                            icon: _isObscured
+                                ? const Icon(Icons.visibility)
+                                : const Icon(Icons.visibility_off),
+                            onPressed: () {
+                              setState(() {
+                                _isObscured = !_isObscured;
+                              });
+                            },
+                          ),
                           errorBorder: UnderlineInputBorder(
                             borderRadius: BorderRadius.circular(6.0),
                             borderSide: BorderSide(
@@ -94,6 +109,23 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                           ),
                         ),
+                      ),
+                      //password status validator
+                      FlutterPwValidator(
+                        controller: _passwordTextController,
+                        minLength: 6,
+                        uppercaseCharCount: 1,
+                        numericCharCount: 1,
+                        specialCharCount: 1,
+                        normalCharCount: 1,
+                        width: 400,
+                        height: 150,
+                        onSuccess: () {
+                          return true;
+                        },
+                        onFail: () {
+                          return false;
+                        },
                       ),
                       SizedBox(height: 32.0),
                       _isProcessing
