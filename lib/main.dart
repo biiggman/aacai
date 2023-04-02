@@ -1,6 +1,7 @@
 import 'package:aacademic/camera/camera_page.dart';
 import 'package:aacademic/ui/login_page.dart';
 import 'package:aacademic/ui/settings_page.dart';
+import 'package:aacademic/utils/add_menu/color_button.dart';
 import 'package:aacademic/utils/themes.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -63,6 +64,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
+  Color? buttonColor;
 
   //dummy variables
   Color colorVariable = Colors.blue;
@@ -83,6 +85,12 @@ class _MyHomePageState extends State<MyHomePage> {
       _selectedIndex = index;
     });
 
+    void onColorSelected(Color color) {
+      setState(() {
+        buttonColor = color;
+      });
+    }
+
     switch (index) {
       case 0:
         break;
@@ -93,238 +101,185 @@ class _MyHomePageState extends State<MyHomePage> {
       case 2:
         {
           ImageboardUtils imageboardUtils = ImageboardUtils();
-          Color buttonColor = Colors.red;
           showDialog(
               context: context,
               builder: (BuildContext context) {
                 return AlertDialog(
-                  scrollable: true,
-                  title: const Text('Add a Button'),
-                  content: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Form(
-                        key: _addButtonKey,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              flex: 4,
-                              child: RawMaterialButton(
-                                onPressed: () {},
-                                elevation: 2.0,
-                                constraints: const BoxConstraints(
-                                    minHeight: 100, minWidth: 100),
-                                fillColor: buttonColor,
-                                padding: const EdgeInsets.all(3.0),
-                                shape: const CircleBorder(),
-                                child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: const [
-                                      Icon(Icons.emoji_emotions),
-                                      SizedBox(height: 5),
-                                    ]),
-                              ),
-                            ),
-                            Flexible(
-                                flex: 4,
-                                fit: FlexFit.tight,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      TextFormField(
-                                        decoration: const InputDecoration(
-                                          labelText: 'Button Name',
-                                        ),
-                                        onChanged: (value) {
-                                          setState(() {
-                                            buttonName = value;
-                                          });
-                                        },
-                                        validator: (value) {
-                                          if (value == null || value.isEmpty) {
-                                            return "Please enter a name.";
-                                          }
-                                          return null;
-                                        },
-                                      ),
-                                      const SizedBox(height: 20),
-                                      const Text('Picture: '),
-                                      ButtonBar(
-                                        key: _sourceImageKey,
-                                        alignment: MainAxisAlignment.center,
-                                        buttonPadding:
-                                            const EdgeInsets.all(10.0),
-                                        buttonAlignedDropdown: true,
-                                        children: <Widget>[
-                                          ElevatedButton(
-                                              onPressed: () {
-                                                imageboardUtils.chooseImage();
-                                              },
-                                              child: const Text('Camera Roll'))
-                                        ],
-                                      ),
-                                      const Text('Size: '),
-                                      ButtonBar(
-                                        alignment: MainAxisAlignment.center,
-                                        buttonPadding:
-                                            const EdgeInsets.all(10.0),
-                                        buttonAlignedDropdown: true,
-                                        children: <Widget>[
-                                          ElevatedButton(
-                                              onPressed: () {
-                                                buttonSize = "1x1";
-                                              },
-                                              child: const Text('Small: 1x1')),
-                                          ElevatedButton(
-                                              onPressed: () {
-                                                buttonSize = "2x2";
-                                              },
-                                              child: const Text('Large: 2x2')),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 20),
-                                      const Text('Button Color: '),
-                                      ButtonBar(
-                                        key: _buttonColorKey,
-                                        alignment: MainAxisAlignment.center,
+                    scrollable: true,
+                    title: const Text('Add a Button'),
+                    content: Padding(
+                        padding: const EdgeInsets.all(5),
+                        child: Form(
+                            key: _addButtonKey,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Flexible(
+                                    flex: 4,
+                                    fit: FlexFit.tight,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(5),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         mainAxisSize: MainAxisSize.min,
-                                        buttonHeight: 1.5,
-                                        buttonMinWidth: 1.5,
-                                        buttonPadding:
-                                            const EdgeInsets.all(5.0),
-                                        buttonAlignedDropdown: true,
-                                        children: <Widget>[
-                                          RawMaterialButton(
-                                            onPressed: () {
+                                        children: [
+                                          TextFormField(
+                                            decoration: const InputDecoration(
+                                              labelText: 'Button Name',
+                                            ),
+                                            onChanged: (value) {
                                               setState(() {
-                                                buttonColor = Colors.red;
+                                                buttonName = value;
                                               });
                                             },
-                                            elevation: 2.0,
-                                            fillColor: Colors.red,
-                                            padding: const EdgeInsets.all(3.0),
-                                            shape: const CircleBorder(),
+                                            validator: (value) {
+                                              if (value == null ||
+                                                  value.isEmpty) {
+                                                return "Please enter a name.";
+                                              }
+                                              return null;
+                                            },
                                           ),
-                                          RawMaterialButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                buttonColor = Colors.orange;
-                                              });
-                                            },
-                                            elevation: 2.0,
-                                            fillColor: Colors.orange,
-                                            padding: const EdgeInsets.all(3.0),
-                                            shape: const CircleBorder(),
+                                          const SizedBox(height: 10),
+                                          const Text('Picture: '),
+                                          ButtonBar(
+                                            key: _sourceImageKey,
+                                            alignment: MainAxisAlignment.center,
+                                            buttonPadding:
+                                                const EdgeInsets.all(5),
+                                            buttonAlignedDropdown: true,
+                                            children: <Widget>[
+                                              ElevatedButton(
+                                                  onPressed: () {
+                                                    imageboardUtils
+                                                        .chooseImage();
+                                                  },
+                                                  child:
+                                                      const Text('Camera Roll'))
+                                            ],
                                           ),
-                                          RawMaterialButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                buttonColor = Colors.yellow;
-                                              });
-                                            },
-                                            elevation: 2.0,
-                                            fillColor: Colors.yellow,
-                                            padding: const EdgeInsets.all(3.0),
-                                            shape: const CircleBorder(),
+                                          const Text('Size: '),
+                                          ButtonBar(
+                                            alignment: MainAxisAlignment.center,
+                                            buttonPadding:
+                                                const EdgeInsets.all(5),
+                                            buttonAlignedDropdown: true,
+                                            children: <Widget>[
+                                              ElevatedButton(
+                                                  onPressed: () {
+                                                    buttonSize = "1x1";
+                                                  },
+                                                  child:
+                                                      const Text('Small: 1x1')),
+                                              ElevatedButton(
+                                                  onPressed: () {
+                                                    buttonSize = "2x2";
+                                                  },
+                                                  child:
+                                                      const Text('Large: 2x2')),
+                                            ],
                                           ),
-                                          RawMaterialButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                buttonColor = Colors.green;
-                                              });
-                                            },
-                                            elevation: 2.0,
-                                            fillColor: Colors.green,
-                                            padding: const EdgeInsets.all(3.0),
-                                            shape: const CircleBorder(),
+                                          const SizedBox(height: 10),
+                                          const Text('Button Color: '),
+                                          ButtonBar(
+                                            key: _buttonColorKey,
+                                            alignment: MainAxisAlignment.center,
+                                            mainAxisSize: MainAxisSize.min,
+                                            buttonHeight: .5,
+                                            buttonMinWidth: .5,
+                                            buttonPadding:
+                                                const EdgeInsets.all(5.0),
+                                            buttonAlignedDropdown: true,
+                                            children: [
+                                              SingleChildScrollView(
+                                                scrollDirection: Axis.horizontal,
+                                                physics: const NeverScrollableScrollPhysics(),
+                                                child: Row(
+                                                  children: [
+                                                    ColorButton(
+                                                        color: Colors.red,
+                                                        onColorSelected:
+                                                            onColorSelected),
+                                                    const SizedBox(width: 0),
+                                                    ColorButton(
+                                                        color: Colors.orange,
+                                                        onColorSelected:
+                                                            onColorSelected),
+                                                    ColorButton(
+                                                        color: Colors.yellow,
+                                                        onColorSelected:
+                                                            onColorSelected),
+                                                  ],
+                                                ),
+                                              ),
+                                              SingleChildScrollView(
+                                                scrollDirection: Axis.horizontal,
+                                                physics: const NeverScrollableScrollPhysics(),
+                                                child: Row(
+                                                  children: [
+                                                    ColorButton(
+                                                        color: Colors.green,
+                                                        onColorSelected:
+                                                            onColorSelected),
+                                                    ColorButton(
+                                                        color: Colors.blue,
+                                                        onColorSelected:
+                                                            onColorSelected),
+                                                    ColorButton(
+                                                        color: Colors.purple,
+                                                        onColorSelected:
+                                                            onColorSelected),
+                                                  ],
+                                                ),
+                                              ),
+                                              SingleChildScrollView(
+                                                scrollDirection: Axis.horizontal,
+                                                physics: const NeverScrollableScrollPhysics(),
+                                                child: Row(
+                                                  children: [
+                                                    ColorButton(
+                                                        color: Colors.white,
+                                                        onColorSelected:
+                                                            onColorSelected),
+                                                    ColorButton(
+                                                        color: Colors.black,
+                                                        onColorSelected:
+                                                            onColorSelected),
+                                                    ColorButton(
+                                                        color: Colors.grey,
+                                                        onColorSelected:
+                                                            onColorSelected),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                          RawMaterialButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                buttonColor = Colors.blue;
-                                              });
-                                            },
-                                            elevation: 2.0,
-                                            fillColor: Colors.blue,
-                                            padding: const EdgeInsets.all(3.0),
-                                            shape: const CircleBorder(),
-                                          ),
-                                          RawMaterialButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                buttonColor = Colors.purple;
-                                              });
-                                            },
-                                            elevation: 2.0,
-                                            fillColor: Colors.purple,
-                                            padding: const EdgeInsets.all(3.0),
-                                            shape: const CircleBorder(),
-                                          ),
-                                          RawMaterialButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                buttonColor = Colors.white;
-                                              });
-                                            },
-                                            elevation: 2.0,
-                                            fillColor: Colors.white,
-                                            padding: const EdgeInsets.all(3.0),
-                                            shape: const CircleBorder(),
-                                          ),
-                                          RawMaterialButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                buttonColor = Colors.black;
-                                              });
-                                            },
-                                            elevation: 2.0,
-                                            fillColor: Colors.black,
-                                            padding: const EdgeInsets.all(3.0),
-                                            shape: const CircleBorder(),
-                                          ),
-                                          RawMaterialButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                buttonColor = Colors.grey;
-                                              });
-                                            },
-                                            elevation: 2.0,
-                                            fillColor: Colors.grey,
-                                            padding: const EdgeInsets.all(3.0),
-                                            shape: const CircleBorder(),
+                                          ButtonBar(
+                                            alignment: MainAxisAlignment.center,
+                                            buttonPadding:
+                                                const EdgeInsets.all(5),
+                                            buttonAlignedDropdown: true,
+                                            children: <Widget>[
+                                              ElevatedButton(
+                                                onPressed: () {
+                                                  imageboardUtils.uploadImage(
+                                                      buttonName,
+                                                      buttonSize,
+                                                      buttonColor!);
+                                                  Navigator.pop(context);
+                                                },
+                                                child: const Text('Add'),
+                                              )
+                                            ],
                                           ),
                                         ],
                                       ),
-                                      ButtonBar(
-                                          alignment: MainAxisAlignment.center,
-                                          buttonPadding:
-                                              const EdgeInsets.all(10.0),
-                                          buttonAlignedDropdown: true,
-                                          children: <Widget>[
-                                            ElevatedButton(
-                                              onPressed: () {
-                                                imageboardUtils.uploadImage(
-                                                    buttonName,
-                                                    buttonSize,
-                                                    buttonColor);
-                                                Navigator.pop(context);
-                                              },
-                                              child: const Text('Add'),
-                                            ),
-                                          ]),
-                                    ],
-                                  ),
-                                ))
-                          ],
-                        ),
-                      )),
-                );
+                                    )),
+                              ],
+                            ))));
               });
         }
         break;
@@ -358,10 +313,19 @@ class _MyHomePageState extends State<MyHomePage> {
               } else if (imageboardRef.hasError) {
                 return Text('Error: ${imageboardRef.error}');
               } else {
-                return GridView.count(
-                  crossAxisCount: 3,
-                  crossAxisSpacing: 5,
-                  children: imageboardRef.data!,
+                return OrientationBuilder(
+                  builder: (context, orientation) {
+                    return GridView.count(
+                      scrollDirection: orientation == Orientation.portrait
+                          ? Axis.vertical
+                          : Axis.horizontal,
+                      crossAxisCount: 3,
+                      crossAxisSpacing: 20,
+                      mainAxisSpacing: 20,
+                      padding: const EdgeInsets.all(15),
+                      children: imageboardRef.data!,
+                    );
+                  },
                 );
               }
             }),
@@ -392,24 +356,5 @@ class _MyHomePageState extends State<MyHomePage> {
         onTap: _onItemTapped,
       ),
     );
-  }
-}
-
-class imageboardButton extends RawMaterialButton {
-  final String label;
-  final String imageUrl;
-
-  const imageboardButton(
-      {required this.label, required this.imageUrl, required super.onPressed});
-}
-
-class imageboardModel extends ChangeNotifier {
-  final List<imageboardButton> _buttonList = [];
-
-  List<imageboardButton> get buttonList => _buttonList;
-
-  addImageboardButton(imageboardButton buttonArg) {
-    _buttonList.add(buttonArg);
-    notifyListeners();
   }
 }

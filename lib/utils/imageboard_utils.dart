@@ -1,4 +1,6 @@
+
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -6,8 +8,6 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:aacademic/utils/tts.dart';
-
-
 
 class ImageboardUtils {
   File? _selectedImage;
@@ -99,9 +99,8 @@ class ButtonUtils {
           TextToSpeech.speak(buttonName);
         },
         onLongPress: () {
-
           //ADD EDIT MENU HERE???
-          //          
+          //
           //showDialog(
           //  context: context,
           //  builder: (BuildContext context) {
@@ -116,33 +115,42 @@ class ButtonUtils {
           //            children: [
           //             Expanded(
           //                flex: 4,
-          //                child: 
+          //                child:
           //              )
           //            ],
           //          ),))
           //    );
-          //    
+          //
           //  }
-        //  );
+          //  );
         },
         elevation: 0.0,
         constraints: BoxConstraints(
-            minHeight: baseSize * scaleY, 
-            minWidth: baseSize * scaleX,
+          minHeight: baseSize * scaleY,
+          minWidth: baseSize * scaleX,
         ),
-        
         shape: RoundedRectangleBorder(
             side: BorderSide(color: buttonColor, width: 2),
             borderRadius: BorderRadius.circular(18)),
-        fillColor: buttonColor,
+        //fillColor: buttonColor,
         padding: const EdgeInsets.all(3.0),
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Image.network(
-            buttonLocation,
-            height: 125,
-            width: 125,
-            fit: BoxFit.fill,
+          Expanded(
+            child: CachedNetworkImage(
+              imageUrl: buttonLocation,
+              height: 100,
+              width: 100,
+              fit: BoxFit.contain,
+            ),
           ),
+          Column(
+            children: [
+              Text(
+                buttonName,
+                style: const TextStyle(fontSize: 16, color: Colors.black),
+              ),
+            ],
+          )
         ]),
       ));
     }

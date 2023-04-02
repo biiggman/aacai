@@ -52,6 +52,7 @@ dependencies:
   flutter_translate:
   flutter_localizations:
     sdk: flutter
+  cached_network_image: ^3.0.0
 
 
 dev_dependencies:
