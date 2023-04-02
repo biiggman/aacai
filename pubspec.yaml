@@ -53,6 +53,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   cached_network_image: ^3.0.0
+  flutter_colorpicker: ^1.0.3
 
 
 dev_dependencies:

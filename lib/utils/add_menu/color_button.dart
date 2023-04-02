@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 class ColorButton extends StatefulWidget {
   final Color color;
@@ -14,29 +15,38 @@ class ColorButton extends StatefulWidget {
 }
 
 class _ColorButtonState extends State<ColorButton> {
-  bool _isSelected = false;
+  Color? _color;
 
-  void _toggleSelection() {
-    setState(() {
-      _isSelected = !_isSelected;
-    });
-
-    if (_isSelected) {
-      widget.onColorSelected(widget.color);
-    }
+  @override
+  void initState() {
+    super.initState();
+    _color = widget.color;
   }
 
   @override
   Widget build(BuildContext context) {
-    return RawMaterialButton(
-      onPressed: _toggleSelection,
-      fillColor: widget.color,
-      shape: CircleBorder(
-        side: BorderSide(
-          color: _isSelected ? Colors.black : Colors.transparent,
-          width: 2,
-        ) 
-      )
+    return ElevatedButton(
+      onPressed: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text("Pick a Color"),
+              content: SingleChildScrollView(
+                child: BlockPicker(
+                  pickerColor: _color ?? Colors.white,
+                  onColorChanged: (color) {
+                    setState(() {
+                      _color = color;
+                    });
+                    widget.onColorSelected(color);
+                  },
+                ),
+              ),
+            );
+          },
+        );
+      }, child: const Text("Choose a Color"),
     );
   }
 }

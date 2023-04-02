@@ -1,4 +1,3 @@
-
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -89,10 +88,8 @@ class ButtonUtils {
       String buttonSize = doc['image_size'];
       Color buttonColor = Color(colorValue);
 
-      List<int> sizeParts = buttonSize.split('x').map(int.parse).toList();
       double baseSize = 100.0;
-      double scaleX = sizeParts[0].toDouble();
-      double scaleY = sizeParts.length > 1 ? sizeParts[1].toDouble() : scaleX;
+      int numberSize = int.parse(buttonSize);
 
       buttons.add(RawMaterialButton(
         onPressed: () {
@@ -126,8 +123,8 @@ class ButtonUtils {
         },
         elevation: 0.0,
         constraints: BoxConstraints(
-          minHeight: baseSize * scaleY,
-          minWidth: baseSize * scaleX,
+          minHeight: baseSize * numberSize,
+          minWidth: baseSize * numberSize,
         ),
         shape: RoundedRectangleBorder(
             side: BorderSide(color: buttonColor, width: 2),
