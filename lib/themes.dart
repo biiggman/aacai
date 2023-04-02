@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 
-enum MyThemeKeys { LIGHT, DARK }
+enum MyThemeKeys { LIGHT, DARK, PRO, TRI, ACHROMA }
 
 class MyThemes {
+  static const THEME_KEY = "theme_key";
+
   static final ThemeData lightTheme = ThemeData(
 //Standard properties are done up here, before the object declarations.
-    primaryColor: const Color(0xffffcc33),
+    primaryColor: const Color(0xff573943),
     brightness: Brightness.light,
     highlightColor: Colors.white,
 
 //Alterations to overarching appbar theme are done in this object.
     appBarTheme: const AppBarTheme(
-      color: Color(0xffffcc33),
+      color: Color(0xff573943),
       shape: BeveledRectangleBorder(),
       titleTextStyle: TextStyle(color: Colors.black),
       //toolbarTextStyle:
@@ -20,32 +22,32 @@ class MyThemes {
 
 //BNB theme properties.
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-      backgroundColor: Colors.black54,
-      selectedItemColor: Color(0xffffcc33),
+      backgroundColor: Color(0xff573943),
+      selectedItemColor: Color(0xff7ca200),
       unselectedItemColor: Colors.white70,
     ),
 
 //Alterations to selected text go here, probably not too useful?
     textSelectionTheme: const TextSelectionThemeData(
       selectionColor: Colors.grey,
-      cursorColor: Color(0xff171d49),
-      selectionHandleColor: Color(0xff4260bd),
+      //cursorColor: Color(0xff171d49),
+      //selectionHandleColor: Color(0xff4260bd),
     ),
 
 //Text button properties. Text button is often used for forms and fillable fields.
     textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(
       backgroundColor:
-          MaterialStateProperty.all<Color>(const Color(0xffffe69d)),
+          MaterialStateProperty.all<Color>(const Color(0xff573943)),
       foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
       overlayColor: MaterialStateProperty.resolveWith<Color?>(
         (Set<MaterialState> states) {
           if (states.contains(MaterialState.hovered)) {
-            return const Color(0xffb4c7ff);
+            return const Color(0xff7ca200);
           }
           if (states.contains(MaterialState.focused) ||
               states.contains(MaterialState.pressed)) {
-            return const Color(0xff4260bd);
+            return const Color(0xff393C09);
           }
           return null; // Defer to the widget's default.
         },
@@ -56,16 +58,16 @@ class MyThemes {
     elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
       backgroundColor:
-          MaterialStateProperty.all<Color>(const Color(0xffffe69d)),
+          MaterialStateProperty.all<Color>(const Color(0xff573943)),
       foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
       overlayColor: MaterialStateProperty.resolveWith<Color?>(
         (Set<MaterialState> states) {
           if (states.contains(MaterialState.hovered)) {
-            return const Color(0xffb4c7ff);
+            return const Color(0xff7ca200);
           }
           if (states.contains(MaterialState.focused) ||
               states.contains(MaterialState.pressed)) {
-            return const Color(0xff4260bd);
+            return const Color(0xff393C09);
           }
           return null; // Defer to the widget's default.
         },
@@ -74,29 +76,174 @@ class MyThemes {
 
 //Standard button theme, applies to buttons not specified within theme class
     buttonTheme: const ButtonThemeData(
-        buttonColor: Color(0xffffcc33),
-        focusColor: Color(0xffb4c7ff),
-        splashColor: Color(0xffffe69d)),
+        buttonColor: Color(0xff573943),
+        focusColor: Color(0xff7ca200),
+        splashColor: Color(0xff573943)),
 
 //floating action button properties, used to hold a buttons position on a page while scrolling.
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
-        backgroundColor: Color(0xffffcc33),
-        focusColor: Color(0xffb4c7ff),
-        splashColor: Color(0xffffe69d)),
+        backgroundColor: Color(0xff573943),
+        focusColor: Color(0xff7ca200),
+        splashColor: Color(0xff573943)),
 
 //Color scheme properties
     colorScheme: ColorScheme.fromSwatch()
         .copyWith(secondary: Colors.white)
-        .copyWith(background: const Color(0xffffe69d)),
+        .copyWith(background: const Color(0xff573943)),
   );
 
   static final ThemeData darkTheme = ThemeData(
     primaryColor: Colors.grey,
     brightness: Brightness.dark,
     highlightColor: Colors.white,
-    backgroundColor: Colors.black54,
+    scaffoldBackgroundColor: Colors.black54,
+    dialogBackgroundColor: Colors.black54,
     textSelectionTheme:
         const TextSelectionThemeData(selectionColor: Colors.grey),
+  );
+
+  static final ThemeData protanopiaTheme = ThemeData(
+    primaryColor: const Color(0xff4A4940),
+    brightness: Brightness.light,
+    highlightColor: Colors.white,
+
+//Alterations to overarching appbar theme are done in this object.
+    appBarTheme: const AppBarTheme(
+      color: Color(0xff4A4940),
+      shape: BeveledRectangleBorder(),
+      titleTextStyle: TextStyle(color: Colors.black),
+      //toolbarTextStyle:
+    ),
+
+//BNB theme properties.
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      backgroundColor: Color(0xff4A4940),
+      selectedItemColor: Color(0xff8c8c27),
+      unselectedItemColor: Colors.white70,
+    ),
+
+//Alterations to selected text go here, probably not too useful?
+    textSelectionTheme: const TextSelectionThemeData(
+      selectionColor: Colors.grey,
+      //cursorColor: Color(0xff171d49),
+      //selectionHandleColor: Color(0xff4260bd),
+    ),
+
+//Text button properties. Text button is often used for forms and fillable fields.
+    textButtonTheme: TextButtonThemeData(
+        style: ButtonStyle(
+      backgroundColor:
+          MaterialStateProperty.all<Color>(const Color(0xff4A4940)),
+      foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+      overlayColor: MaterialStateProperty.resolveWith<Color?>(
+        (Set<MaterialState> states) {
+          if (states.contains(MaterialState.hovered)) {
+            return const Color(0xff8c8c27);
+          }
+          if (states.contains(MaterialState.focused) ||
+              states.contains(MaterialState.pressed)) {
+            return const Color(0xff393C09);
+          }
+          return null; // Defer to the widget's default.
+        },
+      ),
+    )),
+  );
+
+  static final ThemeData tritanopiaTheme = ThemeData(
+    primaryColor: const Color(0xff553e3e),
+    brightness: Brightness.light,
+    highlightColor: Colors.white,
+
+    //Alterations to overarching appbar theme are done in this object.
+    appBarTheme: const AppBarTheme(
+      color: Color(0xff553e3e),
+      shape: BeveledRectangleBorder(),
+      titleTextStyle: TextStyle(color: Colors.black),
+      //toolbarTextStyle:
+    ),
+
+    //BNB theme properties.
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      backgroundColor: Color(0xff553e3e),
+      selectedItemColor: Color(0xff7d464c),
+      unselectedItemColor: Colors.white70,
+    ),
+
+    //Alterations to selected text go here, probably not too useful?
+    textSelectionTheme: const TextSelectionThemeData(
+      selectionColor: Colors.grey,
+      //cursorColor: Color(0xff171d49),
+      //selectionHandleColor: Color(0xff4260bd),
+    ),
+
+    //Text button properties. Text button is often used for forms and fillable fields.
+    textButtonTheme: TextButtonThemeData(
+        style: ButtonStyle(
+      backgroundColor:
+          MaterialStateProperty.all<Color>(const Color(0xff553e3e)),
+      foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+      overlayColor: MaterialStateProperty.resolveWith<Color?>(
+        (Set<MaterialState> states) {
+          if (states.contains(MaterialState.hovered)) {
+            return const Color(0xff7d464c);
+          }
+          if (states.contains(MaterialState.focused) ||
+              states.contains(MaterialState.pressed)) {
+            return const Color(0xff391f21);
+          }
+          return null; // Defer to the widget's default.
+        },
+      ),
+    )),
+  );
+
+  static final ThemeData achromatopsiaTheme = ThemeData(
+    primaryColor: const Color(0xff434343),
+    brightness: Brightness.light,
+    highlightColor: Colors.white,
+
+    //Alterations to overarching appbar theme are done in this object.
+    appBarTheme: const AppBarTheme(
+      color: Color(0xff434343),
+      shape: BeveledRectangleBorder(),
+      titleTextStyle: TextStyle(color: Colors.black),
+      //toolbarTextStyle:
+    ),
+
+    //BNB theme properties.
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      backgroundColor: Color(0xff434343),
+      selectedItemColor: Color(0xff848484),
+      unselectedItemColor: Colors.white70,
+    ),
+
+    //Alterations to selected text go here, probably not too useful?
+    textSelectionTheme: const TextSelectionThemeData(
+      selectionColor: Colors.grey,
+      //cursorColor: Color(0xff171d49),
+      //selectionHandleColor: Color(0xff4260bd),
+    ),
+
+    //Text button properties. Text button is often used for forms and fillable fields.
+    textButtonTheme: TextButtonThemeData(
+        style: ButtonStyle(
+      backgroundColor:
+          MaterialStateProperty.all<Color>(const Color(0xff434343)),
+      foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+      overlayColor: MaterialStateProperty.resolveWith<Color?>(
+        (Set<MaterialState> states) {
+          if (states.contains(MaterialState.hovered)) {
+            return const Color(0xff848484);
+          }
+          if (states.contains(MaterialState.focused) ||
+              states.contains(MaterialState.pressed)) {
+            return const Color(0xff353535);
+          }
+          return null; // Defer to the widget's default.
+        },
+      ),
+    )),
   );
 
   static ThemeData getThemeFromKey(MyThemeKeys themeKey) {
@@ -105,6 +252,12 @@ class MyThemes {
         return lightTheme;
       case MyThemeKeys.DARK:
         return darkTheme;
+      case MyThemeKeys.PRO:
+        return protanopiaTheme;
+      case MyThemeKeys.TRI:
+        return tritanopiaTheme;
+      case MyThemeKeys.ACHROMA:
+        return achromatopsiaTheme;
       default:
         return lightTheme;
     }
