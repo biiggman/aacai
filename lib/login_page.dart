@@ -52,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Logo here'),
+          title: Text('Welcome'),
         ),
         body: FutureBuilder(
           future: _initializeFirebase(),
@@ -69,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 24.0),
                     child: Text(
-                      'Login',
+                      'Logo Here',
                       style: Theme.of(context).textTheme.displayMedium,
                     ),
                   ),
@@ -149,6 +149,7 @@ class _LoginPageState extends State<LoginPage> {
                                             email: _emailTextController.text,
                                             password:
                                                 _passwordTextController.text,
+                                            context: context,
                                           );
 
                                           setState(() {

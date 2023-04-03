@@ -6,7 +6,6 @@ import 'dart:async';
 
 class FireAuth {
   // For registering a new user
-  //add snackbar
   static Future<User?> registerUsingEmailPassword(
       {required String name,
       required String email,
@@ -27,7 +26,11 @@ class FireAuth {
       user = auth.currentUser;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
+        ScaffoldMessenger.of(context).showSnackBar(
+          FireAuth.customSnackBar(
+            content: 'The password provided is too weak',
+          ),
+        );
       } else if (e.code == 'email-already-in-use') {
         ScaffoldMessenger.of(context).showSnackBar(
           FireAuth.customSnackBar(
@@ -43,11 +46,10 @@ class FireAuth {
   }
 
   // For signing in a user (have already registered)
-  //add snackbar for errors
-  static Future<User?> signInUsingEmailPassword({
-    required String email,
-    required String password,
-  }) async {
+  static Future<User?> signInUsingEmailPassword(
+      {required String email,
+      required String password,
+      required BuildContext context}) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user;
 
@@ -59,9 +61,17 @@ class FireAuth {
       user = userCredential.user;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        print('No user found for that email.');
+        ScaffoldMessenger.of(context).showSnackBar(
+          FireAuth.customSnackBar(
+            content: 'No account found for that email',
+          ),
+        );
       } else if (e.code == 'wrong-password') {
-        print('Incorrect password provided.');
+        ScaffoldMessenger.of(context).showSnackBar(
+          FireAuth.customSnackBar(
+            content: 'Incorrect password provided',
+          ),
+        );
       }
     }
 
@@ -174,7 +184,7 @@ class FireAuth {
     );
   }
 
-  //forgot password with snackbar
+  //forgot password
   static Future<void> forgotPassword(
       {required String email, required BuildContext context}) async {
     try {
@@ -187,7 +197,7 @@ class FireAuth {
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         ScaffoldMessenger.of(context).showSnackBar(FireAuth.customSnackBar(
-          content: 'No user found for that email',
+          content: 'No account found for that email',
         ));
       }
     }
