@@ -104,13 +104,14 @@ class _RegisterPageState extends State<RegisterPage> {
                           ),
                           errorBorder: UnderlineInputBorder(
                             borderRadius: BorderRadius.circular(6.0),
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                               color: Colors.red,
                             ),
                           ),
                         ),
                       ),
                       //password status validator
+                      const SizedBox(height: 25),
                       FlutterPwValidator(
                         controller: _passwordTextController,
                         minLength: 6,

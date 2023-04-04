@@ -46,156 +46,233 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        _focusEmail.unfocus();
-        _focusPassword.unfocus();
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('Welcome'),
-        ),
-        body: FutureBuilder(
-          future: _initializeFirebase(),
-          builder: (context, snapshot) {
-            //commented this if statement out to fix entire page reloading on
-            //visibilty icon toggle on/off for password
-            //if (snapshot.connectionState == ConnectionState.done) {
+        onTap: () {
+          _focusEmail.unfocus();
+          _focusPassword.unfocus();
+        },
+        child: Scaffold(
+          //page background color
+          backgroundColor: const Color.fromARGB(255, 225, 225, 225),
+          appBar: AppBar(
+              title: const Text('Welcome'),
+              titleTextStyle:
+                  const TextStyle(fontWeight: FontWeight.bold, fontSize: 40)),
 
-            return Padding(
-              padding: const EdgeInsets.only(left: 24.0, right: 24.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 24.0),
-                    child: Text(
-                      'Logo Here',
-                      style: Theme.of(context).textTheme.displayMedium,
-                    ),
-                  ),
-                  Form(
-                    key: _formKey,
+          body: FutureBuilder(
+              future: _initializeFirebase(),
+              builder: (context, snapshot) {
+                //commented this if statement out to fix entire page reloading on
+                //visibilty icon toggle on/off for password
+                //if (snapshot.connectionState == ConnectionState.done) {
+
+                return Padding(
+                    //padding for all fields
+                    padding: const EdgeInsets.only(left: 24.0, right: 24.0),
                     child: Column(
-                      children: <Widget>[
-                        TextFormField(
-                          controller: _emailTextController,
-                          focusNode: _focusEmail,
-                          validator: (value) => Validator.validateEmail(
-                            email: value,
-                          ),
-                          decoration: InputDecoration(
-                            hintText: "Email",
-                            errorBorder: UnderlineInputBorder(
-                              borderRadius: BorderRadius.circular(6.0),
-                              borderSide: BorderSide(
-                                color: Colors.red,
-                              ),
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          //logo--add image to assets folder and call
+                          const Padding(
+                            padding: EdgeInsets.only(bottom: 50),
+                            child: Image(
+                              image: AssetImage("assets/berrywithbeer.png"),
+                              height: 250,
+                              width: 250,
                             ),
                           ),
-                        ),
-                        SizedBox(height: 8.0),
-                        TextFormField(
-                          controller: _passwordTextController,
-                          focusNode: _focusPassword,
-                          obscureText: _isObscured,
-                          validator: (value) => Validator.validatePassword(
-                            password: value,
-                          ),
-                          decoration: InputDecoration(
-                            hintText: "Password",
-                            //Icon button toggles password visibility
-                            suffixIcon: IconButton(
-                              padding:
-                                  const EdgeInsetsDirectional.only(end: 12.0),
-                              icon: _isObscured
-                                  ? const Icon(Icons.visibility)
-                                  : const Icon(Icons.visibility_off),
-                              onPressed: () {
-                                setState(() {
-                                  _isObscured = !_isObscured;
-                                });
-                              },
-                            ),
-                            errorBorder: UnderlineInputBorder(
-                              borderRadius: BorderRadius.circular(6.0),
-                              borderSide: BorderSide(
-                                color: Colors.red,
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 24.0),
-                        _isProcessing
-                            ? CircularProgressIndicator()
-                            : Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  //sign in =>
-                                  Expanded(
-                                    child: ElevatedButton(
-                                      onPressed: () async {
-                                        _focusEmail.unfocus();
-                                        _focusPassword.unfocus();
-
-                                        if (_formKey.currentState!.validate()) {
-                                          setState(() {
-                                            _isProcessing = true;
-                                          });
-
-                                          User? user = await FireAuth
-                                              .signInUsingEmailPassword(
-                                            email: _emailTextController.text,
-                                            password:
-                                                _passwordTextController.text,
-                                            context: context,
-                                          );
-
-                                          setState(() {
-                                            _isProcessing = false;
-                                          });
-
-                                          if (user != null) {
-                                            Navigator.of(context)
-                                                .pushReplacement(
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ProfilePage(user: user),
-                                              ),
-                                            );
-                                          }
-                                        }
-                                      },
-                                      child: const Text(
-                                        'Sign In',
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ),
+                          Form(
+                            key: _formKey,
+                            child: Column(
+                              children: <Widget>[
+                                //email textfield
+                                TextFormField(
+                                  controller: _emailTextController,
+                                  focusNode: _focusEmail,
+                                  validator: (value) => Validator.validateEmail(
+                                    email: value,
                                   ),
-                                  SizedBox(width: 24.0),
-                                ],
-                              ),
-                        _isProcessing
-                            ? CircularProgressIndicator()
-                            : Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                    //google sign in =>
-                                    OutlinedButton(
-                                      style: ButtonStyle(
-                                        backgroundColor:
-                                            MaterialStateProperty.all(
-                                                Colors.white),
-                                        shape: MaterialStateProperty.all(
-                                          RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(40),
-                                          ),
+                                  decoration: InputDecoration(
+                                      hintText: "Email",
+                                      hintStyle:
+                                          TextStyle(color: Colors.grey[500]),
+                                      enabledBorder: const OutlineInputBorder(
+                                          borderSide:
+                                              BorderSide(color: Colors.white)),
+                                      errorBorder: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(6.0),
+                                        borderSide: const BorderSide(
+                                          color: Colors.red,
                                         ),
                                       ),
-                                      onPressed: () async {
+                                      focusedBorder: const OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Color.fromARGB(
+                                                  255, 122, 2, 152))),
+                                      fillColor: const Color.fromARGB(
+                                          255, 246, 210, 253),
+                                      filled: true),
+                                ),
+                                const SizedBox(height: 25),
+                                //password textfield
+                                TextFormField(
+                                  controller: _passwordTextController,
+                                  focusNode: _focusPassword,
+                                  obscureText: _isObscured,
+                                  validator: (value) =>
+                                      Validator.validatePassword(
+                                    password: value,
+                                  ),
+                                  decoration: InputDecoration(
+                                      hintText: "Password",
+                                      hintStyle: TextStyle(
+                                          color: Color.fromARGB(
+                                              255, 158, 158, 158)),
+                                      //Icon button toggles password visibility
+                                      suffixIcon: IconButton(
+                                        padding:
+                                            const EdgeInsetsDirectional.only(
+                                                end: 12.0),
+                                        icon: _isObscured
+                                            ? const Icon(Icons.visibility)
+                                            : const Icon(Icons.visibility_off),
+                                        onPressed: () {
+                                          setState(() {
+                                            _isObscured = !_isObscured;
+                                          });
+                                        },
+                                      ),
+                                      enabledBorder: const OutlineInputBorder(
+                                          borderSide:
+                                              BorderSide(color: Colors.white)),
+                                      errorBorder: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(6.0),
+                                        borderSide: const BorderSide(
+                                          color: Colors.red,
+                                        ),
+                                      ),
+                                      focusedBorder: const OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Color.fromARGB(
+                                                  255, 122, 2, 152))),
+                                      fillColor: const Color.fromARGB(
+                                          255, 246, 210, 253),
+                                      filled: true),
+                                ),
+                                //forgot password button
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      MaterialButton(
+                                        onPressed: () {
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ForgotPasswordPage(),
+                                            ),
+                                          );
+                                        },
+                                        child: const Text(
+                                          'Forgot Password?',
+                                          style: TextStyle(color: Colors.grey),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                _isProcessing
+                                    ? const CircularProgressIndicator()
+                                    //sign in button
+                                    : Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: ElevatedButton(
+                                              onPressed: () async {
+                                                _focusEmail.unfocus();
+                                                _focusPassword.unfocus();
+
+                                                if (_formKey.currentState!
+                                                    .validate()) {
+                                                  setState(() {
+                                                    _isProcessing = true;
+                                                  });
+
+                                                  User? user = await FireAuth
+                                                      .signInUsingEmailPassword(
+                                                    email: _emailTextController
+                                                        .text,
+                                                    password:
+                                                        _passwordTextController
+                                                            .text,
+                                                    context: context,
+                                                  );
+
+                                                  setState(() {
+                                                    _isProcessing = false;
+                                                  });
+
+                                                  if (user != null) {
+                                                    Navigator.of(context)
+                                                        .pushReplacement(
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            ProfilePage(
+                                                                user: user),
+                                                      ),
+                                                    );
+                                                  }
+                                                }
+                                              },
+                                              child: const Text(
+                                                'Sign In',
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                const SizedBox(height: 25),
+                                //or continue with row
+                                Row(
+                                  children: const [
+                                    Expanded(
+                                      child: Divider(
+                                        thickness: 1,
+                                        color: Colors.purple,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text(
+                                        'Or continue with',
+                                        style: TextStyle(color: Colors.grey),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Divider(
+                                        thickness: 1,
+                                        color: Colors.purple,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 25),
+                                //google sign in button
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () async {
                                         setState(() {
                                           _isProcessing = true;
                                         });
@@ -216,94 +293,54 @@ class _LoginPageState extends State<LoginPage> {
                                           );
                                         }
                                       },
-                                      child: Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            0, 10, 0, 10),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: const <Widget>[
-                                            Image(
-                                              image: AssetImage(
-                                                  "assets/google_logo.png"),
-                                              height: 35.0,
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  EdgeInsets.only(left: 10),
-                                              child: Text(
-                                                'Sign in with Google',
-                                                style: TextStyle(
-                                                  fontSize: 20,
-                                                  color: Colors.black54,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                              ),
-                                            )
-                                          ],
+                                      child: Container(
+                                        padding: EdgeInsets.all(20),
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                            color: Colors.white,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(16),
+                                          color: Colors.grey[200],
+                                        ),
+                                        child: const Image(
+                                          image: AssetImage(
+                                              "assets/google_logo.png"),
+                                          height: 40,
                                         ),
                                       ),
                                     ),
-                                    SizedBox(width: 24.0),
-                                  ]),
-                        _isProcessing
-                            ? CircularProgressIndicator()
-                            : Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                    //register =>
-                                    Expanded(
-                                      child: ElevatedButton(
-                                        onPressed: () {
-                                          Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  RegisterPage(),
-                                            ),
-                                          );
-                                        },
-                                        child: const Text(
-                                          'Register',
-                                          style: TextStyle(color: Colors.white),
-                                        ),
+                                  ],
+                                ),
+                                const SizedBox(height: 50),
+                                //register now
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) => RegisterPage(),
                                       ),
-                                    ),
-                                    SizedBox(width: 24.0),
-                                    //forgot password =>
-                                    Expanded(
-                                      child: ElevatedButton(
-                                        onPressed: () {
-                                          Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  ForgotPasswordPage(),
-                                            ),
-                                          );
-                                        },
-                                        child: const Text(
-                                          'Forgot Password',
-                                          style: TextStyle(color: Colors.white),
-                                        ),
+                                    );
+                                  },
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: const [
+                                      Text('Dont have an account? '),
+                                      Text(
+                                        'Register now',
+                                        style: TextStyle(
+                                            color: Colors.blue,
+                                            fontWeight: FontWeight.bold),
                                       ),
-                                    ),
-                                    SizedBox(width: 24.0),
-                                  ]),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            );
-            //} curly brace for if snapshot.connectionstate
-
-            // return Center(
-            //   child: CircularProgressIndicator(),
-            // );
-          },
-        ),
-      ),
-    );
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ]));
+              }),
+        ));
+    //} curly brace for if snapshot.connectionstate
   }
 }
