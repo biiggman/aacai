@@ -72,13 +72,10 @@ class _LoginPageState extends State<LoginPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           //logo--add image to assets folder and call
-                          const Padding(
-                            padding: EdgeInsets.only(bottom: 50),
-                            child: Image(
-                              image: AssetImage("assets/berrywithbeer.png"),
-                              height: 250,
-                              width: 250,
-                            ),
+                          const Image(
+                            image: AssetImage("assets/berrywithbeer.png"),
+                            height: 150,
+                            width: 150,
                           ),
                           Form(
                             key: _formKey,
@@ -113,7 +110,7 @@ class _LoginPageState extends State<LoginPage> {
                                           255, 246, 210, 253),
                                       filled: true),
                                 ),
-                                const SizedBox(height: 25),
+                                const SizedBox(height: 5),
                                 //password textfield
                                 TextFormField(
                                   controller: _passwordTextController,
@@ -161,28 +158,24 @@ class _LoginPageState extends State<LoginPage> {
                                       filled: true),
                                 ),
                                 //forgot password button
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      MaterialButton(
-                                        onPressed: () {
-                                          Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  ForgotPasswordPage(),
-                                            ),
-                                          );
-                                        },
-                                        child: const Text(
-                                          'Forgot Password?',
-                                          style: TextStyle(color: Colors.grey),
-                                        ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    MaterialButton(
+                                      onPressed: () {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                ForgotPasswordPage(),
+                                          ),
+                                        );
+                                      },
+                                      child: const Text(
+                                        'Forgot Password?',
+                                        style: TextStyle(color: Colors.grey),
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
                                 _isProcessing
                                     ? const CircularProgressIndicator()
@@ -241,7 +234,7 @@ class _LoginPageState extends State<LoginPage> {
                                           ),
                                         ],
                                       ),
-                                const SizedBox(height: 25),
+                                const SizedBox(height: 5),
                                 //or continue with row
                                 Row(
                                   children: const [
@@ -266,7 +259,7 @@ class _LoginPageState extends State<LoginPage> {
                                     ),
                                   ],
                                 ),
-                                const SizedBox(height: 25),
+                                const SizedBox(height: 5),
                                 //google sign in button
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -294,7 +287,7 @@ class _LoginPageState extends State<LoginPage> {
                                         }
                                       },
                                       child: Container(
-                                        padding: EdgeInsets.all(20),
+                                        padding: EdgeInsets.all(5),
                                         decoration: BoxDecoration(
                                           border: Border.all(
                                             color: Colors.white,
@@ -312,7 +305,7 @@ class _LoginPageState extends State<LoginPage> {
                                     ),
                                   ],
                                 ),
-                                const SizedBox(height: 50),
+                                const SizedBox(height: 30),
                                 //register now
                                 GestureDetector(
                                   onTap: () {
