@@ -1,10 +1,12 @@
 import 'dart:io';
 import 'package:aacademic/camera/camera_page.dart';
-import 'package:aacademic/ui/login_page.dart';
-import 'package:aacademic/ui/settings_page.dart';
-import 'package:aacademic/utils/add_menu/color_button.dart';
-import 'package:aacademic/utils/add_menu/preview_button.dart';
+import 'package:aacademic/ui/custom_appbar.dart';
+import 'package:aacademic/ui/login/login_page.dart';
+import 'package:aacademic/ui/settings/settings_page.dart';
+import 'package:aacademic/ui/add_menu/color_button.dart';
+import 'package:aacademic/ui/add_menu/preview_button.dart';
 import 'package:aacademic/utils/themes.dart';
+import 'package:aacademic/utils/tts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +14,6 @@ import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:aacademic/firebase/firebase_options.dart';
 import 'package:aacademic/utils/imageboard_utils.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,32 +28,32 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        //Material App Constructor
-        title: 'AAC.AI',
-        initialRoute: '/', //Route logic for navigation
+      //Material App Constructor
+      title: 'AAC.AI',
+      initialRoute: '/', //Route logic for navigation
 
-        routes: {
-          '/login': (context) => const LoginPage(),
-          '/settings': (context) => const SettingsPage(),
-        },
-        theme: MyThemes.lightTheme,
-        home: const LoginPage()
+      routes: {
+        '/login': (context) => const LoginPage(),
+        '/settings': (context) => const SettingsPage(),
+      },
+      theme: MyThemes.lightTheme,
+      home: //const LoginPage()
 
-        //ROUTE FOR HOMEPAGE THAT CHECKS FOR LOGIN. NEEDS ROUTE TO ACCOUNT IN SETTINGS TO AVOID SOFTLOCK OUT OF LOGIN PAGE
-        //FutureBuilder(
-        //future: FirebaseAuth.instance.authStateChanges().first,
-        //builder: (context, AsyncSnapshot<User?> snapshot) {
-        //  if (snapshot.connectionState == ConnectionState.waiting) {
-        //    return const CircularProgressIndicator();
-        //  } else if (snapshot.hasData) {
-        //    return const MyHomePage(
-        //      title: 'AAC.AI',
-        //    );
-        //  } else {
-        //    return const LoginPage();
-        //  }
-        //}),
-        );
+          //ROUTE FOR HOMEPAGE THAT CHECKS FOR LOGIN. NEEDS ROUTE TO ACCOUNT IN SETTINGS TO AVOID SOFTLOCK OUT OF LOGIN PAGE
+          FutureBuilder(
+              future: FirebaseAuth.instance.authStateChanges().first,
+              builder: (context, AsyncSnapshot<User?> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                } else if (snapshot.hasData) {
+                  return const MyHomePage(
+                    title: 'AAC.AI',
+                  );
+                } else {
+                  return const LoginPage();
+                }
+              }),
+    );
   }
 }
 
@@ -67,6 +68,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
+  late Future<List<RawMaterialButton>> _imageboardRef;
 
   //button variables
   String buttonName = "";
@@ -81,6 +83,12 @@ class _MyHomePageState extends State<MyHomePage> {
   final _sourceImageKey = GlobalKey();
   final _buttonColorKey = GlobalKey();
 
+  @override
+  void initState() {
+    super.initState();
+    _imageboardRef = buttonUtils.makeButtons();
+  }
+
   void onColorSelected(Color color) {
     setState(() {
       buttonColor = color;
@@ -93,6 +101,21 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  List<RawMaterialButton> selectedButtons = [];
+  PreferredSizeWidget getAppBar() {
+    if (selectedButtons.isEmpty) {
+      return AppBar(
+        title: const Text("AAC.AI"),
+      );
+    } else {
+      return CustomAppBar(
+        height: 70,
+        buttons: buttonUtils.tappedButtons,
+        buttonsName: buttonUtils.tappedButtonNames,
+      );
+    }
+  }
+
   void _onItemTapped(int index) async {
     setState(() {
       _selectedIndex = index;
@@ -100,6 +123,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     switch (index) {
       case 0:
+        //tappedButtons.add(test);
         break;
 
       case 1:
@@ -286,63 +310,79 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return OrientationBuilder(
-      builder: ((context, orientation) {
-        return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        toolbarHeight: orientation == Orientation.portrait ? 100 : 80,
-      ),
-      body: Center(
-        child: FutureBuilder(
-            future: buttonUtils.makeButtons(),
-            builder: (BuildContext context,
-                AsyncSnapshot<List<RawMaterialButton>> imageboardRef) {
-              if (imageboardRef.connectionState == ConnectionState.waiting) {
-                return const CircularProgressIndicator();
-              } else if (imageboardRef.hasError) {
-                return Text('Error: ${imageboardRef.error}');
-              } else {
-                return GridView.count(
-                  scrollDirection: orientation == Orientation.portrait
-                    ? Axis.vertical
-                    : Axis.horizontal,
-                  crossAxisCount: 3,
-                  crossAxisSpacing: 20,
-                  mainAxisSpacing: 20,
-                  padding: const EdgeInsets.all(15),
-                  children: imageboardRef.data!,
-                );
-              }
-            }),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        key: navKey,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.list),
-            label: 'Menu',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.keyboard),
-            label: 'Keyboard',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.add),
-            label: 'Add',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.camera),
-            label: 'Camera',
-          ),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.settings), label: 'Settings'),
-        ],
-        onTap: _onItemTapped,
-      ),
-    );
-  }));
-    
+    return OrientationBuilder(builder: ((context, orientation) {
+      return Scaffold(
+        appBar: CustomAppBar(
+          height: 70,
+          buttons: buttonUtils.tappedButtons,
+          buttonsName: buttonUtils.tappedButtonNames,
+        ),
+        body: Center(
+          child: FutureBuilder(
+              future: _imageboardRef,
+              builder: (BuildContext context,
+                  AsyncSnapshot<List<RawMaterialButton>> imageboardRef) {
+                if (imageboardRef.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                } else if (imageboardRef.hasError) {
+                  return Text('Error: ${imageboardRef.error}');
+                } else {
+                  return GridView.count(
+                    scrollDirection: orientation == Orientation.portrait
+                        ? Axis.vertical
+                        : Axis.horizontal,
+                    crossAxisCount: orientation == Orientation.portrait ? 3 : 2,
+                    crossAxisSpacing:
+                        orientation == Orientation.portrait ? 20 : 5,
+                    mainAxisSpacing:
+                        orientation == Orientation.portrait ? 20 : 5,
+                    padding: const EdgeInsets.all(15),
+                    children: imageboardRef.data!
+                        .map((button) => GestureDetector(
+                              onTap: () {
+                                print("ADDING TO LIST");
+                                setState(() {
+                                  buttonUtils.addButtonToList(button);
+                                  TextToSpeech.speak(button.key
+                                      .toString()
+                                      .replaceAll('<', '')
+                                      .replaceAll('>', '')
+                                      .replaceAll("'", ''));
+                                });
+                              },
+                              child: button,
+                            ))
+                        .toList(),
+                  );
+                }
+              }),
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          key: navKey,
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.list),
+              label: 'Menu',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.keyboard),
+              label: 'Keyboard',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.add),
+              label: 'Add',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.camera),
+              label: 'Camera',
+            ),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.settings), label: 'Settings'),
+          ],
+          onTap: _onItemTapped,
+        ),
+      );
+    }));
   }
 }

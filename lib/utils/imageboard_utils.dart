@@ -66,6 +66,7 @@ class ImageboardUtils {
 
 class ButtonUtils {
   String uid = FirebaseAuth.instance.currentUser!.uid;
+
   Future<List<RawMaterialButton>> makeButtons() async {
     QuerySnapshot<Map<String, dynamic>> imageboardRef = await FirebaseFirestore
         .instance
@@ -82,6 +83,7 @@ class ButtonUtils {
         continue;
       }
 
+      //data from database
       int colorValue = doc['image_color'];
       String buttonName = doc['image_name'];
       String buttonLocation = doc['image_location'];
@@ -91,41 +93,19 @@ class ButtonUtils {
       double baseSize = 100.0;
       int numberSize = int.parse(buttonSize);
 
+      //create button based on data above
       buttons.add(RawMaterialButton(
-        onPressed: () {
-          TextToSpeech.speak(buttonName);
-        },
-        onLongPress: () {
-          //ADD EDIT MENU HERE???
-          //
-          //showDialog(
-          //  context: context,
-          //  builder: (BuildContext context) {
-          //    return AlertDialog(
-          //      scrollable: true,
-          //      title: Text("Edit $buttonName"),
-          //      content: Padding(
-          //        padding: const EdgeInsets.all(10.0),
-          //        child: Form(
-          //          child: Row(
-          //            crossAxisAlignment: CrossAxisAlignment.center,
-          //            children: [
-          //             Expanded(
-          //                flex: 4,
-          //                child:
-          //              )
-          //            ],
-          //          ),))
-          //    );
-          //
-          //  }
-          //  );
-        },
-        elevation: 0.0,
+        key: Key(buttonName),
+        onPressed: null,
+
+        //size of button (NOT FUNCTIONAL)
+        elevation: 2.0,
         constraints: BoxConstraints(
           minHeight: baseSize * numberSize,
           minWidth: baseSize * numberSize,
         ),
+
+        //shape of button
         shape: RoundedRectangleBorder(
             side: BorderSide(color: buttonColor, width: 2),
             borderRadius: BorderRadius.circular(18)),
@@ -154,5 +134,37 @@ class ButtonUtils {
     return buttons;
   }
 
-  //Future<void> deleteImage
+  List<RawMaterialButton> tappedButtons = [];
+  List<String> tappedButtonNames = [];
+
+  void addButtonToList(RawMaterialButton button) {
+    RawMaterialButton newButton = RawMaterialButton(
+      onPressed: null,
+      onLongPress: null,
+      elevation: button.elevation,
+      constraints: button.constraints,
+      shape: button.shape,
+      padding: button.padding,
+      child: button.child,
+    );
+    String buttonName = button.key
+        .toString()
+        .replaceAll('<', '')
+        .replaceAll('>', '')
+        .replaceAll("'", '');
+    tappedButtons.add(newButton);
+    tappedButtonNames.add(buttonName);
+    print(buttonName);
+  }
+
+  List<RawMaterialButton> setButtonList(List<RawMaterialButton> buttonList) {
+    buttonList = tappedButtons;
+    print("SET LIST");
+    return buttonList;
+  }
+
+  List<String> setNameList(List<String> nameList) {
+    nameList = tappedButtonNames;
+    return nameList;
+  }
 }

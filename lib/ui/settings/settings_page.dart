@@ -1,4 +1,4 @@
-import 'package:aacademic/ui/login_page.dart';
+import 'package:aacademic/ui/login/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:settings_ui/settings_ui.dart';
