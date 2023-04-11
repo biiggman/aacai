@@ -29,12 +29,14 @@ class FireAuth {
         ScaffoldMessenger.of(context).showSnackBar(
           FireAuth.customSnackBar(
             content: 'The password provided is too weak',
+            color: Colors.red,
           ),
         );
       } else if (e.code == 'email-already-in-use') {
         ScaffoldMessenger.of(context).showSnackBar(
           FireAuth.customSnackBar(
             content: 'Account already exists for that email',
+            color: Colors.red,
           ),
         );
       }
@@ -64,12 +66,14 @@ class FireAuth {
         ScaffoldMessenger.of(context).showSnackBar(
           FireAuth.customSnackBar(
             content: 'No account found for that email',
+            color: Colors.red,
           ),
         );
       } else if (e.code == 'wrong-password') {
         ScaffoldMessenger.of(context).showSnackBar(
           FireAuth.customSnackBar(
             content: 'Incorrect password provided',
+            color: Colors.red,
           ),
         );
       }
@@ -132,6 +136,7 @@ class FireAuth {
               FireAuth.customSnackBar(
                 content:
                     'An account already exists with a different credential',
+                color: Colors.red,
               ),
             );
           } else if (e.code == 'invalid-credential') {
@@ -139,6 +144,7 @@ class FireAuth {
               FireAuth.customSnackBar(
                 content:
                     'Error occurred while accessing credentials. Try again.',
+                color: Colors.red,
               ),
             );
           }
@@ -146,6 +152,7 @@ class FireAuth {
           ScaffoldMessenger.of(context).showSnackBar(
             FireAuth.customSnackBar(
               content: 'Error occurred using Google Sign In. Try again.',
+              color: Colors.red,
             ),
           );
         }
@@ -167,15 +174,16 @@ class FireAuth {
       ScaffoldMessenger.of(context).showSnackBar(
         FireAuth.customSnackBar(
           content: 'Error signing out. Try again.',
+          color: Colors.red,
         ),
       );
     }
   }
 
   //snackbar to handle authorization errors
-  static SnackBar customSnackBar({required String content}) {
+  static SnackBar customSnackBar({required String content, required color}) {
     return SnackBar(
-      backgroundColor: Color.fromRGBO(246, 197, 2, 1),
+      backgroundColor: color,
       content: Text(
         content,
         style:
@@ -192,12 +200,14 @@ class FireAuth {
       ScaffoldMessenger.of(context).showSnackBar(
         FireAuth.customSnackBar(
           content: 'Password reset email sent',
+          color: Colors.green,
         ),
       );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         ScaffoldMessenger.of(context).showSnackBar(FireAuth.customSnackBar(
           content: 'No account found for that email',
+          color: Colors.red,
         ));
       }
     }
