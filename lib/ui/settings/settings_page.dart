@@ -1,4 +1,4 @@
-import 'package:aacademic/ui/login_page.dart';
+import 'package:aacademic/ui/login/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:settings_ui/settings_ui.dart';
@@ -31,6 +31,10 @@ class _SettingsPageState extends State<SettingsPage> {
                 leading: const Icon(Icons.language),
                 title: const Text('Language'),
                 value: const Text('English'),
+                trailing: const Icon(Icons.arrow_forward_ios),
+                onPressed: (BuildContext context) {
+                  Navigator.push(context, MaterialPageRoute(builder: ((context) => const LoginPage())));
+                },
               ),
               //SettingsTile.navigation(
               //    leading: const Icon(Icons.colorize),
@@ -51,7 +55,7 @@ class _SettingsPageState extends State<SettingsPage> {
               SettingsTile.navigation(
                 leading: const Icon(Icons.lock),
                 title: const Text('Log-in Page'),
-                // onPressed: () {};
+                //onPressed: () {}
               )
             ],
           ),

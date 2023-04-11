@@ -5,7 +5,7 @@ import 'profile_page.dart';
 import 'register_page.dart';
 import 'package:aacademic/firebase/fire_auth.dart';
 import 'package:aacademic/firebase/validator.dart';
-import 'package:aacademic/ui/forgot_password_page.dart';
+import 'package:aacademic/ui//login/forgot_password_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);

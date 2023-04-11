@@ -33,7 +33,7 @@ dependencies:
   camera:
   path_provider:
   path:
-  image_picker:
+  image_picker: ^0.8.4+2
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -49,6 +49,14 @@ dependencies:
   google_sign_in: ^6.0.2
   camera_android: 0.9.7+1
   camera_avfoundation: 0.9.7+1
+  flutter_translate:
+  flutter_localizations:
+    sdk: flutter
+  cached_network_image: ^3.0.0
+  flutter_colorpicker: ^1.0.3
+  flutter_staggered_grid_view:
+  flutter_image_compress: ^1.1.3
+  image:
 
 
 dev_dependencies:
@@ -77,6 +85,35 @@ flutter:
   assets:
   #- images/a_dot_burr.jpeg
   - assets/
+
+    #stock images
+      #adjectives
+  - assets/images/adjectives/Big.jpg
+  - assets/images/adjectives/old.jpg
+  - assets/images/adjectives/Small.jpg
+  - assets/images/adjectives/Young.jpg
+
+      #nouns
+  - assets/images/nouns/Dog.jpg
+  - assets/images/nouns/Cat.jpg
+
+      #pronouns
+  - assets/images/pronouns/i.jpg
+  - assets/images/pronouns/You.jpg
+
+      #responses
+  - assets/images/responses/Bye.jpg
+  - assets/images/responses/Hi.jpg
+  - assets/images/responses/No.jpg
+  - assets/images/responses/Yes.jpg
+
+      #verbs
+  - assets/images/verbs/Drink.jpg
+  - assets/images/verbs/Go.jpg
+  - assets/images/verbs/Stop.jpg
+  - assets/images/verbs/Talk.jpg
+
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

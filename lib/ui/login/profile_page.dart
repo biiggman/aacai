@@ -1,10 +1,8 @@
 import 'package:aacademic/main.dart';
-import 'package:camera/camera.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../camera/camera_page.dart';
 import 'login_page.dart';
-import '../firebase/fire_auth.dart';
+import '/firebase/fire_auth.dart';
 
 class ProfilePage extends StatefulWidget {
   final User user;

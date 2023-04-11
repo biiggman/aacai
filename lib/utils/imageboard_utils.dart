@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -12,26 +13,14 @@ class ImageboardUtils {
 
   Future<File?> chooseImage() async {
     final picker = ImagePicker();
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    final pickedFile =
+        await picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
     if (pickedFile != null) {
       _selectedImage = File(pickedFile.path);
       return _selectedImage;
     }
     return null;
   }
-
-  //THIS IS FOR TRYING TO LIST ASSET IMAGES AS SELECTABLE (SIMILAR TO PHOTO GALLERY)
-  //MIGHT DELETE LOL
-  //Future<List<String>> loadAssetImages() async {
-  //  final manifestContent = await rootBundle.loadString('AssetManifest.json');
-  //  final Map<String, dynamic> manifestMap = json.decode(manifestContent);
-
-  //  final imagePaths = manifestMap.keys
-  //      .where((String key) => key.contains('assets/images/'))
-  //      .toList();
-
-  //  return imagePaths;
-  //}
 
   Future<void> uploadImage(String name, Color buttonColor) async {
     String uid = FirebaseAuth.instance.currentUser!.uid;
@@ -64,13 +53,14 @@ class ImageboardUtils {
 
 class ButtonUtils {
   String uid = FirebaseAuth.instance.currentUser!.uid;
+
   Future<List<RawMaterialButton>> makeButtons() async {
     QuerySnapshot<Map<String, dynamic>> imageboardRef = await FirebaseFirestore
         .instance
         .collection('user-information')
         .doc(uid)
         .collection('imageboard')
-        .orderBy(FieldPath.documentId)
+        .orderBy('image_color', descending: true)
         .get();
 
     List<RawMaterialButton> buttons = [];
@@ -79,34 +69,76 @@ class ButtonUtils {
       if (doc.id == 'initial') {
         continue;
       }
+
+      //data from database
       int colorValue = doc['image_color'];
       String buttonName = doc['image_name'];
       String buttonLocation = doc['image_location'];
       Color buttonColor = Color(colorValue);
+
+      //create button based on data above
       buttons.add(RawMaterialButton(
-        onPressed: () {
-          TextToSpeech.speak(buttonName);
-        },
-        onLongPress: () {},
-        elevation: 0.0,
-        constraints: const BoxConstraints(minHeight: 100, minWidth: 100),
+        key: Key(buttonName),
+        onPressed: null,
+
+        elevation: 2.0,
+
+        //shape of button
         shape: RoundedRectangleBorder(
             side: BorderSide(color: buttonColor, width: 2),
             borderRadius: BorderRadius.circular(18)),
-            fillColor: buttonColor,
+        //fillColor: buttonColor,
         padding: const EdgeInsets.all(3.0),
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Image.network(
-            buttonLocation,
-            height: 125,
-            width: 125,
-            fit: BoxFit.cover,
+          Expanded(
+            child: CachedNetworkImage(
+              imageUrl: buttonLocation,
+              height: 100,
+              width: 100,
+              fit: BoxFit.contain,
+            ),
           ),
+          Column(
+            children: [
+              Text(
+                buttonName,
+                style: const TextStyle(fontSize: 16, color: Colors.black),
+              ),
+            ],
+          )
         ]),
       ));
     }
     return buttons;
   }
 
-  //Future<void> deleteImage
+  List<RawMaterialButton> tappedButtons = [];
+  List<String> tappedButtonNames = [];
+
+  void addButtonToList(RawMaterialButton button) {
+    //creates a copy of the button
+    RawMaterialButton newButton = RawMaterialButton(
+      onPressed: null,
+      onLongPress: null,
+      elevation: button.elevation,
+      constraints: button.constraints,
+      shape: button.shape,
+      padding: button.padding,
+      child: button.child,
+    );
+
+    //extracts name of the button
+    String buttonName = button.key
+        .toString()
+        .replaceAll('<', '')
+        .replaceAll('>', '')
+        .replaceAll("'", '');
+
+    //adds button copy object and the name of the button to respected lists
+    tappedButtons.add(newButton);
+    tappedButtonNames.add(buttonName);
+
+    //debug test to see if working
+    print(buttonName);
+  }
 }
