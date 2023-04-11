@@ -50,48 +50,43 @@ class _CustomAppBarState extends State<CustomAppBar> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.buttons.isEmpty) {
-      return AppBar(
-        title: const Text("AAC.AI"),
-      );
-    } else {
-      return AppBar(
-        backgroundColor: Colors.white,
-        centerTitle: false,
-        actions: <Widget>[
-          IconButton(
-            onPressed: _speakSentence,
-            icon: const Icon(Icons.play_arrow_rounded),
-            color: Colors.black,
-          ),
-          IconButton(
-            onPressed: _backspace,
-            icon: const Icon(Icons.backspace),
-            color: Colors.black,
-          ),
-          IconButton(
-            onPressed: _clearList,
-            icon: const Icon(Icons.clear),
-            color: Colors.black,
-          ),
-        ],
-        title: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              for (var button in widget.buttons)
-                IconButton(
-                  icon: button.child!,
-                  color: Colors.black,
-                  constraints:
-                      const BoxConstraints(minWidth: 75, minHeight: 75),
-                  onPressed: () {},
-                ),
-            ],
-          ),
+    return AppBar(
+      backgroundColor: Colors.white,
+      centerTitle: false,
+      actions: widget.buttons.isNotEmpty
+          ? <Widget>[
+              IconButton(
+                onPressed: _speakSentence,
+                icon: const Icon(Icons.play_arrow_rounded),
+                color: Colors.black,
+              ),
+              IconButton(
+                onPressed: _backspace,
+                icon: const Icon(Icons.backspace),
+                color: Colors.black,
+              ),
+              IconButton(
+                onPressed: _clearList,
+                icon: const Icon(Icons.clear),
+                color: Colors.black,
+              ),
+            ]
+          : null,
+      title: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            for (var button in widget.buttons)
+              IconButton(
+                icon: button.child!,
+                color: Colors.white,
+                constraints: const BoxConstraints(minWidth: 75, minHeight: 75),
+                onPressed: () {},
+              ),
+          ],
         ),
-      );
-    }
+      ),
+    );
   }
 }

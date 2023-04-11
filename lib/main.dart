@@ -101,21 +101,6 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  List<RawMaterialButton> selectedButtons = [];
-  PreferredSizeWidget getAppBar() {
-    if (selectedButtons.isEmpty) {
-      return AppBar(
-        title: const Text("AAC.AI"),
-      );
-    } else {
-      return CustomAppBar(
-        height: 70,
-        buttons: buttonUtils.tappedButtons,
-        buttonsName: buttonUtils.tappedButtonNames,
-      );
-    }
-  }
-
   void _onItemTapped(int index) async {
     setState(() {
       _selectedIndex = index;
@@ -179,7 +164,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                   },
                                                 ),
                                                 const SizedBox(height: 10),
-                                                const Text('Picture: '),
+                                                //const Text('Picture: '),
                                                 ButtonBar(
                                                   key: _sourceImageKey,
                                                   alignment:
@@ -202,28 +187,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                                         },
                                                         child: const Text(
                                                             'Camera Roll'))
-                                                  ],
-                                                ),
-                                                const Text('Size: '),
-                                                ButtonBar(
-                                                  alignment:
-                                                      MainAxisAlignment.center,
-                                                  buttonPadding:
-                                                      const EdgeInsets.all(5),
-                                                  buttonAlignedDropdown: true,
-                                                  children: <Widget>[
-                                                    ElevatedButton(
-                                                        onPressed: () {
-                                                          buttonSize = "1";
-                                                        },
-                                                        child: const Text(
-                                                            'Small: 1x1')),
-                                                    ElevatedButton(
-                                                        onPressed: () {
-                                                          buttonSize = "2";
-                                                        },
-                                                        child: const Text(
-                                                            'Large: 2x2')),
                                                   ],
                                                 ),
                                                 const SizedBox(height: 10),
@@ -272,15 +235,29 @@ class _MyHomePageState extends State<MyHomePage> {
                                                         : const SizedBox(),
                                                     ElevatedButton(
                                                       onPressed: () {
-                                                        imageboardUtils
-                                                            .uploadImage(
-                                                                buttonName,
-                                                                buttonSize,
-                                                                buttonColor!);
+                                                        buttonName == null ||
+                                                                buttonColor ==
+                                                                    null ||
+                                                                _selectedImage ==
+                                                                    null
+                                                            ? //ADD SNACKBAR HERE SAYING TO FINISH SELECTING
+                                                            print(
+                                                                'PLEASE CHOOSE ITEMS')
+                                                            : imageboardUtils
+                                                                .uploadImage(
+                                                                    buttonName,
+                                                                    buttonColor!);
                                                         Navigator.pop(context);
                                                       },
                                                       child: const Text('Add'),
-                                                    )
+                                                    ),
+                                                    ElevatedButton(
+                                                      onPressed: () {
+                                                        Navigator.pop(context);
+                                                      },
+                                                      child:
+                                                          const Text('Cancel'),
+                                                    ),
                                                   ],
                                                 ),
                                               ],
@@ -349,6 +326,14 @@ class _MyHomePageState extends State<MyHomePage> {
                                       .replaceAll('>', '')
                                       .replaceAll("'", ''));
                                 });
+                              },
+                              onLongPress: () {
+                                print("LONG PRESS");
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return const AlertDialog();
+                                    });
                               },
                               child: button,
                             ))

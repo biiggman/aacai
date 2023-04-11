@@ -13,7 +13,8 @@ class ImageboardUtils {
 
   Future<File?> chooseImage() async {
     final picker = ImagePicker();
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    final pickedFile =
+        await picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
     if (pickedFile != null) {
       _selectedImage = File(pickedFile.path);
       return _selectedImage;
@@ -21,20 +22,7 @@ class ImageboardUtils {
     return null;
   }
 
-  //THIS IS FOR TRYING TO LIST ASSET IMAGES AS SELECTABLE (SIMILAR TO PHOTO GALLERY)
-  //MIGHT DELETE LOL
-  //Future<List<String>> loadAssetImages() async {
-  //  final manifestContent = await rootBundle.loadString('AssetManifest.json');
-  //  final Map<String, dynamic> manifestMap = json.decode(manifestContent);
-
-  //  final imagePaths = manifestMap.keys
-  //      .where((String key) => key.contains('assets/images/'))
-  //      .toList();
-
-  //  return imagePaths;
-  //}
-
-  Future<void> uploadImage(String name, String size, Color buttonColor) async {
+  Future<void> uploadImage(String name, Color buttonColor) async {
     String uid = FirebaseAuth.instance.currentUser!.uid;
 
     CollectionReference imageboardRef = FirebaseFirestore.instance
@@ -57,7 +45,6 @@ class ImageboardUtils {
       'image_name': name,
       'image_location': imageUrl,
       'image_color': buttonColorValue,
-      'image_size': size,
     });
 
     print('Image uploaded to $imageUrl');
@@ -73,7 +60,7 @@ class ButtonUtils {
         .collection('user-information')
         .doc(uid)
         .collection('imageboard')
-        .orderBy(FieldPath.documentId)
+        .orderBy('image_color', descending: true)
         .get();
 
     List<RawMaterialButton> buttons = [];
@@ -87,23 +74,14 @@ class ButtonUtils {
       int colorValue = doc['image_color'];
       String buttonName = doc['image_name'];
       String buttonLocation = doc['image_location'];
-      String buttonSize = doc['image_size'];
       Color buttonColor = Color(colorValue);
-
-      double baseSize = 100.0;
-      int numberSize = int.parse(buttonSize);
 
       //create button based on data above
       buttons.add(RawMaterialButton(
         key: Key(buttonName),
         onPressed: null,
 
-        //size of button (NOT FUNCTIONAL)
         elevation: 2.0,
-        constraints: BoxConstraints(
-          minHeight: baseSize * numberSize,
-          minWidth: baseSize * numberSize,
-        ),
 
         //shape of button
         shape: RoundedRectangleBorder(
@@ -138,6 +116,7 @@ class ButtonUtils {
   List<String> tappedButtonNames = [];
 
   void addButtonToList(RawMaterialButton button) {
+    //creates a copy of the button
     RawMaterialButton newButton = RawMaterialButton(
       onPressed: null,
       onLongPress: null,
@@ -147,24 +126,19 @@ class ButtonUtils {
       padding: button.padding,
       child: button.child,
     );
+
+    //extracts name of the button
     String buttonName = button.key
         .toString()
         .replaceAll('<', '')
         .replaceAll('>', '')
         .replaceAll("'", '');
+
+    //adds button copy object and the name of the button to respected lists
     tappedButtons.add(newButton);
     tappedButtonNames.add(buttonName);
+
+    //debug test to see if working
     print(buttonName);
-  }
-
-  List<RawMaterialButton> setButtonList(List<RawMaterialButton> buttonList) {
-    buttonList = tappedButtons;
-    print("SET LIST");
-    return buttonList;
-  }
-
-  List<String> setNameList(List<String> nameList) {
-    nameList = tappedButtonNames;
-    return nameList;
   }
 }

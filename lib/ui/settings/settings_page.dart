@@ -31,6 +31,10 @@ class _SettingsPageState extends State<SettingsPage> {
                 leading: const Icon(Icons.language),
                 title: const Text('Language'),
                 value: const Text('English'),
+                trailing: const Icon(Icons.arrow_forward_ios),
+                onPressed: (BuildContext context) {
+                  Navigator.push(context, MaterialPageRoute(builder: ((context) => const LoginPage())));
+                },
               ),
               //SettingsTile.navigation(
               //    leading: const Icon(Icons.colorize),
