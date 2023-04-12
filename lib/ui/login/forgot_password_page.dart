@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:aacademic/firebase/fire_auth.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
+  const ForgotPasswordPage({super.key});
+
+
   @override
   _ForgotPasswordPageState createState() => _ForgotPasswordPageState();
 }
@@ -14,7 +17,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
   final _focusEmail = FocusNode();
 
-  bool _isProcessing = false;
+  final bool _isProcessing = false;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +27,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Forgot Password'),
+          title: const Text('Forgot Password'),
         ),
         body: Padding(
           padding: const EdgeInsets.all(24.0),
@@ -46,15 +49,15 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                           hintText: "Email",
                           errorBorder: UnderlineInputBorder(
                             borderRadius: BorderRadius.circular(6.0),
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                               color: Colors.red,
                             ),
                           ),
                         ),
                       ),
-                      SizedBox(height: 16.0),
+                      const SizedBox(height: 16.0),
                       _isProcessing
-                          ? CircularProgressIndicator()
+                          ? const CircularProgressIndicator()
                           : ElevatedButton(
                               onPressed: () async {
                                 _focusEmail.unfocus();
@@ -73,7 +76,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                   });
                                 }
                               },
-                              child: Text(
+                              child: const Text(
                                 'Reset Password',
                                 style: TextStyle(color: Colors.white),
                               ),

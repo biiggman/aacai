@@ -1,4 +1,9 @@
+import 'dart:io';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/services.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -24,6 +29,35 @@ class FireAuth {
       await user!.updateProfile(displayName: name);
       await user.reload();
       user = auth.currentUser;
+
+      // Create user document with imageboard subcollection upon user creation
+      CollectionReference userCollection =
+          FirebaseFirestore.instance.collection('user-information');
+      await userCollection.doc(user!.uid).set({
+        'username': name,
+        'email': email,
+      });
+      CollectionReference imageboardCollection =
+          userCollection.doc(user.uid).collection('imageboard');
+
+      DocumentReference initialDocument = imageboardCollection.doc('initial');
+
+      //set default values for initial value NOTE: Firebase Firestore requires a document to be present to create a subfolder. pain :/
+
+      await initialDocument.set({
+        'image_color': '0xff000000',
+        'image_name': 'Initial',
+        'image_location': 'example.com/pleaseGiveMeAGoodGradeDrIslam',
+        'image_size': '1x1',
+      });
+
+      // create a folder in Cloud Storage upon user creation
+      final storageRef =
+          FirebaseStorage.instance.ref().child('users/${user.uid}');
+      final ByteData blankFileData =
+          await rootBundle.load('assets/welcome.txt');
+      final Uint8List blankFileBytes = blankFileData.buffer.asUint8List();
+      await storageRef.child('welcome.txt').putData(blankFileBytes);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -95,6 +129,7 @@ class FireAuth {
   //google login
   static Future<User?> signInWithGoogle({required BuildContext context}) async {
     FirebaseAuth auth = FirebaseAuth.instance;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
     User? user;
 
     if (kIsWeb) {
@@ -105,6 +140,45 @@ class FireAuth {
             await auth.signInWithPopup(authProvider);
 
         user = userCredential.user;
+
+        // Create user document with imageboard subcollection upon user creation
+        CollectionReference userCollection =
+            FirebaseFirestore.instance.collection('user-information');
+        DocumentSnapshot userDocument =
+            await userCollection.doc(user!.uid).get();
+
+        if (userDocument.exists) {
+          //User already exists
+          print("User already exists in Firestore");
+        } else {
+          //User does not exist, create respected documents in Firestore
+
+          await userCollection.doc(user.uid).set({
+            'username': user.displayName,
+            'email': user.email,
+          });
+
+          CollectionReference imageboardCollection =
+              userCollection.doc(user.uid).collection('imageboard');
+
+          DocumentReference initialDocument =
+              imageboardCollection.doc('initial');
+          await initialDocument.set({
+            'image_color': '0xff000000',
+            'image_name': 'Initial',
+            'image_location': 'example.com/pleaseGiveMeAGoodGradeDrIslam',
+            'image_size': '1x1',
+          });
+
+          // create a folder in Cloud Storage upon user creation
+          final storageRef =
+              FirebaseStorage.instance.ref().child('users/${user.uid}');
+          final ByteData blankFileData =
+              await rootBundle.load('assets/welcome.txt');
+          final Uint8List blankFileBytes = blankFileData.buffer.asUint8List();
+          await storageRef.child('welcome.txt').putData(blankFileBytes);
+          print("Complete");
+        }
       } catch (e) {
         print(e);
       }
@@ -130,6 +204,45 @@ class FireAuth {
               await auth.signInWithCredential(credential);
 
           user = userCredential.user;
+
+          // Create user document with imageboard subcollection upon user creation
+          CollectionReference userCollection =
+              FirebaseFirestore.instance.collection('user-information');
+          DocumentSnapshot userDocument =
+              await userCollection.doc(user!.uid).get();
+
+          if (userDocument.exists) {
+            //User already exists
+            print("User already exists in Firestore");
+          } else {
+            //User does not exist, create respected documents in Firestore
+
+            await userCollection.doc(user.uid).set({
+              'username': user.displayName,
+              'email': user.email,
+            });
+
+            CollectionReference imageboardCollection =
+                userCollection.doc(user.uid).collection('imageboard');
+
+            DocumentReference initialDocument =
+                imageboardCollection.doc('initial');
+            await initialDocument.set({
+              'image_color': '0xff000000',
+              'image_name': 'Initial',
+              'image_location': 'example.com/pleaseGiveMeAGoodGradeDrIslam',
+              'image_size': '1x1',
+            });
+
+            // create a folder in Cloud Storage upon user creation
+            final storageRef =
+                FirebaseStorage.instance.ref().child('users/${user.uid}');
+            final ByteData blankFileData =
+                await rootBundle.load('assets/welcome.txt');
+            final Uint8List blankFileBytes = blankFileData.buffer.asUint8List();
+            await storageRef.child('welcome.txt').putData(blankFileBytes);
+            print("Complete");
+          }
         } on FirebaseAuthException catch (e) {
           if (e.code == 'account-exists-with-different-credential') {
             ScaffoldMessenger.of(context).showSnackBar(
