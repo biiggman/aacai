@@ -51,6 +51,14 @@ class FireAuth {
         'image_size': '1x1',
       });
 
+      CollectionReference folderCollection =
+          userCollection.doc(user.uid).collection('folders');
+
+      DocumentReference initialFolder = folderCollection.doc('initial');
+      await initialFolder.set({
+        'folderName': 'TEST',
+      });
+
       // create a folder in Cloud Storage upon user creation
       final storageRef =
           FirebaseStorage.instance.ref().child('users/${user.uid}');
@@ -121,7 +129,7 @@ class FireAuth {
 
         user = userCredential.user;
 
-        // Create user document with imageboard subcollection upon user creation
+        // Create user document with imageboard and folder subcollection upon user creation
         CollectionReference userCollection =
             FirebaseFirestore.instance.collection('user-information');
         DocumentSnapshot userDocument =
@@ -150,6 +158,14 @@ class FireAuth {
             'image_size': '1x1',
           });
 
+          CollectionReference folderCollection =
+              userCollection.doc(user.uid).collection('folders');
+
+          DocumentReference initialFolder = folderCollection.doc('initial');
+          await initialFolder.set({
+            'folderName': 'TEST',
+          });
+
           // create a folder in Cloud Storage upon user creation
           final storageRef =
               FirebaseStorage.instance.ref().child('users/${user.uid}');
@@ -165,7 +181,7 @@ class FireAuth {
     } else {
       final GoogleSignIn googleSignIn = GoogleSignIn(
           clientId:
-              "1062028064938-e4inidfj0v6eho6mm7r4n4u6qa4m821f.apps.googleusercontent.com");
+              "1062028064938-rlnv4910m182n0l2jfjjrfh645k2qogu.apps.googleusercontent.com");
 
       final GoogleSignInAccount? googleSignInAccount =
           await googleSignIn.signIn();
@@ -212,6 +228,14 @@ class FireAuth {
               'image_name': 'Initial',
               'image_location': 'example.com/pleaseGiveMeAGoodGradeDrIslam',
               'image_size': '1x1',
+            });
+
+            CollectionReference folderCollection =
+                userCollection.doc(user.uid).collection('folders');
+
+            DocumentReference initialFolder = folderCollection.doc('initial');
+            await initialFolder.set({
+              'folderName': 'TEST',
             });
 
             // create a folder in Cloud Storage upon user creation

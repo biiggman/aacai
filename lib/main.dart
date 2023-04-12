@@ -37,10 +37,7 @@ class MyApp extends StatelessWidget {
         '/settings': (context) => const SettingsPage(),
       },
       theme: MyThemes.lightTheme,
-      home: //const LoginPage()
-
-          //ROUTE FOR HOMEPAGE THAT CHECKS FOR LOGIN. NEEDS ROUTE TO ACCOUNT IN SETTINGS TO AVOID SOFTLOCK OUT OF LOGIN PAGE
-          FutureBuilder(
+      home: FutureBuilder(
               future: FirebaseAuth.instance.authStateChanges().first,
               builder: (context, AsyncSnapshot<User?> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -235,7 +232,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                         : const SizedBox(),
                                                     ElevatedButton(
                                                       onPressed: () {
-                                                        buttonName == null ||
+                                                        buttonName == "" ||
                                                                 buttonColor ==
                                                                     null ||
                                                                 _selectedImage ==
