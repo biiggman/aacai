@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'login_page.dart';
-import 'fire_auth.dart';
+import 'package:aacademic/firebase/fire_auth.dart';
 
 class ProfilePage extends StatefulWidget {
   final User user;

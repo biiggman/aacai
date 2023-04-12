@@ -1,6 +1,6 @@
-import 'package:aacademic/validator.dart';
+import 'package:aacademic/firebase/validator.dart';
 import 'package:flutter/material.dart';
-import 'fire_auth.dart';
+import 'package:aacademic/firebase/fire_auth.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   @override

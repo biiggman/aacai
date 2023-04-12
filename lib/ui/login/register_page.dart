@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'profile_page.dart';
-import 'fire_auth.dart';
-import 'validator.dart';
+import 'package:aacademic/firebase/fire_auth.dart';
+import 'package:aacademic/firebase/validator.dart';
 import 'package:flutter_pw_validator/flutter_pw_validator.dart';
 
 class RegisterPage extends StatefulWidget {

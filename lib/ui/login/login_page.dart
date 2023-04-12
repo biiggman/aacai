@@ -3,8 +3,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'profile_page.dart';
 import 'register_page.dart';
-import 'fire_auth.dart';
-import 'validator.dart';
+import 'package:aacademic/firebase/fire_auth.dart';
+import 'package:aacademic/firebase/validator.dart';
 import 'forgot_password_page.dart';
 
 class LoginPage extends StatefulWidget {
