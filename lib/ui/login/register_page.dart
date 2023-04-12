@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_pw_validator/flutter_pw_validator.dart';
 import 'profile_page.dart';
 import '/firebase/fire_auth.dart';
 import '/firebase/validator.dart';

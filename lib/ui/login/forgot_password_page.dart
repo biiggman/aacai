@@ -5,7 +5,6 @@ import 'package:aacademic/firebase/fire_auth.dart';
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
 
-
   @override
   _ForgotPasswordPageState createState() => _ForgotPasswordPageState();
 }
@@ -17,7 +16,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
   final _focusEmail = FocusNode();
 
-  final bool _isProcessing = false;
+  bool _isProcessing = false;
 
   @override
   Widget build(BuildContext context) {
