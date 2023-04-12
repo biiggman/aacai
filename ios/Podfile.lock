@@ -847,9 +847,7 @@ PODS:
   - sqflite (0.0.2):
     - Flutter
     - FMDB (>= 2.7.5)
-  - TensorFlowLiteC (2.2.0):
-    - TensorFlowLiteC/Core (= 2.2.0)
-  - TensorFlowLiteC/Core (2.2.0)
+  - TensorFlowLiteC (2.2.0)
   - tflite (1.1.2):
     - Flutter
     - TensorFlowLiteC
@@ -868,7 +866,7 @@ DEPENDENCIES:
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
-  - TensorFlowLiteC (= 2.11.0)
+  - TensorFlowLiteC (= 2.2.0)
   - tflite (from `.symlinks/plugins/tflite/ios`)
 
 SPEC REPOS:
@@ -987,9 +985,9 @@ SPEC CHECKSUMS:
   SDWebImage: fd7e1a22f00303e058058278639bf6196ee431fe
   SDWebImageWebPCoder: 295a6573c512f54ad2dd58098e64e17dcf008499
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
-  TensorFlowLiteC: 8a8cb6fa20ad74dff29b5e490d02c36a14d48148
+  TensorFlowLiteC: b3ab9e867b0b71052ca102a32a786555b330b02e
   tflite: 7acd11db0915e2d90ab90474413068568eb605f0
 
-PODFILE CHECKSUM: 7759462b73aceac90877d9c3a050f89ce445f67f
+PODFILE CHECKSUM: 828c029747dc8d39def6b829f9b51a5c1f7e929c
 
 COCOAPODS: 1.12.0

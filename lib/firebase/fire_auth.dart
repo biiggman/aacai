@@ -299,8 +299,10 @@ class FireAuth {
       backgroundColor: color,
       content: Text(
         content,
-        style:
-            TextStyle(color: Color.fromARGB(255, 1, 4, 0), letterSpacing: 0.5),
+        style: const TextStyle(
+            color: Color.fromARGB(255, 1, 4, 0),
+            letterSpacing: 0.5,
+            fontWeight: FontWeight.bold),
       ),
     );
   }

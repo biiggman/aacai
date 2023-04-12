@@ -14,6 +14,7 @@
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
 		BC53F224AFE4E8737AD11A08 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 443DD645BC7F4D1DCE5BE7AB /* Pods_Runner.framework */; };
+		CB87D52829E738E100FC2F74 /* TensorFlowLiteC.h in Sources */ = {isa = PBXBuildFile; fileRef = CBE3880729E734E50054F0C5 /* TensorFlowLiteC.h */; };
 		CBBD1E9F29C2786B003C54A2 /* GoogleService-Info (1).plist in Resources */ = {isa = PBXBuildFile; fileRef = CBBD1E9E29C2786A003C54A2 /* GoogleService-Info (1).plist */; };
 /* End PBXBuildFile section */
 
@@ -279,6 +280,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CB87D52829E738E100FC2F74 /* TensorFlowLiteC.h in Sources */,
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
 			);
