@@ -25,9 +25,16 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         _focusEmail.unfocus();
       },
       child: Scaffold(
+        //page background color
+        backgroundColor: const Color.fromARGB(255, 225, 225, 225),
+        //top bar
         appBar: AppBar(
-          title: const Text('Forgot Password'),
-        ),
+            backgroundColor: Colors.purple,
+            title: const Text('Forgot Password'),
+            titleTextStyle: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+                color: Colors.white)),
         body: Padding(
           padding: const EdgeInsets.all(24.0),
           child: Center(
@@ -38,6 +45,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   key: _registerFormKey,
                   child: Column(
                     children: <Widget>[
+                      //email textfield
                       TextFormField(
                         controller: _emailTextController,
                         focusNode: _focusEmail,
@@ -45,20 +53,28 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                           email: value,
                         ),
                         decoration: InputDecoration(
-                          hintText: "Email",
-                          errorBorder: UnderlineInputBorder(
-                            borderRadius: BorderRadius.circular(6.0),
-                            borderSide: const BorderSide(
-                              color: Colors.red,
+                            hintText: "Email",
+                            hintStyle: TextStyle(color: Colors.grey[500]),
+                            enabledBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.white)),
+                            errorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(6.0),
+                              borderSide: const BorderSide(
+                                color: Colors.red,
+                              ),
                             ),
-                          ),
-                        ),
+                            focusedBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Color.fromARGB(255, 122, 2, 152))),
+                            fillColor: const Color.fromARGB(255, 246, 210, 253),
+                            filled: true),
                       ),
+                      const SizedBox(height: 5),
                       const SizedBox(height: 16.0),
                       _isProcessing
                           ? const CircularProgressIndicator()
-                          : ElevatedButton(
-                              onPressed: () async {
+                          : GestureDetector(
+                              onTap: () async {
                                 _focusEmail.unfocus();
 
                                 if (_registerFormKey.currentState!.validate()) {
@@ -75,9 +91,22 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                   });
                                 }
                               },
-                              child: const Text(
-                                'Reset Password',
-                                style: TextStyle(color: Colors.white),
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 24),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    color: Colors.purple),
+                                child: const Center(
+                                  child: Text(
+                                    'Reset Password',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
                     ],

@@ -53,18 +53,18 @@ class _LoginPageState extends State<LoginPage> {
         child: Scaffold(
           //page background color
           backgroundColor: const Color.fromARGB(255, 225, 225, 225),
+          //top bar
           appBar: AppBar(
+              backgroundColor: Colors.purple,
               title: const Text('Welcome'),
-              titleTextStyle:
-                  const TextStyle(fontWeight: FontWeight.bold, fontSize: 40)),
+              titleTextStyle: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 40,
+                  color: Colors.white)),
 
           body: FutureBuilder(
               future: _initializeFirebase(),
               builder: (context, snapshot) {
-                //commented this if statement out to fix entire page reloading on
-                //visibilty icon toggle on/off for password
-                //if (snapshot.connectionState == ConnectionState.done) {
-
                 return Padding(
                     //padding for all fields
                     padding: const EdgeInsets.only(left: 24.0, right: 24.0),
@@ -122,7 +122,7 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
                                   decoration: InputDecoration(
                                       hintText: "Password",
-                                      hintStyle: TextStyle(
+                                      hintStyle: const TextStyle(
                                           color: Color.fromARGB(
                                               255, 158, 158, 158)),
                                       //Icon button toggles password visibility
@@ -157,12 +157,13 @@ class _LoginPageState extends State<LoginPage> {
                                           255, 246, 210, 253),
                                       filled: true),
                                 ),
+                                const SizedBox(height: 5),
                                 //forgot password button
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
-                                    MaterialButton(
-                                      onPressed: () {
+                                    GestureDetector(
+                                      onTap: () {
                                         Navigator.of(context).push(
                                           MaterialPageRoute(
                                             builder: (context) =>
@@ -177,64 +178,65 @@ class _LoginPageState extends State<LoginPage> {
                                     ),
                                   ],
                                 ),
+                                const SizedBox(height: 25),
                                 _isProcessing
                                     ? const CircularProgressIndicator()
                                     //sign in button
-                                    : Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: ElevatedButton(
-                                              onPressed: () async {
-                                                _focusEmail.unfocus();
-                                                _focusPassword.unfocus();
+                                    : GestureDetector(
+                                        onTap: () async {
+                                          _focusEmail.unfocus();
+                                          _focusPassword.unfocus();
 
-                                                if (_formKey.currentState!
-                                                    .validate()) {
-                                                  setState(() {
-                                                    _isProcessing = true;
-                                                  });
+                                          if (_formKey.currentState!
+                                              .validate()) {
+                                            setState(() {
+                                              _isProcessing = true;
+                                            });
 
-                                                  User? user = await FireAuth
-                                                      .signInUsingEmailPassword(
-                                                    email: _emailTextController
-                                                        .text,
-                                                    password:
-                                                        _passwordTextController
-                                                            .text,
-                                                    context: context,
-                                                  );
+                                            User? user = await FireAuth
+                                                .signInUsingEmailPassword(
+                                              email: _emailTextController.text,
+                                              password:
+                                                  _passwordTextController.text,
+                                              context: context,
+                                            );
 
-                                                  setState(() {
-                                                    _isProcessing = false;
-                                                  });
+                                            setState(() {
+                                              _isProcessing = false;
+                                            });
 
-                                                  if (user != null) {
-                                                    Navigator.of(context)
-                                                        .pushReplacement(
-                                                      MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            ProfilePage(
-                                                                user: user),
-                                                      ),
-                                                    );
-                                                  }
-                                                }
-                                              },
-                                              child: const Text(
-                                                'Sign In',
-                                                style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 16,
+                                            if (user != null) {
+                                              Navigator.of(context)
+                                                  .pushReplacement(
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ProfilePage(user: user),
                                                 ),
+                                              );
+                                            }
+                                          }
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 24),
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(8.0),
+                                              color: Colors.purple),
+                                          child: const Center(
+                                            child: Text(
+                                              'Sign In',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
                                               ),
                                             ),
                                           ),
-                                        ],
+                                        ),
                                       ),
-                                const SizedBox(height: 5),
+
+                                const SizedBox(height: 15),
                                 //or continue with row
                                 Row(
                                   children: const [
@@ -259,7 +261,7 @@ class _LoginPageState extends State<LoginPage> {
                                     ),
                                   ],
                                 ),
-                                const SizedBox(height: 5),
+                                const SizedBox(height: 15),
                                 //google sign in button
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -334,82 +336,5 @@ class _LoginPageState extends State<LoginPage> {
                         ]));
               }),
         ));
-    //} curly brace for if snapshot.connectionstate
   }
 }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: Colors.white,
-//       appBar: AppBar(
-//         title: const Text("Login Page"),
-//       ),
-//       body: SingleChildScrollView(
-//         child: Column(
-//           children: <Widget>[
-//             Padding(
-//               padding: const EdgeInsets.only(top: 60.0),
-//               child: Center(
-//                 child: Container(
-//                     width: 200,
-//                     height: 150,
-//                     child: Image.asset('This is where our logo goes')),
-//               ),
-//             ),
-//             const Padding(
-//               //padding: const EdgeInsets.only(left:15.0,right: 15.0,top:0,bottom: 0),
-//               padding: EdgeInsets.symmetric(horizontal: 15),
-//               child: TextField(
-//                 decoration: InputDecoration(
-//                     border: OutlineInputBorder(),
-//                     labelText: 'Email',
-//                     hintText: 'Enter valid email id as abc@gmail.com'),
-//               ),
-//             ),
-//             const Padding(
-//               padding:
-//                   EdgeInsets.only(left: 15.0, right: 15.0, top: 15, bottom: 0),
-//               //padding: EdgeInsets.symmetric(horizontal: 15),
-//               child: TextField(
-//                 obscureText: true,
-//                 decoration: InputDecoration(
-//                     border: OutlineInputBorder(),
-//                     labelText: 'Password',
-//                     hintText: 'Enter secure password'),
-//               ),
-//             ),
-//             TextButton(
-//               onPressed: () {
-//                 //TODO FORGOT PASSWORD SCREEN GOES HERE
-//               },
-//               child: const Text(
-//                 'Forgot Password',
-//                 style: TextStyle(color: Colors.blue, fontSize: 15),
-//               ),
-//             ),
-//             Container(
-//               height: 50,
-//               width: 250,
-//               decoration: BoxDecoration(
-//                   color: Colors.blue, borderRadius: BorderRadius.circular(20)),
-//               child: TextButton(
-//                 onPressed: () {
-//                   Navigator.of(context).pushNamed('/');
-//                 },
-//                 child: const Text(
-//                   'Login',
-//                   style: TextStyle(color: Colors.white, fontSize: 25),
-//                 ),
-//               ),
-//             ),
-//             const SizedBox(
-//               height: 130,
-//             ),
-//             const Text('New User? Create Account')
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
