@@ -35,19 +35,24 @@ class _RegisterPageState extends State<RegisterPage> {
         _focusPassword.unfocus();
       },
       child: Scaffold(
+        backgroundColor: const Color.fromARGB(255, 225, 225, 225),
         appBar: AppBar(
-          title: const Text('Register'),
-        ),
+            backgroundColor: Colors.purple,
+            title: const Text('Register'),
+            titleTextStyle: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 40,
+                color: Colors.white)),
         body: Padding(
           padding: const EdgeInsets.all(24.0),
           child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Form(
+            child:
+                Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+              Form(
                   key: _registerFormKey,
                   child: Column(
                     children: <Widget>[
+                      //name textfield
                       TextFormField(
                         controller: _nameTextController,
                         focusNode: _focusName,
@@ -55,16 +60,24 @@ class _RegisterPageState extends State<RegisterPage> {
                           name: value,
                         ),
                         decoration: InputDecoration(
-                          hintText: "Name",
-                          errorBorder: UnderlineInputBorder(
-                            borderRadius: BorderRadius.circular(6.0),
-                            borderSide: const BorderSide(
-                              color: Colors.red,
+                            hintText: "Name",
+                            hintStyle: TextStyle(color: Colors.grey[500]),
+                            enabledBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.white)),
+                            errorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(6.0),
+                              borderSide: const BorderSide(
+                                color: Colors.red,
+                              ),
                             ),
-                          ),
-                        ),
+                            focusedBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Color.fromARGB(255, 122, 2, 152))),
+                            fillColor: const Color.fromARGB(255, 246, 210, 253),
+                            filled: true),
                       ),
                       const SizedBox(height: 16.0),
+                      //email textfield
                       TextFormField(
                         controller: _emailTextController,
                         focusNode: _focusEmail,
@@ -72,16 +85,24 @@ class _RegisterPageState extends State<RegisterPage> {
                           email: value,
                         ),
                         decoration: InputDecoration(
-                          hintText: "Email",
-                          errorBorder: UnderlineInputBorder(
-                            borderRadius: BorderRadius.circular(6.0),
-                            borderSide: const BorderSide(
-                              color: Colors.red,
+                            hintText: "Email",
+                            hintStyle: TextStyle(color: Colors.grey[500]),
+                            enabledBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.white)),
+                            errorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(6.0),
+                              borderSide: const BorderSide(
+                                color: Colors.red,
+                              ),
                             ),
-                          ),
-                        ),
+                            focusedBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Color.fromARGB(255, 122, 2, 152))),
+                            fillColor: const Color.fromARGB(255, 246, 210, 253),
+                            filled: true),
                       ),
                       const SizedBox(height: 16.0),
+                      //password textfield
                       TextFormField(
                         controller: _passwordTextController,
                         focusNode: _focusPassword,
@@ -90,27 +111,35 @@ class _RegisterPageState extends State<RegisterPage> {
                           password: value,
                         ),
                         decoration: InputDecoration(
-                          hintText: "Password",
-                          //Icon button toggles password visibility
-                          suffixIcon: IconButton(
-                            padding:
-                                const EdgeInsetsDirectional.only(end: 12.0),
-                            icon: _isObscured
-                                ? const Icon(Icons.visibility)
-                                : const Icon(Icons.visibility_off),
-                            onPressed: () {
-                              setState(() {
-                                _isObscured = !_isObscured;
-                              });
-                            },
-                          ),
-                          errorBorder: UnderlineInputBorder(
-                            borderRadius: BorderRadius.circular(6.0),
-                            borderSide: const BorderSide(
-                              color: Colors.red,
+                            hintText: "Password",
+                            hintStyle: const TextStyle(
+                                color: Color.fromARGB(255, 158, 158, 158)),
+                            //Icon button toggles password visibility
+                            suffixIcon: IconButton(
+                              padding:
+                                  const EdgeInsetsDirectional.only(end: 12.0),
+                              icon: _isObscured
+                                  ? const Icon(Icons.visibility)
+                                  : const Icon(Icons.visibility_off),
+                              onPressed: () {
+                                setState(() {
+                                  _isObscured = !_isObscured;
+                                });
+                              },
                             ),
-                          ),
-                        ),
+                            enabledBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.white)),
+                            errorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(6.0),
+                              borderSide: const BorderSide(
+                                color: Colors.red,
+                              ),
+                            ),
+                            focusedBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Color.fromARGB(255, 122, 2, 152))),
+                            fillColor: const Color.fromARGB(255, 246, 210, 253),
+                            filled: true),
                       ),
                       //password status validator
                       const SizedBox(height: 25),
@@ -133,55 +162,58 @@ class _RegisterPageState extends State<RegisterPage> {
                       SizedBox(height: 32.0),
                       _isProcessing
                           ? const CircularProgressIndicator()
-                          : Row(
-                              children: [
-                                Expanded(
-                                  child: ElevatedButton(
-                                    onPressed: () async {
-                                      if (_registerFormKey.currentState!
-                                          .validate()) {
-                                        setState(() {
-                                          _isProcessing = true;
-                                        });
+                          //sign up button
+                          : GestureDetector(
+                              onTap: () async {
+                                if (_registerFormKey.currentState!.validate()) {
+                                  setState(() {
+                                    _isProcessing = true;
+                                  });
 
-                                        User? user = await FireAuth
-                                            .registerUsingEmailPassword(
-                                          name: _nameTextController.text,
-                                          email: _emailTextController.text,
-                                          password:
-                                              _passwordTextController.text,
-                                          context: context,
-                                        );
+                                  User? user =
+                                      await FireAuth.registerUsingEmailPassword(
+                                    name: _nameTextController.text,
+                                    email: _emailTextController.text,
+                                    password: _passwordTextController.text,
+                                    context: context,
+                                  );
 
-                                        setState(() {
-                                          _isProcessing = false;
-                                        });
+                                  setState(() {
+                                    _isProcessing = false;
+                                  });
 
-                                        if (user != null) {
-                                          Navigator.of(context)
-                                              .pushAndRemoveUntil(
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  ProfilePage(user: user),
-                                            ),
-                                            ModalRoute.withName('/'),
-                                          );
-                                        }
-                                      }
-                                    },
-                                    child: const Text(
-                                      'Sign up',
-                                      style: TextStyle(color: Colors.white),
+                                  if (user != null) {
+                                    Navigator.of(context).pushAndRemoveUntil(
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            ProfilePage(user: user),
+                                      ),
+                                      ModalRoute.withName('/'),
+                                    );
+                                  }
+                                }
+                              },
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 24),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    color: Colors.purple),
+                                child: const Center(
+                                  child: Text(
+                                    'Sign Up',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
                                     ),
                                   ),
                                 ),
-                              ],
-                            )
+                              ),
+                            ),
                     ],
-                  ),
-                )
-              ],
-            ),
+                  )),
+            ]),
           ),
         ),
       ),
