@@ -19,7 +19,7 @@ class _CameraPageState extends State<CameraPage> {
 
   initCamera() {
     cameraController =
-        CameraController(widget.cameras[0], ResolutionPreset.low);
+        CameraController(widget.cameras[0], ResolutionPreset.high);
     cameraController.initialize().then((value) {
       setState(() {
         cameraController.startImageStream((image) => {

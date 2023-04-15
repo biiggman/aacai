@@ -6,6 +6,7 @@ import 'register_page.dart';
 import 'package:aacademic/firebase/fire_auth.dart';
 import 'package:aacademic/firebase/validator.dart';
 import 'forgot_password_page.dart';
+import 'package:aacademic/utils/UI_templates.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -69,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
                     //padding for all fields
                     padding: const EdgeInsets.only(left: 24.0, right: 24.0),
                     child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           //logo--add image to assets folder and call
                           const Image(
@@ -88,27 +89,8 @@ class _LoginPageState extends State<LoginPage> {
                                   validator: (value) => Validator.validateEmail(
                                     email: value,
                                   ),
-                                  decoration: InputDecoration(
-                                      hintText: "Email",
-                                      hintStyle:
-                                          TextStyle(color: Colors.grey[500]),
-                                      enabledBorder: const OutlineInputBorder(
-                                          borderSide:
-                                              BorderSide(color: Colors.white)),
-                                      errorBorder: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(6.0),
-                                        borderSide: const BorderSide(
-                                          color: Colors.red,
-                                        ),
-                                      ),
-                                      focusedBorder: const OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: Color.fromARGB(
-                                                  255, 122, 2, 152))),
-                                      fillColor: const Color.fromARGB(
-                                          255, 246, 210, 253),
-                                      filled: true),
+                                  decoration: UITemplates.textFieldDeco(
+                                      hintText: "Email"),
                                 ),
                                 const SizedBox(height: 5),
                                 //password textfield
@@ -216,24 +198,8 @@ class _LoginPageState extends State<LoginPage> {
                                             }
                                           }
                                         },
-                                        child: Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 24),
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(8.0),
-                                              color: Colors.purple),
-                                          child: const Center(
-                                            child: Text(
-                                              'Sign In',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 16,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
+                                        child: UITemplates.buttonDeco(
+                                            displayText: "Sign in"),
                                       ),
 
                                 const SizedBox(height: 15),

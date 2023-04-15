@@ -1,6 +1,7 @@
 import 'package:aacademic/firebase/validator.dart';
 import 'package:flutter/material.dart';
 import 'package:aacademic/firebase/fire_auth.dart';
+import 'package:aacademic/utils/UI_templates.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
@@ -39,7 +40,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           padding: const EdgeInsets.all(24.0),
           child: Center(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Form(
                   key: _registerFormKey,
@@ -52,27 +53,14 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                         validator: (value) => Validator.validateEmail(
                           email: value,
                         ),
-                        decoration: InputDecoration(
-                            hintText: "Email",
-                            hintStyle: TextStyle(color: Colors.grey[500]),
-                            enabledBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white)),
-                            errorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(6.0),
-                              borderSide: const BorderSide(
-                                color: Colors.red,
-                              ),
-                            ),
-                            focusedBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Color.fromARGB(255, 122, 2, 152))),
-                            fillColor: const Color.fromARGB(255, 246, 210, 253),
-                            filled: true),
+                        decoration:
+                            UITemplates.textFieldDeco(hintText: "Email"),
                       ),
                       const SizedBox(height: 5),
                       const SizedBox(height: 16.0),
                       _isProcessing
                           ? const CircularProgressIndicator()
+                          //reset password button
                           : GestureDetector(
                               onTap: () async {
                                 _focusEmail.unfocus();
@@ -91,23 +79,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                   });
                                 }
                               },
-                              child: Container(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 24),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8.0),
-                                    color: Colors.purple),
-                                child: const Center(
-                                  child: Text(
-                                    'Reset Password',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                              ),
+                              child: UITemplates.buttonDeco(
+                                  displayText: "Reset Password"),
                             ),
                     ],
                   ),
