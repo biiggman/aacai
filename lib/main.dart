@@ -38,18 +38,18 @@ class MyApp extends StatelessWidget {
       },
       theme: MyThemes.lightTheme,
       home: FutureBuilder(
-              future: FirebaseAuth.instance.authStateChanges().first,
-              builder: (context, AsyncSnapshot<User?> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
-                } else if (snapshot.hasData) {
-                  return const MyHomePage(
-                    title: 'AAC.AI',
-                  );
-                } else {
-                  return const LoginPage();
-                }
-              }),
+          future: FirebaseAuth.instance.authStateChanges().first,
+          builder: (context, AsyncSnapshot<User?> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            } else if (snapshot.hasData) {
+              return const MyHomePage(
+                title: 'AAC.AI',
+              );
+            } else {
+              return const LoginPage();
+            }
+          }),
     );
   }
 }
@@ -83,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    _imageboardRef = buttonUtils.makeButtons();
+    _imageboardRef = buttonUtils.populateButtons();
   }
 
   void onColorSelected(Color color) {
@@ -105,7 +105,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
     switch (index) {
       case 0:
-        //tappedButtons.add(test);
         break;
 
       case 1:
@@ -119,7 +118,7 @@ class _MyHomePageState extends State<MyHomePage> {
               builder: (BuildContext context) {
                 return AlertDialog(
                     scrollable: true,
-                    title: const Text('Add a Button'),
+                    title: const Text('Add'),
                     content: Padding(
                         padding: const EdgeInsets.all(5),
                         child: Form(
@@ -295,7 +294,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: FutureBuilder(
               future: _imageboardRef,
               builder: (BuildContext context,
-                  AsyncSnapshot<List<RawMaterialButton>> imageboardRef) {
+                  AsyncSnapshot<List<RawMaterialButton>>imageboardRef) {
                 if (imageboardRef.connectionState == ConnectionState.waiting) {
                   return const CircularProgressIndicator();
                 } else if (imageboardRef.hasError) {
