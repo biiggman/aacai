@@ -74,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
                         children: [
                           //logo--add image to assets folder and call
                           const Image(
-                            image: AssetImage("assets/berrywithbeer.png"),
+                            image: AssetImage("assets/logos/berrywithbeer.png"),
                             height: 150,
                             width: 150,
                           ),
@@ -199,7 +199,8 @@ class _LoginPageState extends State<LoginPage> {
                                           }
                                         },
                                         child: UITemplates.buttonDeco(
-                                            displayText: "Sign in"),
+                                            displayText: "Sign in",
+                                            vertInset: 24),
                                       ),
 
                                 const SizedBox(height: 15),
@@ -266,7 +267,7 @@ class _LoginPageState extends State<LoginPage> {
                                         ),
                                         child: const Image(
                                           image: AssetImage(
-                                              "assets/google_logo.png"),
+                                              "assets/logos/google_logo.png"),
                                           height: 40,
                                         ),
                                       ),

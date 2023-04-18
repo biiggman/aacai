@@ -1,10 +1,13 @@
 import 'dart:io';
 import 'package:aacademic/camera/camera_page.dart';
+import 'package:aacademic/firebase/fire_auth.dart';
+import 'package:aacademic/firebase/validator.dart';
 import 'package:aacademic/ui/custom_appbar.dart';
 import 'package:aacademic/ui/login/login_page.dart';
 import 'package:aacademic/ui/settings/settings_page.dart';
 import 'package:aacademic/ui/add_menu/color_button.dart';
 import 'package:aacademic/ui/add_menu/preview_button.dart';
+import 'package:aacademic/utils/UI_templates.dart';
 import 'package:aacademic/utils/themes.dart';
 import 'package:aacademic/utils/tts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -82,6 +85,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final _addButtonKey = GlobalKey<FormState>();
   final _sourceImageKey = GlobalKey();
   final _buttonColorKey = GlobalKey();
+  bool _isProcessing = false;
 
   @override
   void initState() {
@@ -120,152 +124,187 @@ class _MyHomePageState extends State<MyHomePage> {
           showDialog(
               context: context,
               builder: (BuildContext context) {
-                return AlertDialog(
-                    scrollable: true,
-                    title: const Text('Add a Button'),
-                    content: Padding(
-                        padding: const EdgeInsets.all(5),
-                        child: Form(
-                            key: _addButtonKey,
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Flexible(
-                                    flex: 4,
-                                    fit: FlexFit.tight,
-                                    child: Padding(
-                                        padding: const EdgeInsets.all(5),
-                                        child: StatefulBuilder(
-                                          builder: (BuildContext context,
-                                              StateSetter setState) {
-                                            return Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceAround,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                TextFormField(
-                                                  decoration:
-                                                      const InputDecoration(
-                                                    labelText: 'Button Name',
+                return Scaffold(
+                  backgroundColor: Colors.grey,
+                  body: AlertDialog(
+                      scrollable: true,
+                      title: const Text(
+                        'Add a New Button',
+                        textAlign: TextAlign.center,
+                      ),
+                      titleTextStyle: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        color: Colors.purple,
+                      ),
+                      content: Padding(
+                          padding: const EdgeInsets.all(5),
+                          child: Form(
+                              key: _addButtonKey,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Flexible(
+                                      flex: 4,
+                                      fit: FlexFit.tight,
+                                      child: Padding(
+                                          padding: const EdgeInsets.all(5),
+                                          child: StatefulBuilder(
+                                            builder: (BuildContext context,
+                                                StateSetter setState) {
+                                              return Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceAround,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  //button name textfield
+                                                  TextFormField(
+                                                    onChanged: (value) {
+                                                      setState(() {
+                                                        buttonName = value;
+                                                      });
+                                                    },
+                                                    validator: (value) =>
+                                                        Validator.validateName(
+                                                      name: value,
+                                                    ),
+                                                    decoration: UITemplates
+                                                        .textFieldDeco(
+                                                            hintText:
+                                                                "Button Name"),
                                                   ),
-                                                  onChanged: (value) {
-                                                    setState(() {
-                                                      buttonName = value;
-                                                    });
-                                                  },
-                                                  validator: (value) {
-                                                    if (value == null ||
-                                                        value.isEmpty) {
-                                                      return "Please enter a name.";
-                                                    }
-                                                    return null;
-                                                  },
-                                                ),
-                                                const SizedBox(height: 10),
-                                                //const Text('Picture: '),
-                                                ButtonBar(
-                                                  key: _sourceImageKey,
-                                                  alignment:
-                                                      MainAxisAlignment.center,
-                                                  buttonPadding:
-                                                      const EdgeInsets.all(5),
-                                                  buttonAlignedDropdown: true,
-                                                  children: <Widget>[
-                                                    ElevatedButton(
-                                                        onPressed: () {
-                                                          imageboardUtils
-                                                              .chooseImage()
-                                                              .then(
-                                                                  (selectedImage) {
-                                                            setState(() {
-                                                              _onImageSelected(
-                                                                  selectedImage!);
-                                                            });
-                                                          });
-                                                        },
-                                                        child: const Text(
-                                                            'Camera Roll'))
-                                                  ],
-                                                ),
-                                                const SizedBox(height: 10),
-                                                Center(
-                                                  child: ButtonBar(
-                                                    key: _buttonColorKey,
-                                                    alignment: MainAxisAlignment
-                                                        .center,
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    buttonHeight: .5,
-                                                    buttonMinWidth: .5,
-                                                    buttonPadding:
-                                                        const EdgeInsets.all(
-                                                            5.0),
-                                                    buttonAlignedDropdown: true,
-                                                    children: [
-                                                      ColorButton(
+                                                  const SizedBox(height: 10),
+                                                  //camera roll button
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      imageboardUtils
+                                                          .chooseImage()
+                                                          .then(
+                                                              (selectedImage) {
+                                                        setState(() {
+                                                          _onImageSelected(
+                                                              selectedImage!);
+                                                        });
+                                                      });
+                                                    },
+                                                    child:
+                                                        UITemplates.buttonDeco(
+                                                            displayText:
+                                                                "Camera Roll",
+                                                            vertInset: 10),
+                                                  ),
+                                                  const SizedBox(height: 10),
+                                                  //select color button
+                                                  GestureDetector(
+                                                      key: _buttonColorKey,
+                                                      child: ColorButton(
                                                           color: buttonColor ??
                                                               Colors
                                                                   .transparent,
                                                           onColorSelected:
-                                                              onColorSelected)
-                                                    ],
+                                                              onColorSelected)),
+                                                  //divider bar
+                                                  const Divider(
+                                                    thickness: 0.5,
+                                                    color: Colors.black,
                                                   ),
-                                                ),
-                                                const Divider(
-                                                  thickness: 0.5,
-                                                  color: Colors.black,
-                                                ),
-                                                ButtonBar(
-                                                  alignment:
-                                                      MainAxisAlignment.center,
-                                                  buttonPadding:
-                                                      const EdgeInsets.all(5),
-                                                  buttonAlignedDropdown: true,
-                                                  children: <Widget>[
-                                                    _selectedImage != null
-                                                        ? PreviewButton(
-                                                            previewColor:
-                                                                buttonColor ??
-                                                                    Colors.red,
-                                                            selectedImage:
-                                                                _selectedImage,
-                                                          )
-                                                        : const SizedBox(),
-                                                    ElevatedButton(
-                                                      onPressed: () {
-                                                        buttonName == null ||
-                                                                buttonColor ==
+                                                  _selectedImage != null
+                                                      ? PreviewButton(
+                                                          previewColor:
+                                                              buttonColor ??
+                                                                  Colors.red,
+                                                          selectedImage:
+                                                              _selectedImage,
+                                                        )
+                                                      : const SizedBox(),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      //add button
+                                                      Expanded(
+                                                        child: GestureDetector(
+                                                          onTap: () {
+                                                            if (_addButtonKey
+                                                                .currentState!
+                                                                .validate()) {
+                                                              setState(() {
+                                                                _isProcessing =
+                                                                    true;
+                                                              });
+                                                            }
+
+                                                            if (buttonColor ==
                                                                     null ||
                                                                 _selectedImage ==
-                                                                    null
-                                                            ? //ADD SNACKBAR HERE SAYING TO FINISH SELECTING
-                                                            print(
-                                                                'PLEASE CHOOSE ITEMS')
-                                                            : imageboardUtils
+                                                                    null) {
+                                                              ScaffoldMessenger
+                                                                      .of(
+                                                                          context)
+                                                                  .showSnackBar(
+                                                                      FireAuth
+                                                                          .customSnackBar(
+                                                                content:
+                                                                    'Please finish making selections',
+                                                                color:
+                                                                    Colors.red,
+                                                              ));
+                                                            }
+
+                                                            imageboardUtils
                                                                 .uploadImage(
                                                                     buttonName,
                                                                     buttonColor!);
-                                                        Navigator.pop(context);
-                                                      },
-                                                      child: const Text('Add'),
-                                                    ),
-                                                    ElevatedButton(
-                                                      onPressed: () {
-                                                        Navigator.pop(context);
-                                                      },
-                                                      child:
-                                                          const Text('Cancel'),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
-                                            );
-                                          },
-                                        ))),
-                              ],
-                            ))));
+                                                            Navigator.pop(
+                                                                context);
+                                                            ScaffoldMessenger
+                                                                    .of(context)
+                                                                .showSnackBar(
+                                                                    FireAuth
+                                                                        .customSnackBar(
+                                                              content:
+                                                                  'Button added',
+                                                              color:
+                                                                  Colors.green,
+                                                            ));
+                                                          },
+                                                          child: UITemplates
+                                                              .buttonDeco(
+                                                                  displayText:
+                                                                      'Add',
+                                                                  vertInset:
+                                                                      10),
+                                                        ),
+                                                      ),
+                                                      const SizedBox(width: 5),
+                                                      //cancel button
+                                                      Expanded(
+                                                        child: GestureDetector(
+                                                          onTap: () {
+                                                            Navigator.pop(
+                                                                context);
+                                                          },
+                                                          child: UITemplates
+                                                              .buttonDeco(
+                                                                  displayText:
+                                                                      'Cancel',
+                                                                  vertInset:
+                                                                      10),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          ))),
+                                ],
+                              )))),
+                );
               }).then((_) {
             _selectedImage = null;
           });

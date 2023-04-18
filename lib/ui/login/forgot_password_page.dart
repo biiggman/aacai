@@ -80,7 +80,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                 }
                               },
                               child: UITemplates.buttonDeco(
-                                  displayText: "Reset Password"),
+                                  displayText: "Reset Password", vertInset: 24),
                             ),
                     ],
                   ),

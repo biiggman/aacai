@@ -21,9 +21,10 @@ class UITemplates {
   }
 
 //general button decoration
-  static Container buttonDeco({required String displayText}) {
+  static Container buttonDeco(
+      {required String displayText, required double vertInset}) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 24),
+      padding: EdgeInsets.symmetric(vertical: vertInset),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8.0), color: Colors.purple),
       child: Center(

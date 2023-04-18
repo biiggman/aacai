@@ -122,6 +122,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           //password status validator
                           const SizedBox(height: 25),
                           FlutterPwValidator(
+                            defaultColor: Colors.red,
                             controller: _passwordTextController,
                             minLength: 6,
                             uppercaseCharCount: 1,
@@ -174,7 +175,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                     }
                                   },
                                   child: UITemplates.buttonDeco(
-                                      displayText: "Sign Up"),
+                                      displayText: "Sign Up", vertInset: 24),
                                 ),
                         ],
                       )),
