@@ -58,11 +58,9 @@ class ButtonUtils {
       key: Key(name),
       onPressed: null,
       elevation: 2.0,
-
       shape: RoundedRectangleBorder(
           side: BorderSide(color: color, width: 2),
           borderRadius: BorderRadius.circular(18)),
-      //fillColor: buttonColor,
       padding: const EdgeInsets.all(3.0),
       child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
         Expanded(
@@ -115,7 +113,7 @@ class ButtonUtils {
     return button;
   }
 
-  Future<List<RawMaterialButton>> populateButtons() async {
+  Future<Map<String, List<RawMaterialButton>>> populateButtons() async {
     QuerySnapshot<Map<String, dynamic>> imageboardRef = await FirebaseFirestore
         .instance
         .collection('user-information')
@@ -150,47 +148,54 @@ class ButtonUtils {
         .collection('folders')
         .get();
 
-    for (var doc in folderRef.docs) {
-      if (doc.id == 'initial') {
+    //list of buttons in a respected folder
+    List<RawMaterialButton> folderButtons = [];
+
+    //data map of buttons within a respected folder
+    Map<String, List<RawMaterialButton>> folderButtonsMap = {};
+
+    for (var folderDoc in folderRef.docs) {
+      if (folderDoc.id == 'initial') {
         continue;
       }
 
-      for (var folderDoc in folderRef.docs) {
-        //Create a RawMaterialButton for the folders
+      //Create a RawMaterialButton for the folders
 
-        int colorValue = folderDoc['folder_color'];
-        String buttonName = folderDoc['folder_name'];
+      int colorValue = folderDoc['folder_color'];
+      String buttonName = folderDoc['folder_name'];
+      Color buttonColor = Color(colorValue);
+
+      RawMaterialButton folderButton = createFolder(buttonName, buttonColor);
+
+      //Iterate through each document in the current folder
+      QuerySnapshot<Map<String, dynamic>> imageRef = await FirebaseFirestore
+          .instance
+          .collection('user-information')
+          .doc(uid)
+          .collection('folders')
+          .doc(folderDoc.id)
+          .collection('images')
+          .get();
+
+      for (var imageDoc in imageRef.docs) {
+        //create a RawMaterialBUtton for the buttons within a folder
+
+        int colorValue = imageDoc['image_color'];
+        String buttonName = imageDoc['image_name'];
+        String buttonLocation = imageDoc['image_location'];
         Color buttonColor = Color(colorValue);
 
-        RawMaterialButton folderButton = createFolder(buttonName, buttonColor);
-        buttons.add(folderButton);
-
-        //Iterate through each document in the current folder
-        QuerySnapshot<Map<String, dynamic>> imageRef = await FirebaseFirestore
-            .instance
-            .collection('user-information')
-            .doc(uid)
-            .collection('folders')
-            .doc(folderDoc.id)
-            .collection('images')
-            .get();
-
-        for (var imageDoc in imageRef.docs) {
-          //create a RawMaterialBUtton for the buttons within a folder
-
-          int colorValue = imageDoc['image_color'];
-          String buttonName = imageDoc['image_name'];
-          String buttonLocation = imageDoc['image_location'];
-          Color buttonColor = Color(colorValue);
-
-          RawMaterialButton imageButton =
-              createButton(buttonName, buttonLocation, buttonColor);
-          buttons.add(imageButton);
-        }
+        RawMaterialButton imageButton =
+            createButton(buttonName, buttonLocation, buttonColor);
+        folderButtons.add(imageButton);
       }
+
+      folderButtonsMap[folderDoc.id] = folderButtons;
+
+      buttons.add(folderButton);
     }
 
-    return buttons;
+    return folderButtonsMap;
   }
 
   List<RawMaterialButton> tappedButtons = [];

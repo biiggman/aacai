@@ -65,7 +65,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
-  late Future<List<RawMaterialButton>> _imageboardRef;
+  late Future<Map<String, List<RawMaterialButton>>> _imageboardRef;
 
   //button variables
   String buttonName = "";
@@ -291,15 +291,18 @@ class _MyHomePageState extends State<MyHomePage> {
           buttonsName: buttonUtils.tappedButtonNames,
         ),
         body: Center(
-          child: FutureBuilder(
+          child: FutureBuilder<Map<String, List<RawMaterialButton>>>(
               future: _imageboardRef,
               builder: (BuildContext context,
-                  AsyncSnapshot<List<RawMaterialButton>>imageboardRef) {
-                if (imageboardRef.connectionState == ConnectionState.waiting) {
+                  AsyncSnapshot<Map<String, List<RawMaterialButton>>>
+                      snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
                   return const CircularProgressIndicator();
-                } else if (imageboardRef.hasError) {
-                  return Text('Error: ${imageboardRef.error}');
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
                 } else {
+                  final List<RawMaterialButton> buttons = [];
+                  snapshot.data![selectedFolderName] ?? [];
                   return GridView.count(
                     scrollDirection: orientation == Orientation.portrait
                         ? Axis.vertical
@@ -310,7 +313,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     mainAxisSpacing:
                         orientation == Orientation.portrait ? 20 : 5,
                     padding: const EdgeInsets.all(15),
-                    children: imageboardRef.data!
+                    children: buttons
                         .map((button) => GestureDetector(
                               onTap: () {
                                 print("ADDING TO LIST");
