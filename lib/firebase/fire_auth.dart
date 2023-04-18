@@ -298,6 +298,7 @@ class FireAuth {
     return SnackBar(
       backgroundColor: color,
       content: Text(
+        textAlign: TextAlign.center,
         content,
         style: const TextStyle(
             color: Color.fromARGB(255, 1, 4, 0),

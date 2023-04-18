@@ -47,10 +47,10 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>Camera Access is needed to use Image Recognition</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Photo Library Access is needed to add custom buttons</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Microphone Access is needed for Text-To-Speech </string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Photo Library Access is needed to add custom buttons</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
