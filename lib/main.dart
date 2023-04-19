@@ -241,7 +241,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                                             if (buttonColor ==
                                                                     null ||
                                                                 _selectedImage ==
-                                                                    null) {
+                                                                    null ||
+                                                                buttonName ==
+                                                                    "") {
                                                               ScaffoldMessenger
                                                                       .of(
                                                                           context)

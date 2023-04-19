@@ -31,7 +31,11 @@ class _ColorButtonState extends State<ColorButton> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: const Text("Select Color"),
+              title: const Text("Select Color", textAlign: TextAlign.center),
+              titleTextStyle: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                  color: Colors.purple),
               content: SingleChildScrollView(
                 child: BlockPicker(
                   pickerColor: _color ?? Colors.white,
@@ -40,6 +44,7 @@ class _ColorButtonState extends State<ColorButton> {
                       _color = color;
                     });
                     widget.onColorSelected(color);
+                    Navigator.pop(context);
                   },
                 ),
               ),
