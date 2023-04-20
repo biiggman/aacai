@@ -16,6 +16,7 @@ class _CameraPageState extends State<CameraPage> {
   late CameraController cameraController;
   late CameraImage cameraImage;
   late List recognitionsList = [];
+  bool predicting = false;
 
   initCamera() {
     cameraController =
@@ -33,6 +34,9 @@ class _CameraPageState extends State<CameraPage> {
   runModel() async {
     //check if the interpreter is busy
 
+    if (predicting) return;
+    predicting = true;
+
     recognitionsList = (await Tflite.detectObjectOnFrame(
       bytesList: cameraImage.planes.map((plane) {
         return plane.bytes;
@@ -46,7 +50,8 @@ class _CameraPageState extends State<CameraPage> {
     ))!;
 
     setState(() {
-      cameraImage;
+      recognitionsList;
+      predicting = false;
     });
   }
 
