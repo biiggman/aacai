@@ -5,7 +5,7 @@ class UITemplates {
   static InputDecoration textFieldDeco({required String hintText}) {
     return (InputDecoration(
         hintText: hintText,
-        hintStyle: TextStyle(color: Colors.grey[500]),
+        hintStyle: TextStyle(color: Colors.white),
         enabledBorder: const OutlineInputBorder(
             borderSide: BorderSide(color: Colors.white)),
         errorBorder: OutlineInputBorder(
@@ -15,8 +15,8 @@ class UITemplates {
           ),
         ),
         focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Color.fromARGB(255, 122, 2, 152))),
-        fillColor: const Color.fromARGB(255, 246, 210, 253),
+            borderSide: BorderSide(color: Color(0xff6A145D))),
+        fillColor: const Color(0xffABC99B),
         filled: true));
   }
 
@@ -26,7 +26,7 @@ class UITemplates {
     return Container(
       padding: EdgeInsets.symmetric(vertical: vertInset),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8.0), color: Colors.purple),
+          borderRadius: BorderRadius.circular(8.0), color: Color(0xff6A145D)),
       child: Center(
         child: Text(
           displayText,

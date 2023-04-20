@@ -30,7 +30,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         backgroundColor: const Color.fromARGB(255, 225, 225, 225),
         //top bar
         appBar: AppBar(
-            backgroundColor: Colors.purple,
             title: const Text('Forgot Password'),
             titleTextStyle: const TextStyle(
                 fontWeight: FontWeight.bold,

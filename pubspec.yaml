@@ -116,8 +116,7 @@ flutter:
   - assets/images/verbs/Talk.jpg
 
     #logos
-  - assets/logos/berry.png
-  - assets/logos/berrywithbeer.png
+  - assets/logos/logo.png
   - assets/logos/google_logo.png
 
 

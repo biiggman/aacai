@@ -39,7 +39,6 @@ class _RegisterPageState extends State<RegisterPage> {
         backgroundColor: const Color.fromARGB(255, 225, 225, 225),
         //top bar
         appBar: AppBar(
-            backgroundColor: Colors.purple,
             title: const Text('Register'),
             titleTextStyle: const TextStyle(
                 fontWeight: FontWeight.bold,
@@ -87,8 +86,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                             decoration: InputDecoration(
                                 hintText: "Password",
-                                hintStyle: const TextStyle(
-                                    color: Color.fromARGB(255, 158, 158, 158)),
+                                hintStyle: const TextStyle(color: Colors.white),
                                 //Icon button toggles password visibility
                                 suffixIcon: IconButton(
                                   padding: const EdgeInsetsDirectional.only(
@@ -112,11 +110,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                   ),
                                 ),
                                 focusedBorder: const OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color:
-                                            Color.fromARGB(255, 122, 2, 152))),
-                                fillColor:
-                                    const Color.fromARGB(255, 246, 210, 253),
+                                    borderSide:
+                                        BorderSide(color: Color(0xff6A145D))),
+                                fillColor: const Color(0xffABC99B),
                                 filled: true),
                           ),
                           //password status validator

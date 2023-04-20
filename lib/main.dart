@@ -142,7 +142,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       titleTextStyle: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
-                        color: Colors.purple,
+                        color: Color(0xff6A145D),
                       ),
                       content: Padding(
                           padding: const EdgeInsets.all(5),

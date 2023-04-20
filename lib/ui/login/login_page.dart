@@ -58,12 +58,12 @@ class _LoginPageState extends State<LoginPage> {
           backgroundColor: const Color.fromARGB(255, 225, 225, 225),
           //top bar
           appBar: AppBar(
-              backgroundColor: Colors.purple,
               title: const Text('Welcome'),
               titleTextStyle: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 40,
-                  color: Colors.white)),
+                fontWeight: FontWeight.bold,
+                fontSize: 40,
+                color: Colors.white,
+              )),
 
           body: FutureBuilder(
               future: _initializeFirebase(),
@@ -76,9 +76,9 @@ class _LoginPageState extends State<LoginPage> {
                         children: [
                           //logo--add image to assets folder and call
                           const Image(
-                            image: AssetImage("assets/logos/berrywithbeer.png"),
-                            height: 150,
-                            width: 150,
+                            image: AssetImage("assets/logos/logo.png"),
+                            height: 100,
+                            width: 300,
                           ),
                           Form(
                             key: _formKey,
@@ -106,9 +106,8 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
                                   decoration: InputDecoration(
                                       hintText: "Password",
-                                      hintStyle: const TextStyle(
-                                          color: Color.fromARGB(
-                                              255, 158, 158, 158)),
+                                      hintStyle:
+                                          const TextStyle(color: Colors.white),
                                       //Icon button toggles password visibility
                                       suffixIcon: IconButton(
                                         padding:
@@ -135,10 +134,8 @@ class _LoginPageState extends State<LoginPage> {
                                       ),
                                       focusedBorder: const OutlineInputBorder(
                                           borderSide: BorderSide(
-                                              color: Color.fromARGB(
-                                                  255, 122, 2, 152))),
-                                      fillColor: const Color.fromARGB(
-                                          255, 246, 210, 253),
+                                              color: const Color(0xff6A145D))),
+                                      fillColor: const Color(0xffABC99B),
                                       filled: true),
                                 ),
                                 const SizedBox(height: 5),
@@ -212,7 +209,7 @@ class _LoginPageState extends State<LoginPage> {
                                     Expanded(
                                       child: Divider(
                                         thickness: 1,
-                                        color: Colors.purple,
+                                        color: Color(0xff6A145D),
                                       ),
                                     ),
                                     Padding(
@@ -224,9 +221,8 @@ class _LoginPageState extends State<LoginPage> {
                                     ),
                                     Expanded(
                                       child: Divider(
-                                        thickness: 1,
-                                        color: Colors.purple,
-                                      ),
+                                          thickness: 1,
+                                          color: Color(0xff6A145D)),
                                     ),
                                   ],
                                 ),
