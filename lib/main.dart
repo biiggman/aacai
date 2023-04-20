@@ -105,6 +105,13 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+//refresh imageboard after button adds
+  Future<void> _refresh() async {
+    await Future.delayed(const Duration(seconds: 1));
+    initState();
+    setState(() {});
+  }
+
   void _onItemTapped(int index) async {
     setState(() {
       _selectedIndex = index;
@@ -215,11 +222,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                                       ? PreviewButton(
                                                           previewColor:
                                                               buttonColor ??
-                                                                  Colors.red,
+                                                                  Colors.grey,
                                                           selectedImage:
                                                               _selectedImage,
                                                         )
                                                       : const SizedBox(),
+                                                  const SizedBox(height: 10),
                                                   Row(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
@@ -269,7 +277,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                     FireAuth
                                                                         .customSnackBar(
                                                               content:
-                                                                  'Button added',
+                                                                  'Button added! Pull down to refresh',
                                                               color:
                                                                   Colors.green,
                                                             ));
@@ -330,59 +338,68 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return OrientationBuilder(builder: ((context, orientation) {
       return Scaffold(
+        //top bar for image stringing
         appBar: CustomAppBar(
           height: 70,
           buttons: buttonUtils.tappedButtons,
           buttonsName: buttonUtils.tappedButtonNames,
         ),
+        //imageboard
         body: Center(
-          child: FutureBuilder(
-              future: _imageboardRef,
-              builder: (BuildContext context,
-                  AsyncSnapshot<List<RawMaterialButton>> imageboardRef) {
-                if (imageboardRef.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
-                } else if (imageboardRef.hasError) {
-                  return Text('Error: ${imageboardRef.error}');
-                } else {
-                  return GridView.count(
-                    scrollDirection: orientation == Orientation.portrait
-                        ? Axis.vertical
-                        : Axis.horizontal,
-                    crossAxisCount: orientation == Orientation.portrait ? 3 : 2,
-                    crossAxisSpacing:
-                        orientation == Orientation.portrait ? 20 : 5,
-                    mainAxisSpacing:
-                        orientation == Orientation.portrait ? 20 : 5,
-                    padding: const EdgeInsets.all(15),
-                    children: imageboardRef.data!
-                        .map((button) => GestureDetector(
-                              onTap: () {
-                                print("ADDING TO LIST");
-                                setState(() {
-                                  buttonUtils.addButtonToList(button);
-                                  TextToSpeech.speak(button.key
-                                      .toString()
-                                      .replaceAll('<', '')
-                                      .replaceAll('>', '')
-                                      .replaceAll("'", ''));
-                                });
-                              },
-                              onLongPress: () {
-                                print("LONG PRESS");
-                                showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return const AlertDialog();
-                                    });
-                              },
-                              child: button,
-                            ))
-                        .toList(),
-                  );
-                }
-              }),
+          //pull down refresh
+          child: RefreshIndicator(
+            onRefresh: _refresh,
+            child: FutureBuilder(
+                future: _imageboardRef,
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<RawMaterialButton>> imageboardRef) {
+                  if (imageboardRef.connectionState ==
+                      ConnectionState.waiting) {
+                    return const CircularProgressIndicator();
+                  } else if (imageboardRef.hasError) {
+                    return Text('Error: ${imageboardRef.error}');
+                  } else {
+                    return GridView.count(
+                      scrollDirection: orientation == Orientation.portrait
+                          ? Axis.vertical
+                          : Axis.horizontal,
+                      crossAxisCount:
+                          orientation == Orientation.portrait ? 3 : 2,
+                      crossAxisSpacing:
+                          orientation == Orientation.portrait ? 20 : 5,
+                      mainAxisSpacing:
+                          orientation == Orientation.portrait ? 20 : 5,
+                      padding: const EdgeInsets.all(15),
+                      children: imageboardRef.data!
+                          .map((button) => GestureDetector(
+                                onTap: () {
+                                  print("ADDING TO LIST");
+                                  setState(() {
+                                    buttonUtils.addButtonToList(button);
+                                    TextToSpeech.speak(button.key
+                                        .toString()
+                                        .replaceAll('<', '')
+                                        .replaceAll('>', '')
+                                        .replaceAll("'", ''));
+                                  });
+                                },
+                                onLongPress: () {
+                                  print("LONG PRESS");
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return const AlertDialog();
+                                      });
+                                },
+                                child: button,
+                              ))
+                          .toList(),
+                    );
+                  }
+                }),
+          ),
         ),
+        //bottom navigation bar
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           key: navKey,
