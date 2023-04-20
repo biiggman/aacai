@@ -8,21 +8,21 @@ class MyThemes {
 
   static final ThemeData lightTheme = ThemeData(
 //Standard properties are done up here, before the object declarations.
-    primaryColor: const Color(0xff573943),
+    primaryColor: const Color(0xff6A145D),
     brightness: Brightness.light,
     highlightColor: Colors.white,
 
 //Alterations to overarching appbar theme are done in this object.
     appBarTheme: const AppBarTheme(
-      color: Color(0xff573943),
+      color: Color(0xff6A145D),
       shape: BeveledRectangleBorder(),
-      titleTextStyle: TextStyle(color: Colors.black),
+      titleTextStyle: TextStyle(color: Colors.white),
       //toolbarTextStyle:
     ),
 
 //BNB theme properties.
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-      backgroundColor: Color(0xff573943),
+      backgroundColor: Color(0xff6A145D),
       selectedItemColor: Color(0xff7ca200),
       unselectedItemColor: Colors.white70,
     ),
@@ -38,8 +38,10 @@ class MyThemes {
     textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(
       backgroundColor:
-          MaterialStateProperty.all<Color>(const Color(0xff573943)),
-      foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+          MaterialStateProperty.all<Color>(const Color(0xff6A145D)),
+
+      //If you want white text on buttons globally, change this value
+      foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
       overlayColor: MaterialStateProperty.resolveWith<Color?>(
         (Set<MaterialState> states) {
           if (states.contains(MaterialState.hovered)) {
@@ -47,7 +49,7 @@ class MyThemes {
           }
           if (states.contains(MaterialState.focused) ||
               states.contains(MaterialState.pressed)) {
-            return const Color(0xff393C09);
+            return const Color(0xffABC99B);
           }
           return null; // Defer to the widget's default.
         },
@@ -58,8 +60,8 @@ class MyThemes {
     elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
       backgroundColor:
-          MaterialStateProperty.all<Color>(const Color(0xff573943)),
-      foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+          MaterialStateProperty.all<Color>(const Color(0xff6A145D)),
+      foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
       overlayColor: MaterialStateProperty.resolveWith<Color?>(
         (Set<MaterialState> states) {
           if (states.contains(MaterialState.hovered)) {
@@ -67,7 +69,7 @@ class MyThemes {
           }
           if (states.contains(MaterialState.focused) ||
               states.contains(MaterialState.pressed)) {
-            return const Color(0xff393C09);
+            return const Color(0xffABC99B);
           }
           return null; // Defer to the widget's default.
         },
@@ -76,20 +78,20 @@ class MyThemes {
 
 //Standard button theme, applies to buttons not specified within theme class
     buttonTheme: const ButtonThemeData(
-        buttonColor: Color(0xff573943),
+        buttonColor: Color(0xff6A145D),
         focusColor: Color(0xff7ca200),
-        splashColor: Color(0xff573943)),
+        splashColor: Color(0xffABC99B)),
 
 //floating action button properties, used to hold a buttons position on a page while scrolling.
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
-        backgroundColor: Color(0xff573943),
+        backgroundColor: Color(0xff6A145D),
         focusColor: Color(0xff7ca200),
-        splashColor: Color(0xff573943)),
+        splashColor: Color(0xffABC99B)),
 
 //Color scheme properties
     colorScheme: ColorScheme.fromSwatch()
         .copyWith(secondary: Colors.white)
-        .copyWith(background: const Color(0xff573943)),
+        .copyWith(background: const Color(0xff6A145D)),
   );
 
   static final ThemeData darkTheme = ThemeData(
