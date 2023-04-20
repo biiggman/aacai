@@ -128,7 +128,12 @@ class _RegisterPageState extends State<RegisterPage> {
                             width: 400,
                             height: 150,
                             onSuccess: () {
-                              return true;
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                FireAuth.customSnackBar(
+                                  content: 'Password meets requirements',
+                                  color: Colors.green,
+                                ),
+                              );
                             },
                             onFail: () {
                               return false;
