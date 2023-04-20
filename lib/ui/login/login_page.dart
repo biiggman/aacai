@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../../utils/themes.dart';
 import 'profile_page.dart';
 import 'register_page.dart';
 import 'package:aacademic/firebase/fire_auth.dart';
@@ -46,6 +47,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    MyThemes.lightTheme;
     return GestureDetector(
         onTap: () {
           _focusEmail.unfocus();
