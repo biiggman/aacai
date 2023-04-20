@@ -1,6 +1,6 @@
 import 'dart:io';
-import 'package:aacademic/camera/camera_page.dart';
 import 'package:aacademic/ui/custom_appbar.dart';
+import 'package:aacademic/camera/camera_page.dart';
 import 'package:aacademic/ui/login/login_page.dart';
 import 'package:aacademic/ui/settings/settings_page.dart';
 import 'package:aacademic/ui/add_menu/color_button.dart';
@@ -65,7 +65,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
-  late Future<Map<String, List<RawMaterialButton>>> _imageboardRef;
+  late Future<List<RawMaterialButton>> _imageboardRef;
 
   //button variables
   String buttonName = "";
@@ -73,6 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Color? buttonColor;
   File? _selectedImage;
   ButtonUtils buttonUtils = ButtonUtils();
+  late String _selectedFolderId;
 
   //keys here
   final navKey = GlobalKey();
@@ -84,6 +85,16 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     _imageboardRef = buttonUtils.populateButtons();
+  }
+
+  void _updateImageBoard() {
+    setState(() {});
+  }
+
+  void _onFolderPressed(String folderId) {
+    setState(() {
+      _selectedFolderId = folderId;
+    });
   }
 
   void onColorSelected(Color color) {
@@ -263,13 +274,16 @@ class _MyHomePageState extends State<MyHomePage> {
                               ],
                             ))));
               }).then((_) {
-            _selectedImage = null;
+            setState(() {
+              _selectedImage = null;
+            });
           });
         }
         break;
 
       case 3:
         {
+          //Navigator.of(context).pushNamed('/settings');
           await availableCameras().then((value) => Navigator.push(context,
               MaterialPageRoute(builder: (_) => CameraPage(cameras: value))));
         }
@@ -291,18 +305,24 @@ class _MyHomePageState extends State<MyHomePage> {
           buttonsName: buttonUtils.tappedButtonNames,
         ),
         body: Center(
-          child: FutureBuilder<Map<String, List<RawMaterialButton>>>(
+          child: FutureBuilder(
               future: _imageboardRef,
               builder: (BuildContext context,
-                  AsyncSnapshot<Map<String, List<RawMaterialButton>>>
-                      snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
+                  AsyncSnapshot<List<RawMaterialButton>> imageboardRef) {
+                if (imageboardRef.connectionState == ConnectionState.waiting) {
                   return const CircularProgressIndicator();
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
+                } else if (imageboardRef.hasError) {
+                  return Text('Error: ${imageboardRef.error}');
                 } else {
-                  final List<RawMaterialButton> buttons = [];
-                  snapshot.data![selectedFolderName] ?? [];
+                  //List<RawMaterialButton> buttons = [];
+                  //if (_selectedFolderId != null &&
+                  //    widget.buttonsMap.containsKey(_selectedFolderId)) {
+                  //  buttons = widget.buttonsMap[_selectedFolderId];
+                  //} else {
+                  //  widget.buttonsMap.forEach((_, folderButtons) {
+                  //    buttons.addAll(folderButtons);
+                  //  });
+                  //}
                   return GridView.count(
                     scrollDirection: orientation == Orientation.portrait
                         ? Axis.vertical
@@ -313,7 +333,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     mainAxisSpacing:
                         orientation == Orientation.portrait ? 20 : 5,
                     padding: const EdgeInsets.all(15),
-                    children: buttons
+                    children: imageboardRef.data!
                         .map((button) => GestureDetector(
                               onTap: () {
                                 print("ADDING TO LIST");
