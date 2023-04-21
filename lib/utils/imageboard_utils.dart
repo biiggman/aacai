@@ -5,14 +5,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:image/image.dart' as img;
 
 class ImageboardUtils {
   File? _selectedImage;
 
   Future<File?> chooseImage() async {
     final picker = ImagePicker();
-    final pickedFile =
-        await picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       _selectedImage = File(pickedFile.path);
       return _selectedImage;
@@ -31,21 +32,61 @@ class ImageboardUtils {
     DocumentReference uploadedImage = imageboardRef.doc();
     String uploadedImageID = uploadedImage.id;
 
-    Reference firebaseStorageRef =
-        FirebaseStorage.instance.ref().child('users/$uid/$uploadedImageID');
-    UploadTask uploadTask = firebaseStorageRef.putFile(_selectedImage!);
-    TaskSnapshot taskSnapshot = await uploadTask;
-    String imageUrl = await taskSnapshot.ref.getDownloadURL();
+    final tempDir = await getTemporaryDirectory();
+    final tempFilePath = '${tempDir.path}/image.jpg';
 
-    final int buttonColorValue = buttonColor.value;
+    //checks if image file is a jpeg
+    if (!(_selectedImage!.path.endsWith('.jpeg') ||
+        _selectedImage!.path.endsWith('.jpg'))) {
+      //if not a jpeg, compress by 50% and convert image to jpeg
+      print("NOT A JPEG");
+      img.Image? image = img.decodeImage(_selectedImage!.readAsBytesSync());
+      img.Image resizedImage = img.copyResize(image!, width: 500);
+      final compressedImageBytes = img.encodeJpg(resizedImage, quality: 50);
+      await File(tempFilePath).writeAsBytes(compressedImageBytes);
 
-    await imageboardRef.add({
-      'image_name': name,
-      'image_location': imageUrl,
-      'image_color': buttonColorValue,
-    });
+      //upload image to server
+      Reference firebaseStorageRef = FirebaseStorage.instance
+          .ref()
+          .child('users')
+          .child(uid)
+          .child(uploadedImageID);
 
-    print('Image uploaded to $imageUrl');
+      UploadTask uploadTask = firebaseStorageRef.putFile(File(tempFilePath));
+      TaskSnapshot taskSnapshot = await uploadTask;
+      String imageUrl = await taskSnapshot.ref.getDownloadURL();
+      final int buttonColorValue = buttonColor.value;
+
+      //upload image to database
+      await imageboardRef.add({
+        'image_name': name,
+        'image_location': imageUrl,
+        'image_color': buttonColorValue,
+      });
+
+      print('Image uploaded to $imageUrl');
+    } else {
+      //if image is a jpeg, skip compression and conversion and continue as normal!!
+      print("IS A JPEG");
+      Reference firebaseStorageRef = FirebaseStorage.instance
+          .ref()
+          .child('users')
+          .child(uid)
+          .child(uploadedImageID);
+
+      UploadTask uploadTask = firebaseStorageRef.putFile(_selectedImage!);
+      TaskSnapshot taskSnapshot = await uploadTask;
+      String imageUrl = await taskSnapshot.ref.getDownloadURL();
+      final int buttonColorValue = buttonColor.value;
+
+      await imageboardRef.add({
+        'image_name': name,
+        'image_location': imageUrl,
+        'image_color': buttonColorValue,
+      });
+
+      print('Image uploaded to $imageUrl');
+    }
   }
 }
 
@@ -84,8 +125,10 @@ class ButtonUtils {
     return button;
   }
 
-  RawMaterialButton createFolder(String name, Color color,
-      //Function(String) onFolderPressed, 
+  RawMaterialButton createFolder(
+      String name,
+      Color color,
+      //Function(String) onFolderPressed,
       String folderId) {
     const folderIcon = Icon(Icons.folder);
     RawMaterialButton button = RawMaterialButton(
@@ -171,11 +214,8 @@ class ButtonUtils {
       String buttonName = folderDoc['folder_name'];
       Color buttonColor = Color(colorValue);
 
-      RawMaterialButton folderButton = createFolder(
-        buttonName,
-        buttonColor,
-        folderDoc.id
-      );
+      RawMaterialButton folderButton =
+          createFolder(buttonName, buttonColor, folderDoc.id);
 
       //Iterate through each document in the current folder
       QuerySnapshot<Map<String, dynamic>> imageRef = await FirebaseFirestore

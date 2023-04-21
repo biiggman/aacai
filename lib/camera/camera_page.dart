@@ -20,7 +20,7 @@ class _CameraPageState extends State<CameraPage> {
 
   initCamera() {
     cameraController =
-        CameraController(widget.cameras[0], ResolutionPreset.high);
+        CameraController(widget.cameras[0], ResolutionPreset.max);
     cameraController.initialize().then((value) {
       setState(() {
         cameraController.startImageStream((image) => {
@@ -45,7 +45,7 @@ class _CameraPageState extends State<CameraPage> {
         imageMean: 0,
         imageStd: 255,
         numResultsPerClass: 1,
-        threshold: 0.4,
+        threshold: 0.6,
       ))!;
 
       setState(() {
@@ -63,8 +63,9 @@ class _CameraPageState extends State<CameraPage> {
   Future loadModel() async {
     Tflite.close();
     await Tflite.loadModel(
-        model: "assets/detect.tflite",
-        labels: "assets/labelmap.txt",);
+      model: "assets/detect.tflite",
+      labels: "assets/labelmap.txt",
+    );
   }
 
   @override
