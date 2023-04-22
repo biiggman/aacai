@@ -63,7 +63,15 @@ class _LoginPageState extends State<LoginPage> {
                 fontWeight: FontWeight.bold,
                 fontSize: 40,
                 color: Colors.white,
-              )),
+              ),
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.settings),
+                  onPressed: () {
+                    Navigator.of(context).pushNamed('/settings');
+                  },
+                ),
+              ]),
 
           body: FutureBuilder(
               future: _initializeFirebase(),
