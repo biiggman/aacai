@@ -1,3 +1,4 @@
+import 'package:aacademic/utils/UI_templates.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
@@ -24,13 +25,17 @@ class _ColorButtonState extends State<ColorButton> {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () {
+    return GestureDetector(
+      onTap: () {
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: const Text("Pick a Color"),
+              title: const Text("Select Color", textAlign: TextAlign.center),
+              titleTextStyle: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                  color: Colors.purple),
               content: SingleChildScrollView(
                 child: BlockPicker(
                   pickerColor: _color ?? Colors.white,
@@ -39,13 +44,15 @@ class _ColorButtonState extends State<ColorButton> {
                       _color = color;
                     });
                     widget.onColorSelected(color);
+                    Navigator.pop(context);
                   },
                 ),
               ),
             );
           },
         );
-      }, child: const Text("Choose a Color"),
+      },
+      child: UITemplates.buttonDeco(displayText: 'Button Color', vertInset: 10),
     );
   }
 }
