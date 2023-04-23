@@ -449,7 +449,9 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         //imageboard
         body: Center(
-            child: _buttons.isEmpty
+            child: RefreshIndicator(
+              onRefresh: _refresh,
+              child: _buttons.isEmpty
                 ? const CircularProgressIndicator()
                 : GridView.count(
                     scrollDirection: orientation == Orientation.portrait
@@ -510,7 +512,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   child: button,
                                 ))
                             .toList(),
-                  )),
+                  ))),
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           key: navKey,

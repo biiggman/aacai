@@ -780,7 +780,7 @@ packages:
     source: hosted
     version: "0.4.16"
   tflite:
-    dependency: "direct main"
+    dependency: "direct overridden"
     description:
       name: tflite
       sha256: "661f8942a0e8ca05fedf554cc6f9cc95f526d0e4588d1665e0eb4d29e25e69b1"
