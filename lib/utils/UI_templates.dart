@@ -5,7 +5,7 @@ class UITemplates {
   static InputDecoration textFieldDeco({required String hintText}) {
     return (InputDecoration(
         hintText: hintText,
-        hintStyle: TextStyle(color: Colors.white),
+        hintStyle: const TextStyle(color: Colors.white),
         enabledBorder: const OutlineInputBorder(
             borderSide: BorderSide(color: Colors.white)),
         errorBorder: OutlineInputBorder(
@@ -36,6 +36,24 @@ class UITemplates {
             fontSize: 16,
           ),
         ),
+      ),
+    );
+  }
+
+  //square tile decoration for google login button
+  static Container squareTile({required String imagePath}) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Colors.white,
+        ),
+        borderRadius: BorderRadius.circular(16),
+        color: Colors.grey[200],
+      ),
+      child: Image.asset(
+        imagePath,
+        height: 40,
       ),
     );
   }

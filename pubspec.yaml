@@ -49,6 +49,7 @@ dependencies:
   google_sign_in: ^6.0.2
   flutter_pw_validator: ^1.5.0
 
+
 dependency_overrides:
   camera_android: 0.9.7+1
   camera_avfoundation: 0.9.7+1
@@ -117,8 +118,8 @@ flutter:
 
     #logos
   - assets/logos/logo.png
-  - assets/logos/google_logo.png
-
+  - assets/logos/google.png
+  - assets/logos/apple.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

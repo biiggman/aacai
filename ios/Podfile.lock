@@ -851,6 +851,8 @@ PODS:
   - tflite (1.1.2):
     - Flutter
     - TensorFlowLiteC
+  - the_apple_sign_in (1.0.0):
+    - Flutter
 
 DEPENDENCIES:
   - camera_avfoundation (from `.symlinks/plugins/camera_avfoundation/ios`)
@@ -868,6 +870,7 @@ DEPENDENCIES:
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - TensorFlowLiteC (= 2.2.0)
   - tflite (from `.symlinks/plugins/tflite/ios`)
+  - the_apple_sign_in (from `.symlinks/plugins/the_apple_sign_in/ios`)
 
 SPEC REPOS:
   trunk:
@@ -936,6 +939,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sqflite/ios"
   tflite:
     :path: ".symlinks/plugins/tflite/ios"
+  the_apple_sign_in:
+    :path: ".symlinks/plugins/the_apple_sign_in/ios"
 
 SPEC CHECKSUMS:
   abseil: ebe5b5529fb05d93a8bdb7951607be08b7fa71bc
@@ -987,6 +992,7 @@ SPEC CHECKSUMS:
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
   TensorFlowLiteC: b3ab9e867b0b71052ca102a32a786555b330b02e
   tflite: 7acd11db0915e2d90ab90474413068568eb605f0
+  the_apple_sign_in: 2e78c83cdb09eba07bb16dcc1f3bc12fcdc8263d
 
 PODFILE CHECKSUM: 828c029747dc8d39def6b829f9b51a5c1f7e929c
 

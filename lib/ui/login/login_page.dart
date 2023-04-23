@@ -48,6 +48,10 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     MyThemes.lightTheme;
+
+    //  final appleSignInAvailable =
+    //     Provider.of<AppleSignInAvailable>(context, listen: false);
+
     return GestureDetector(
         onTap: () {
           _focusEmail.unfocus();
@@ -216,7 +220,7 @@ class _LoginPageState extends State<LoginPage> {
                                   children: const [
                                     Expanded(
                                       child: Divider(
-                                        thickness: 1,
+                                        thickness: 2,
                                         color: Color(0xff6A145D),
                                       ),
                                     ),
@@ -229,55 +233,44 @@ class _LoginPageState extends State<LoginPage> {
                                     ),
                                     Expanded(
                                       child: Divider(
-                                          thickness: 1,
+                                          thickness: 2,
                                           color: Color(0xff6A145D)),
                                     ),
                                   ],
                                 ),
                                 const SizedBox(height: 15),
-                                //google sign in button
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
+                                    //google sign in button
                                     GestureDetector(
-                                      onTap: () async {
-                                        setState(() {
-                                          _isProcessing = true;
-                                        });
-                                        User? user =
-                                            await FireAuth.signInWithGoogle(
-                                                context: context);
-                                        setState(() {
-                                          _isProcessing = false;
-                                        });
+                                        onTap: () async {
+                                          setState(() {
+                                            _isProcessing = true;
+                                          });
+                                          User? user =
+                                              await FireAuth.signInWithGoogle(
+                                                  context: context);
+                                          setState(() {
+                                            _isProcessing = false;
+                                          });
 
-                                        if (user != null) {
-                                          Navigator.of(context).pushReplacement(
-                                            MaterialPageRoute(
-                                              builder: (context) => ProfilePage(
-                                                user: user,
+                                          if (user != null) {
+                                            Navigator.of(context)
+                                                .pushReplacement(
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ProfilePage(
+                                                  user: user,
+                                                ),
                                               ),
-                                            ),
-                                          );
-                                        }
-                                      },
-                                      child: Container(
-                                        padding: EdgeInsets.all(5),
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color: Colors.white,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(16),
-                                          color: Colors.grey[200],
-                                        ),
-                                        child: const Image(
-                                          image: AssetImage(
-                                              "assets/logos/google_logo.png"),
-                                          height: 40,
-                                        ),
-                                      ),
-                                    ),
+                                            );
+                                          }
+                                        },
+                                        child: UITemplates.squareTile(
+                                            imagePath:
+                                                "assets/logos/google.png")),
+                                    const SizedBox(width: 10),
                                   ],
                                 ),
                                 const SizedBox(height: 30),
