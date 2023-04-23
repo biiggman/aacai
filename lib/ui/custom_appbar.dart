@@ -53,6 +53,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
     return AppBar(
       backgroundColor: Colors.white,
       centerTitle: false,
+      automaticallyImplyLeading: false,
       actions: widget.buttons.isNotEmpty
           ? <Widget>[
               IconButton(

@@ -1,4 +1,7 @@
 import 'package:aacademic/ui/login/login_page.dart';
+import 'package:aacademic/ui/login/profile_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:aacademic/firebase/fire_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:path/path.dart';
@@ -19,6 +22,7 @@ class _SettingsPageState extends State<SettingsPage> {
   bool isSwitched = false;
   bool isDarkMode = false;
   late ThemeData selectedTheme;
+  User? user = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
@@ -33,14 +37,17 @@ class _SettingsPageState extends State<SettingsPage> {
             tiles: <SettingsTile>[
               SettingsTile.navigation(
                 leading: const Icon(Icons.privacy_tip_outlined),
-                title: const Text('Priivacy Policy'),
-                value: const Text('English'),
+                title: const Text('Profile Page'),
                 trailing: const Icon(Icons.arrow_forward_ios),
                 onPressed: (BuildContext context) {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: ((context) => const LoginPage())));
+                  if (user != null) {
+                    Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                            builder: ((context) => ProfilePage(
+                                  user: user!,
+                                ))));
+                  }
                 },
               ),
               SettingsTile.navigation(
@@ -50,29 +57,39 @@ class _SettingsPageState extends State<SettingsPage> {
               )
             ],
           ),
-          SettingsSection(
-            title: const Text('Languages'),
-            tiles: <SettingsTile>[
-              SettingsTile.navigation(
-                leading: const Icon(Icons.language),
-                title: const Text('Spanish'),
-                trailing: const Icon(Icons.arrow_forward_ios),
-                onPressed: (BuildContext context) {
-                  setState(() {
+          SettingsSection(title: const Text('Languages'), tiles: <SettingsTile>[
+            SettingsTile.navigation(
+              leading: const Icon(Icons.language),
+              title: const Text('Spanish'),
+              trailing: const Icon(Icons.arrow_forward_ios),
+              onPressed: (BuildContext context) {
+                setState(() {
                   currentLanguage = "es-Es";
-                  });
-                },
-              ),
-              SettingsTile.navigation(
-                leading: const Icon(Icons.language),
-                title: const Text('English'),
-                trailing: const Icon(Icons.arrow_forward_ios),
-                onPressed: (BuildContext context) {
-                  setState(() {
-                    currentLanguage = "en-US";
-                  });
-                },
-              ),
+                });
+                ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(FireAuth.customSnackBar(
+                  content: 'Language set to Spanish',
+                  color: Colors.green,
+                ));
+              },
+            ),
+            SettingsTile.navigation(
+              leading: const Icon(Icons.language),
+              title: const Text('English'),
+              trailing: const Icon(Icons.arrow_forward_ios),
+              onPressed: (BuildContext context) {
+                setState(() {
+                  currentLanguage = "en-US";
+                });
+                ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(FireAuth.customSnackBar(
+                  content: 'Language set to English',
+                  color: Colors.green,
+                ));
+              },
+            ),
           ])
         ],
       ),
