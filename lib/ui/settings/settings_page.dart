@@ -1,6 +1,7 @@
 import 'package:aacademic/ui/login/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:path/path.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:aacademic/utils/themes.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -61,7 +62,18 @@ class _SettingsPageState extends State<SettingsPage> {
                   currentLanguage = "es-Es";
                   });
                 },
-          )])
+              ),
+              SettingsTile.navigation(
+                leading: const Icon(Icons.language),
+                title: const Text('English'),
+                trailing: const Icon(Icons.arrow_forward_ios),
+                onPressed: (BuildContext context) {
+                  setState(() {
+                    currentLanguage = "en-US";
+                  });
+                },
+              ),
+          ])
         ],
       ),
     );
