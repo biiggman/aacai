@@ -28,30 +28,14 @@ class _SettingsPageState extends State<SettingsPage> {
             title: const Text('Common'),
             tiles: <SettingsTile>[
               SettingsTile.navigation(
-                leading: const Icon(Icons.language),
-                title: const Text('Language'),
+                leading: const Icon(Icons.privacy_tip_outlined),
+                title: const Text('Priivacy Policy'),
                 value: const Text('English'),
                 trailing: const Icon(Icons.arrow_forward_ios),
                 onPressed: (BuildContext context) {
                   Navigator.push(context, MaterialPageRoute(builder: ((context) => const LoginPage())));
                 },
               ),
-              //SettingsTile.navigation(
-              //    leading: const Icon(Icons.colorize),
-              //    title: const Text('Dark Mode'),
-              //    trailing: Switch(
-              //      value: isDarkMode,
-              //      onChanged: (value) {
-              //        setState(() {
-              //          isDarkMode = value;
-              //        if (value) {
-              //          selectedTheme = MyThemes.darkTheme;
-              //        } else {
-              //          selectedTheme = MyThemes.lightTheme;
-              //        }});
-              //      }
-              //    )
-              //  ),
               SettingsTile.navigation(
                 leading: const Icon(Icons.lock),
                 title: const Text('Log-in Page'),

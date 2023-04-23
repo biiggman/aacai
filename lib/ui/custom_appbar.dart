@@ -76,6 +76,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
         scrollDirection: Axis.horizontal,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             for (var button in widget.buttons)
               IconButton(

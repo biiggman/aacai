@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:aacademic/utils/tts.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -128,14 +129,18 @@ class ButtonUtils {
   RawMaterialButton createFolder(
       String name,
       Color color,
-      //Function(String) onFolderPressed,
-      String folderId) {
+      String folderId,
+      Map<String, List<RawMaterialButton>> folderButtonsMap,
+      Function(List<RawMaterialButton>) onFolderSelect) {
     const folderIcon = Icon(Icons.folder);
     RawMaterialButton button = RawMaterialButton(
       key: Key(name),
       onPressed: () {
-        //onFolderPressed(folderId);
         print(folderId);
+        List<RawMaterialButton>? folderButtons = folderButtonsMap[folderId];
+        print(folderButtons);
+        onFolderSelect(folderButtons ?? []);
+        TextToSpeech.speak(name);
       },
       elevation: 2.0,
 
@@ -159,93 +164,6 @@ class ButtonUtils {
       ]),
     );
     return button;
-  }
-
-  Future<List<RawMaterialButton>> populateButtons() async {
-    QuerySnapshot<Map<String, dynamic>> imageboardRef = await FirebaseFirestore
-        .instance
-        .collection('user-information')
-        .doc(uid)
-        .collection('imageboard')
-        .orderBy('image_color', descending: true)
-        .get();
-
-    List<RawMaterialButton> buttons = [];
-
-    for (var doc in imageboardRef.docs) {
-      if (doc.id == 'initial') {
-        continue;
-      }
-
-      //data from database
-      int colorValue = doc['image_color'];
-      String buttonName = doc['image_name'];
-      String buttonLocation = doc['image_location'];
-      Color buttonColor = Color(colorValue);
-
-      RawMaterialButton imageButton =
-          createButton(buttonName, buttonLocation, buttonColor);
-      buttons.add(imageButton);
-    }
-
-    //Iterate through each Folder in the UserID collection
-    QuerySnapshot<Map<String, dynamic>> folderRef = await FirebaseFirestore
-        .instance
-        .collection('user-information')
-        .doc(uid)
-        .collection('folders')
-        .get();
-
-    //list of buttons in a respected folder
-    List<RawMaterialButton> folderButtons = [];
-
-    //data map of buttons within a respected folder
-    Map<String, List<RawMaterialButton>> folderButtonsMap = {};
-    String selectedFolderName;
-
-    for (var folderDoc in folderRef.docs) {
-      if (folderDoc.id == 'initial') {
-        continue;
-      }
-
-      //Create a RawMaterialButton for the folders
-
-      int colorValue = folderDoc['folder_color'];
-      String buttonName = folderDoc['folder_name'];
-      Color buttonColor = Color(colorValue);
-
-      RawMaterialButton folderButton =
-          createFolder(buttonName, buttonColor, folderDoc.id);
-
-      //Iterate through each document in the current folder
-      QuerySnapshot<Map<String, dynamic>> imageRef = await FirebaseFirestore
-          .instance
-          .collection('user-information')
-          .doc(uid)
-          .collection('folders')
-          .doc(folderDoc.id)
-          .collection('images')
-          .get();
-
-      for (var imageDoc in imageRef.docs) {
-        //create a RawMaterialBUtton for the buttons within a folder
-
-        int colorValue = imageDoc['image_color'];
-        String buttonName = imageDoc['image_name'];
-        String buttonLocation = imageDoc['image_location'];
-        Color buttonColor = Color(colorValue);
-
-        RawMaterialButton imageButton =
-            createButton(buttonName, buttonLocation, buttonColor);
-        folderButtons.add(imageButton);
-      }
-
-      folderButtonsMap[folderDoc.id] = folderButtons;
-
-      buttons.add(folderButton);
-    }
-
-    return buttons;
   }
 
   List<RawMaterialButton> tappedButtons = [];

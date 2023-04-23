@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:aacademic/ui/custom_appbar.dart';
 import 'package:aacademic/camera/camera_page.dart';
 import 'package:aacademic/ui/login/login_page.dart';
@@ -64,8 +65,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 2;
   late Future<List<RawMaterialButton>> _imageboardRef;
+  List<RawMaterialButton> _selectedFolderButtons = [];
+  List<RawMaterialButton> _buttons = [];
 
   //button variables
   String buttonName = "";
@@ -73,7 +76,6 @@ class _MyHomePageState extends State<MyHomePage> {
   Color? buttonColor;
   File? _selectedImage;
   ButtonUtils buttonUtils = ButtonUtils();
-  late String _selectedFolderId;
 
   //keys here
   final navKey = GlobalKey();
@@ -84,17 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    _imageboardRef = buttonUtils.populateButtons();
-  }
-
-  void _updateImageBoard() {
-    setState(() {});
-  }
-
-  void _onFolderPressed(String folderId) {
-    setState(() {
-      _selectedFolderId = folderId;
-    });
+    populateButtons();
   }
 
   void onColorSelected(Color color) {
@@ -116,12 +108,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
     switch (index) {
       case 0:
-        break;
-
-      case 1:
-        break;
-
-      case 2:
         {
           ImageboardUtils imageboardUtils = ImageboardUtils();
           showDialog(
@@ -281,18 +267,122 @@ class _MyHomePageState extends State<MyHomePage> {
         }
         break;
 
+      case 1:
+        break;
+
+      case 2:
+        setState(() {
+          _selectedFolderButtons = [];
+        });
+
+        break;
+
       case 3:
         {
-          //Navigator.of(context).pushNamed('/settings');
           await availableCameras().then((value) => Navigator.push(context,
-              MaterialPageRoute(builder: (_) => CameraPage(cameras: value))));
+              CupertinoPageRoute(builder: (_) => CameraPage(cameras: value))));
         }
         break;
 
       case 4:
-        Navigator.of(context).pushNamed('/settings');
+        Navigator.of(context).push(CupertinoPageRoute(
+          builder: (context) => const SettingsPage(),
+        ));
         break;
     }
+  }
+
+  String uid = FirebaseAuth.instance.currentUser!.uid;
+
+  Future<void> populateButtons() async {
+    QuerySnapshot<Map<String, dynamic>> imageboardRef = await FirebaseFirestore
+        .instance
+        .collection('user-information')
+        .doc(uid)
+        .collection('imageboard')
+        .orderBy('image_color', descending: true)
+        .get();
+
+    List<RawMaterialButton> buttons = [];
+
+    for (var doc in imageboardRef.docs) {
+      if (doc.id == 'initial') {
+        continue;
+      }
+
+      //data from database
+      int colorValue = doc['image_color'];
+      String buttonName = doc['image_name'];
+      String buttonLocation = doc['image_location'];
+      Color buttonColor = Color(colorValue);
+
+      RawMaterialButton imageButton =
+          buttonUtils.createButton(buttonName, buttonLocation, buttonColor);
+      buttons.add(imageButton);
+    }
+
+    //Iterate through each Folder in the UserID collection
+    QuerySnapshot<Map<String, dynamic>> folderRef = await FirebaseFirestore
+        .instance
+        .collection('user-information')
+        .doc(uid)
+        .collection('folders')
+        .get();
+
+    //data map of buttons within a respected folder
+    Map<String, List<RawMaterialButton>> folderButtonsMap = {};
+
+    for (var folderDoc in folderRef.docs) {
+      if (folderDoc.id == 'initial') {
+        continue;
+      }
+
+      //Create a RawMaterialButton for the folders
+
+      int colorValue = folderDoc['folder_color'];
+      String buttonName = folderDoc['folder_name'];
+      Color buttonColor = Color(colorValue);
+
+      RawMaterialButton folderButton = buttonUtils.createFolder(
+          buttonName, buttonColor, folderDoc.id, folderButtonsMap, (buttons) {
+        setState(() {
+          _selectedFolderButtons = buttons;
+        });
+      });
+
+      //list of buttons in a respected folder
+      List<RawMaterialButton> folderButtons = [];
+
+      //Iterate through each document in the current folder
+      QuerySnapshot<Map<String, dynamic>> imageRef = await FirebaseFirestore
+          .instance
+          .collection('user-information')
+          .doc(uid)
+          .collection('folders')
+          .doc(folderDoc.id)
+          .collection('images')
+          .get();
+
+      for (var imageDoc in imageRef.docs) {
+        //create a RawMaterialBUtton for the buttons within a folder
+
+        int colorValue = imageDoc['image_color'];
+        String buttonName = imageDoc['image_name'];
+        String buttonLocation = imageDoc['image_location'];
+        Color buttonColor = Color(colorValue);
+
+        RawMaterialButton imageButton =
+            buttonUtils.createButton(buttonName, buttonLocation, buttonColor);
+        folderButtons.add(imageButton);
+      }
+
+      folderButtonsMap[folderDoc.id] = folderButtons;
+
+      buttons.add(folderButton);
+    }
+    setState(() {
+      _buttons = buttons;
+    });
   }
 
   @override
@@ -305,25 +395,9 @@ class _MyHomePageState extends State<MyHomePage> {
           buttonsName: buttonUtils.tappedButtonNames,
         ),
         body: Center(
-          child: FutureBuilder(
-              future: _imageboardRef,
-              builder: (BuildContext context,
-                  AsyncSnapshot<List<RawMaterialButton>> imageboardRef) {
-                if (imageboardRef.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
-                } else if (imageboardRef.hasError) {
-                  return Text('Error: ${imageboardRef.error}');
-                } else {
-                  //List<RawMaterialButton> buttons = [];
-                  //if (_selectedFolderId != null &&
-                  //    widget.buttonsMap.containsKey(_selectedFolderId)) {
-                  //  buttons = widget.buttonsMap[_selectedFolderId];
-                  //} else {
-                  //  widget.buttonsMap.forEach((_, folderButtons) {
-                  //    buttons.addAll(folderButtons);
-                  //  });
-                  //}
-                  return GridView.count(
+            child: _buttons.isEmpty
+                ? const CircularProgressIndicator()
+                : GridView.count(
                     scrollDirection: orientation == Orientation.portrait
                         ? Axis.vertical
                         : Axis.horizontal,
@@ -333,49 +407,71 @@ class _MyHomePageState extends State<MyHomePage> {
                     mainAxisSpacing:
                         orientation == Orientation.portrait ? 20 : 5,
                     padding: const EdgeInsets.all(15),
-                    children: imageboardRef.data!
-                        .map((button) => GestureDetector(
-                              onTap: () {
-                                print("ADDING TO LIST");
-                                setState(() {
-                                  buttonUtils.addButtonToList(button);
-                                  TextToSpeech.speak(button.key
-                                      .toString()
-                                      .replaceAll('<', '')
-                                      .replaceAll('>', '')
-                                      .replaceAll("'", ''));
-                                });
-                              },
-                              onLongPress: () {
-                                print("LONG PRESS");
-                                showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return const AlertDialog();
+                    children: _selectedFolderButtons.isNotEmpty
+                        ? _selectedFolderButtons
+                            .map((button) => GestureDetector(
+                                  onTap: () {
+                                    print("ADDING TO LIST");
+                                    setState(() {
+                                      buttonUtils.addButtonToList(button);
+                                      TextToSpeech.speak(button.key
+                                          .toString()
+                                          .replaceAll('<', '')
+                                          .replaceAll('>', '')
+                                          .replaceAll("'", ''));
                                     });
-                              },
-                              child: button,
-                            ))
-                        .toList(),
-                  );
-                }
-              }),
-        ),
+                                  },
+                                  onLongPress: () {
+                                    print("LONG PRESS");
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return const AlertDialog();
+                                        });
+                                  },
+                                  child: button,
+                                ))
+                            .toList()
+                        : _buttons
+                            .map((button) => GestureDetector(
+                                  onTap: () {
+                                    print("ADDING TO LIST");
+                                    setState(() {
+                                      buttonUtils.addButtonToList(button);
+                                      TextToSpeech.speak(button.key
+                                          .toString()
+                                          .replaceAll('<', '')
+                                          .replaceAll('>', '')
+                                          .replaceAll("'", ''));
+                                    });
+                                  },
+                                  onLongPress: () {
+                                    print("LONG PRESS");
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return const AlertDialog();
+                                        });
+                                  },
+                                  child: button,
+                                ))
+                            .toList(),
+                  )),
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           key: navKey,
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(Icons.list),
-              label: 'Menu',
+              icon: Icon(Icons.add),
+              label: 'Add',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.keyboard),
               label: 'Keyboard',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.add),
-              label: 'Add',
+              icon: Icon(Icons.home),
+              label: 'Home',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.camera),
@@ -385,6 +481,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 icon: Icon(Icons.settings), label: 'Settings'),
           ],
           onTap: _onItemTapped,
+          currentIndex: 2,
         ),
       );
     }));

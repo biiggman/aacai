@@ -149,6 +149,15 @@ class _CameraPageState extends State<CameraPage> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.black,
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).primaryColor,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ),
         body: Container(
           margin: const EdgeInsets.only(top: 50),
           color: Colors.black,
