@@ -239,40 +239,31 @@ class _LoginPageState extends State<LoginPage> {
                                   ],
                                 ),
                                 const SizedBox(height: 15),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    //google sign in button
-                                    GestureDetector(
-                                        onTap: () async {
-                                          setState(() {
-                                            _isProcessing = true;
-                                          });
-                                          User? user =
-                                              await FireAuth.signInWithGoogle(
-                                                  context: context);
-                                          setState(() {
-                                            _isProcessing = false;
-                                          });
+                                //google sign in button
+                                GestureDetector(
+                                    onTap: () async {
+                                      setState(() {
+                                        _isProcessing = true;
+                                      });
+                                      User? user =
+                                          await FireAuth.signInWithGoogle(
+                                              context: context);
+                                      setState(() {
+                                        _isProcessing = false;
+                                      });
 
-                                          if (user != null) {
-                                            Navigator.of(context)
-                                                .pushReplacement(
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ProfilePage(
-                                                  user: user,
-                                                ),
-                                              ),
-                                            );
-                                          }
-                                        },
-                                        child: UITemplates.squareTile(
-                                            imagePath:
-                                                "assets/logos/google.png")),
-                                    const SizedBox(width: 10),
-                                  ],
-                                ),
+                                      if (user != null) {
+                                        Navigator.of(context).pushReplacement(
+                                          MaterialPageRoute(
+                                            builder: (context) => ProfilePage(
+                                              user: user,
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                    },
+                                    child: UITemplates.squareTile(
+                                        imagePath: "assets/logos/google.png")),
                                 const SizedBox(height: 30),
                                 //register now
                                 GestureDetector(
