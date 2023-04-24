@@ -17,13 +17,19 @@ import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:aacademic/firebase/firebase_options.dart';
 import 'package:aacademic/utils/imageboard_utils.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider<ThemeModel>(
+    create: ((context) => ThemeModel()),
+    child: const MyApp(),
+  ));
+
+  //const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -33,13 +39,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       //Material App Constructor
       title: 'AAC.AI',
-      initialRoute: '/', //Route logic for navigation
+      initialRoute: '/settings', //Route logic for navigation
 
       routes: {
         '/login': (context) => const LoginPage(),
         '/settings': (context) => const SettingsPage(),
       },
-      theme: MyThemes.lightTheme,
+      theme: Provider.of<ThemeModel>(context).currentTheme,
       home: //const LoginPage()
 
           //ROUTE FOR HOMEPAGE THAT CHECKS FOR LOGIN. NEEDS ROUTE TO ACCOUNT IN SETTINGS TO AVOID SOFTLOCK OUT OF LOGIN PAGE
