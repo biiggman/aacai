@@ -76,7 +76,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _selectedIndex = 0;
+  int _selectedIndex = -1;
   late Future<List<RawMaterialButton>> _imageboardRef;
 
   //button variables
@@ -129,6 +129,21 @@ class _MyHomePageState extends State<MyHomePage> {
         break;
 
       case 1:
+        {
+          showModalBottomSheet<void>(
+              context: context,
+              builder: (BuildContext context) {
+                return Container(
+                  height: 70,
+                  color: Colors.white60,
+                  child: TextFormField(
+                    onFieldSubmitted: (value) {
+                      TextToSpeech.speak(value);
+                    },
+                  ),
+                );
+              });
+        }
         break;
 
       case 2:
