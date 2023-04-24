@@ -1,8 +1,10 @@
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
+import 'package:aacademic/ui/imageboard_ui.dart/custom_appbar.dart';
 import 'package:aacademic/camera/camera_page.dart';
 import 'package:aacademic/firebase/fire_auth.dart';
 import 'package:aacademic/firebase/validator.dart';
-import 'package:aacademic/ui/custom_appbar.dart';
+import 'package:aacademic/ui/imageboard_ui.dart/custom_appbar.dart';
 import 'package:aacademic/ui/login/login_page.dart';
 import 'package:aacademic/ui/settings/settings_page.dart';
 import 'package:aacademic/ui/add_menu/color_button.dart';
@@ -18,6 +20,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:aacademic/firebase/firebase_options.dart';
 import 'package:aacademic/utils/imageboard_utils.dart';
 import 'package:provider/provider.dart';
+
+String currentLanguage = "en-US";
+int horiGridSize = 2;
+int vertGridSize = 3;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,7 +45,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       //Material App Constructor
       title: 'AAC.AI',
-      initialRoute: '/settings', //Route logic for navigation
+      initialRoute: '/', //Route logic for navigation
 
       routes: {
         '/login': (context) => const LoginPage(),
@@ -76,12 +82,14 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 2;
   late Future<List<RawMaterialButton>> _imageboardRef;
+  List<RawMaterialButton> _selectedFolderButtons = [];
+  List<RawMaterialButton> _buttons = [];
 
   //button variables
   String buttonName = "";
-  String buttonSize = "";
+  String buttonLocation = "";
   Color? buttonColor;
   File? _selectedImage;
   ButtonUtils buttonUtils = ButtonUtils();
@@ -92,11 +100,11 @@ class _MyHomePageState extends State<MyHomePage> {
   final _sourceImageKey = GlobalKey();
   final _buttonColorKey = GlobalKey();
   bool _isProcessing = false;
+  bool _loading = false;
 
   @override
   void initState() {
     super.initState();
-    _imageboardRef = buttonUtils.makeButtons();
   }
 
   void onColorSelected(Color color) {
@@ -111,11 +119,21 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-//refresh imageboard after button adds
+  Future<void> fetchData() async {
+    setState(() {
+      _loading = true;
+    });
+
+    populateButtons();
+
+    setState(() {
+      _loading = false;
+    });
+  }
+
+  //refresh imageboard after button adds
   Future<void> _refresh() async {
-    await Future.delayed(const Duration(seconds: 1));
-    initState();
-    setState(() {});
+    await fetchData();
   }
 
   void _onItemTapped(int index) async {
@@ -125,13 +143,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
     switch (index) {
       case 0:
-        //tappedButtons.add(test);
-        break;
-
-      case 1:
-        break;
-
-      case 2:
         {
           ImageboardUtils imageboardUtils = ImageboardUtils();
           showDialog(
@@ -322,116 +333,278 @@ class _MyHomePageState extends State<MyHomePage> {
                               )))),
                 );
               }).then((_) {
-            _selectedImage = null;
+            setState(() {
+              _selectedImage = null;
+            });
           });
         }
+        break;
+
+      case 1:
+        break;
+
+      case 2:
+        setState(() {
+          _selectedFolderButtons = [];
+        });
+
         break;
 
       case 3:
         {
           await availableCameras().then((value) => Navigator.push(context,
-              MaterialPageRoute(builder: (_) => CameraPage(cameras: value))));
+              CupertinoPageRoute(builder: (_) => CameraPage(cameras: value))));
         }
         break;
 
       case 4:
-        Navigator.of(context).pushNamed('/settings');
+        Navigator.of(context).push(CupertinoPageRoute(
+          builder: (context) => const SettingsPage(),
+        ));
         break;
     }
   }
 
+  String uid = FirebaseAuth.instance.currentUser!.uid;
+
+  Future<void> populateButtons() async {
+    QuerySnapshot<Map<String, dynamic>> imageboardRef = await FirebaseFirestore
+        .instance
+        .collection('user-information')
+        .doc(uid)
+        .collection('imageboard')
+        .orderBy('image_color', descending: true)
+        .get();
+
+    List<RawMaterialButton> buttons = [];
+
+    for (var doc in imageboardRef.docs) {
+      if (doc.id == 'initial') {
+        continue;
+      }
+
+      //data from database
+      int colorValue = doc['image_color'];
+      String buttonName = doc['image_name'];
+      String buttonLocation = doc['image_location'];
+      Color buttonColor = Color(colorValue);
+
+      RawMaterialButton imageButton =
+          buttonUtils.createButton(buttonName, buttonLocation, buttonColor);
+      buttons.add(imageButton);
+    }
+
+    //Iterate through each Folder in the UserID collection
+    QuerySnapshot<Map<String, dynamic>> folderRef = await FirebaseFirestore
+        .instance
+        .collection('user-information')
+        .doc(uid)
+        .collection('folders')
+        .get();
+
+    //data map of buttons within a respected folder
+    Map<String, List<RawMaterialButton>> folderButtonsMap = {};
+
+    for (var folderDoc in folderRef.docs) {
+      if (folderDoc.id == 'initial') {
+        continue;
+      }
+
+      //Create a RawMaterialButton for the folders
+
+      int colorValue = folderDoc['folder_color'];
+      String buttonName = folderDoc['folder_name'];
+      Color buttonColor = Color(colorValue);
+
+      RawMaterialButton folderButton = buttonUtils.createFolder(
+          buttonName, buttonColor, folderDoc.id, folderButtonsMap, (buttons) {
+        setState(() {
+          _selectedFolderButtons = buttons;
+        });
+      });
+
+      //list of buttons in a respected folder
+      List<RawMaterialButton> folderButtons = [];
+
+      //Iterate through each document in the current folder
+      QuerySnapshot<Map<String, dynamic>> imageRef = await FirebaseFirestore
+          .instance
+          .collection('user-information')
+          .doc(uid)
+          .collection('folders')
+          .doc(folderDoc.id)
+          .collection('images')
+          .get();
+
+      for (var imageDoc in imageRef.docs) {
+        //create a RawMaterialBUtton for the buttons within a folder
+
+        int colorValue = imageDoc['image_color'];
+        String buttonName = imageDoc['image_name'];
+        String buttonLocation = imageDoc['image_location'];
+        Color buttonColor = Color(colorValue);
+
+        RawMaterialButton imageButton =
+            buttonUtils.createButton(buttonName, buttonLocation, buttonColor);
+        folderButtons.add(imageButton);
+      }
+
+      folderButtonsMap[folderDoc.id] = folderButtons;
+
+      buttons.add(folderButton);
+    }
+    setState(() {
+      _buttons = buttons;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return OrientationBuilder(builder: ((context, orientation) {
-      return Scaffold(
-        //top bar for image stringing
-        appBar: CustomAppBar(
-          height: 70,
-          buttons: buttonUtils.tappedButtons,
-          buttonsName: buttonUtils.tappedButtonNames,
-        ),
-        //imageboard
-        body: Center(
-          //pull down refresh
-          child: RefreshIndicator(
-            onRefresh: _refresh,
-            child: FutureBuilder(
-                future: _imageboardRef,
-                builder: (BuildContext context,
-                    AsyncSnapshot<List<RawMaterialButton>> imageboardRef) {
-                  if (imageboardRef.connectionState ==
-                      ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
-                  } else if (imageboardRef.hasError) {
-                    return Text('Error: ${imageboardRef.error}');
-                  } else {
-                    return GridView.count(
-                      scrollDirection: orientation == Orientation.portrait
-                          ? Axis.vertical
-                          : Axis.horizontal,
-                      crossAxisCount:
-                          orientation == Orientation.portrait ? 3 : 2,
-                      crossAxisSpacing:
-                          orientation == Orientation.portrait ? 20 : 5,
-                      mainAxisSpacing:
-                          orientation == Orientation.portrait ? 20 : 5,
-                      padding: const EdgeInsets.all(15),
-                      children: imageboardRef.data!
-                          .map((button) => GestureDetector(
-                                onTap: () {
-                                  print("ADDING TO LIST");
-                                  setState(() {
-                                    buttonUtils.addButtonToList(button);
-                                    TextToSpeech.speak(button.key
-                                        .toString()
-                                        .replaceAll('<', '')
-                                        .replaceAll('>', '')
-                                        .replaceAll("'", ''));
-                                  });
-                                },
-                                onLongPress: () {
-                                  print("LONG PRESS");
-                                  showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return const AlertDialog();
-                                      });
-                                },
-                                child: button,
-                              ))
-                          .toList(),
-                    );
-                  }
-                }),
-          ),
-        ),
-        //bottom navigation bar
-        bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          key: navKey,
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.list),
-              label: 'Menu',
+    populateButtons();
+    return WillPopScope(
+        onWillPop: () async => false,
+        child: OrientationBuilder(builder: ((context, orientation) {
+          return Scaffold(
+            //top bar for image stringing
+            appBar: CustomAppBar(
+              height: 70,
+              buttons: buttonUtils.tappedButtons,
+              buttonsName: buttonUtils.tappedButtonNames,
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.keyboard),
-              label: 'Keyboard',
+            //imageboard
+            body: Center(
+                child: RefreshIndicator(
+                    onRefresh: _refresh,
+                    child: _loading
+                        ? const CircularProgressIndicator()
+                        : GridView.count(
+                            scrollDirection: orientation == Orientation.portrait
+                                ? Axis.vertical
+                                : Axis.horizontal,
+                            crossAxisCount: orientation == Orientation.portrait
+                                ? vertGridSize
+                                : horiGridSize,
+                            crossAxisSpacing:
+                                orientation == Orientation.portrait ? 20 : 5,
+                            mainAxisSpacing:
+                                orientation == Orientation.portrait ? 20 : 5,
+                            padding: const EdgeInsets.all(15),
+                            children: _selectedFolderButtons.isNotEmpty
+                                ? _selectedFolderButtons
+                                    .map((button) => GestureDetector(
+                                          onTap: () {
+                                            print('ADDING TO LIST');
+                                            setState(() {
+                                              buttonUtils
+                                                  .addButtonToList(button);
+                                              TextToSpeech.speak(button.key
+                                                  .toString()
+                                                  .replaceAll('<', '')
+                                                  .replaceAll('>', '')
+                                                  .replaceAll("'", ''));
+                                            });
+                                          },
+                                          onLongPress: () {
+                                            showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return AlertDialog(
+                                                    title: const Center(
+                                                        child: Text(
+                                                            "Delete Button?")),
+                                                    content: const Text(
+                                                        "Are you sure you want to delete this item? It will be permanently deleted along with all of its contents."),
+                                                    actions: <Widget>[
+                                                      UITemplates.buttonDeco(
+                                                        displayText: 'Accept',
+                                                        vertInset: 10,
+                                                      ),
+                                                      const SizedBox(
+                                                          height: 10),
+                                                      UITemplates.buttonDeco(
+                                                        displayText: 'Cancel',
+                                                        vertInset: 10,
+                                                      ),
+                                                    ],
+                                                  );
+                                                });
+                                          },
+                                          child: button,
+                                        ))
+                                    .toList()
+                                : _buttons
+                                    .map((button) => GestureDetector(
+                                          onTap: () {
+                                            print(button);
+                                            setState(() {
+                                              buttonUtils
+                                                  .addButtonToList(button);
+                                              TextToSpeech.speak(button.key
+                                                  .toString()
+                                                  .replaceAll('<', '')
+                                                  .replaceAll('>', '')
+                                                  .replaceAll("'", ''));
+                                            });
+                                          },
+                                          onLongPress: () {
+                                            showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return AlertDialog(
+                                                    title: const Center(
+                                                        child: Text(
+                                                            "Delete Button?")),
+                                                    content: const Text(
+                                                        "Are you sure you want to delete this item? It will be permenently deleted along with all of its contents."),
+                                                    actions: <Widget>[
+                                                      GestureDetector(),
+                                                      UITemplates.buttonDeco(
+                                                        displayText: 'Accept',
+                                                        vertInset: 10,
+                                                      ),
+                                                      const SizedBox(
+                                                          height: 10),
+                                                      UITemplates.buttonDeco(
+                                                        displayText: 'Cancel',
+                                                        vertInset: 10,
+                                                      ),
+                                                    ],
+                                                  );
+                                                });
+                                          },
+                                          child: button,
+                                        ))
+                                    .toList(),
+                          ))),
+            bottomNavigationBar: BottomNavigationBar(
+              type: BottomNavigationBarType.fixed,
+              key: navKey,
+              items: const <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.add),
+                  label: 'Add',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.keyboard),
+                  label: 'Keyboard',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.home),
+                  label: 'Home',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.camera),
+                  label: 'Camera',
+                ),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.settings), label: 'Settings'),
+              ],
+              onTap: _onItemTapped,
+              currentIndex: 2,
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.add),
-              label: 'Add',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.camera),
-              label: 'Camera',
-            ),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.settings), label: 'Settings'),
-          ],
-          onTap: _onItemTapped,
-        ),
-      );
-    }));
+          );
+        })));
   }
 }
