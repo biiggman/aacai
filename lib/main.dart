@@ -86,6 +86,8 @@ class _MyHomePageState extends State<MyHomePage> {
   final _sourceImageKey = GlobalKey();
   final _buttonColorKey = GlobalKey();
   bool _isProcessing = false;
+  bool _isButtonChecked = false;
+  bool _isFolderChecked = false;
 
   @override
   void initState() {
@@ -184,6 +186,125 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                 "Button Name"),
                                                   ),
                                                   const SizedBox(height: 10),
+                                                  //button or folder checkbox row
+                                                  Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        //add a button checkbox
+                                                        Expanded(
+                                                          child:
+                                                              GestureDetector(
+                                                            child:
+                                                                CheckboxListTile(
+                                                              dense: true,
+                                                              controlAffinity:
+                                                                  ListTileControlAffinity
+                                                                      .leading,
+                                                              title: const Text(
+                                                                "Button",
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontSize: 16,
+                                                                ),
+                                                              ),
+                                                              tileColor: Theme.of(
+                                                                      context)
+                                                                  .primaryColor,
+                                                              activeColor:
+                                                                  const Color(
+                                                                      0xff7ca200),
+                                                              side: const BorderSide(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  width: 1.5),
+                                                              checkboxShape: RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              4.0)),
+                                                              shape: RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              8.0)),
+                                                              value:
+                                                                  _isButtonChecked,
+                                                              onChanged: (bool?
+                                                                  value) {
+                                                                setState(() {
+                                                                  _isButtonChecked =
+                                                                      value!;
+                                                                });
+                                                              },
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 5,
+                                                        ),
+                                                        //add a folder checkbox
+                                                        Expanded(
+                                                          child:
+                                                              GestureDetector(
+                                                            child:
+                                                                CheckboxListTile(
+                                                              dense: true,
+                                                              controlAffinity:
+                                                                  ListTileControlAffinity
+                                                                      .leading,
+                                                              title: const Text(
+                                                                "Folder",
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontSize: 16,
+                                                                ),
+                                                              ),
+                                                              tileColor: Theme.of(
+                                                                      context)
+                                                                  .primaryColor,
+                                                              activeColor:
+                                                                  const Color(
+                                                                      0xff7ca200),
+                                                              side: const BorderSide(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  width: 1.5),
+                                                              checkboxShape: RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              4.0)),
+                                                              shape: RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              8.0)),
+                                                              value:
+                                                                  _isFolderChecked,
+                                                              onChanged: (bool?
+                                                                  value) {
+                                                                setState(() {
+                                                                  _isFolderChecked =
+                                                                      value!;
+                                                                });
+                                                              },
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ]),
+                                                  const SizedBox(height: 10),
                                                   //camera roll button
                                                   GestureDetector(
                                                     onTap: () {
@@ -228,6 +349,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                         )
                                                       : const SizedBox(),
                                                   const SizedBox(height: 10),
+                                                  //add or cancel button row
                                                   Row(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
@@ -290,7 +412,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                       10),
                                                         ),
                                                       ),
-                                                      const SizedBox(width: 5),
+                                                      const SizedBox(width: 10),
                                                       //cancel button
                                                       Expanded(
                                                         child: GestureDetector(
