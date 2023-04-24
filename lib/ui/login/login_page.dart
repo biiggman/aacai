@@ -55,7 +55,9 @@ class _LoginPageState extends State<LoginPage> {
     //  final appleSignInAvailable =
     //     Provider.of<AppleSignInAvailable>(context, listen: false);
 
-    return GestureDetector(
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: GestureDetector(
         onTap: () {
           _focusEmail.unfocus();
           _focusPassword.unfocus();
@@ -301,6 +303,6 @@ class _LoginPageState extends State<LoginPage> {
                           )
                         ]));
               }),
-        ));
+        )));
   }
 }

@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       //Material App Constructor
       title: 'AAC.AI',
-      initialRoute: '/settings', //Route logic for navigation
+      initialRoute: '/', //Route logic for navigation
 
       routes: {
         '/login': (context) => const LoginPage(),
@@ -100,11 +100,11 @@ class _MyHomePageState extends State<MyHomePage> {
   final _sourceImageKey = GlobalKey();
   final _buttonColorKey = GlobalKey();
   bool _isProcessing = false;
+  bool _loading = false;
 
   @override
   void initState() {
     super.initState();
-    populateButtons();
   }
 
   void onColorSelected(Color color) {
@@ -119,11 +119,21 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-//refresh imageboard after button adds
+  Future<void> fetchData() async {
+    setState(() {
+      _loading = true;
+    });
+
+    populateButtons();
+
+    setState(() {
+      _loading = false;
+    });
+  }
+
+  //refresh imageboard after button adds
   Future<void> _refresh() async {
-    await Future.delayed(const Duration(seconds: 1));
-    initState();
-    setState(() {});
+    await fetchData();
   }
 
   void _onItemTapped(int index) async {
@@ -450,137 +460,151 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return OrientationBuilder(builder: ((context, orientation) {
-      return Scaffold(
-        //top bar for image stringing
-        appBar: CustomAppBar(
-          height: 70,
-          buttons: buttonUtils.tappedButtons,
-          buttonsName: buttonUtils.tappedButtonNames,
-        ),
-        //imageboard
-        body: Center(
-            child: RefreshIndicator(
-                onRefresh: _refresh,
-                child: _buttons.isEmpty
-                    ? const CircularProgressIndicator()
-                    : GridView.count(
-                        scrollDirection: orientation == Orientation.portrait
-                            ? Axis.vertical
-                            : Axis.horizontal,
-                        crossAxisCount:
-                            orientation == Orientation.portrait ? 3 : 2,
-                        crossAxisSpacing:
-                            orientation == Orientation.portrait ? 20 : 5,
-                        mainAxisSpacing:
-                            orientation == Orientation.portrait ? 20 : 5,
-                        padding: const EdgeInsets.all(15),
-                        children: _selectedFolderButtons.isNotEmpty
-                            ? _selectedFolderButtons
-                                .map((button) => GestureDetector(
-                                      onTap: () {
-                                        print('ADDING TO LIST');
-                                        setState(() {
-                                          buttonUtils.addButtonToList(button);
-                                          TextToSpeech.speak(button.key
-                                              .toString()
-                                              .replaceAll('<', '')
-                                              .replaceAll('>', '')
-                                              .replaceAll("'", ''));
-                                        });
-                                      },
-                                      onLongPress: () {
-                                        showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return AlertDialog(
-                                                title: const Center(child: Text("Delete Button?")),
-                                                content: const Text("Are you sure you want to delete this item? It will be permanently deleted along with all of its contents."),
-                                                actions: <Widget>[
-                                                  UITemplates.buttonDeco(
-                                                    displayText: 'Accept', 
-                                                    vertInset: 10,
-                                                  ),
-                                                  const SizedBox(height: 10),
-                                                  UITemplates.buttonDeco(
-                                                    displayText: 'Cancel',
-                                                    vertInset: 10,
-                                                  ),
-                                                ],
-                                              );
+    populateButtons();
+    return WillPopScope(
+        onWillPop: () async => false,
+        child: OrientationBuilder(builder: ((context, orientation) {
+          return Scaffold(
+            //top bar for image stringing
+            appBar: CustomAppBar(
+              height: 70,
+              buttons: buttonUtils.tappedButtons,
+              buttonsName: buttonUtils.tappedButtonNames,
+            ),
+            //imageboard
+            body: Center(
+                child: RefreshIndicator(
+                    onRefresh: _refresh,
+                    child: _loading
+                        ? const CircularProgressIndicator()
+                        : GridView.count(
+                            scrollDirection: orientation == Orientation.portrait
+                                ? Axis.vertical
+                                : Axis.horizontal,
+                            crossAxisCount: orientation == Orientation.portrait
+                                ? vertGridSize
+                                : horiGridSize,
+                            crossAxisSpacing:
+                                orientation == Orientation.portrait ? 20 : 5,
+                            mainAxisSpacing:
+                                orientation == Orientation.portrait ? 20 : 5,
+                            padding: const EdgeInsets.all(15),
+                            children: _selectedFolderButtons.isNotEmpty
+                                ? _selectedFolderButtons
+                                    .map((button) => GestureDetector(
+                                          onTap: () {
+                                            print('ADDING TO LIST');
+                                            setState(() {
+                                              buttonUtils
+                                                  .addButtonToList(button);
+                                              TextToSpeech.speak(button.key
+                                                  .toString()
+                                                  .replaceAll('<', '')
+                                                  .replaceAll('>', '')
+                                                  .replaceAll("'", ''));
                                             });
-                                      },
-                                      child: button,
-                                    ))
-                                .toList()
-                            : _buttons
-                                .map((button) => GestureDetector(
-                                      onTap: () {
-                                        print(button);
-                                        setState(() {
-                                          buttonUtils.addButtonToList(button);
-                                          TextToSpeech.speak(button.key
-                                              .toString()
-                                              .replaceAll('<', '')
-                                              .replaceAll('>', '')
-                                              .replaceAll("'", ''));
-                                        });
-                                      },
-                                      onLongPress: () {
-                                        showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return AlertDialog(
-                                                title: const Center(child: Text("Delete Button?")),
-                                                content: const Text("Are you sure you want to delete this item? It will be permenently deleted along with all of its contents."),
-                                                actions: <Widget>[
-                                                  GestureDetector(
-
-                                                  ),
-                                                  UITemplates.buttonDeco(
-                                                    displayText: 'Accept', 
-                                                    vertInset: 10,
-                                                  ),
-                                                  const SizedBox(height: 10),
-                                                  UITemplates.buttonDeco(
-                                                    displayText: 'Cancel',
-                                                    vertInset: 10,
-                                                  ),
-                                                ],
-                                              );
+                                          },
+                                          onLongPress: () {
+                                            showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return AlertDialog(
+                                                    title: const Center(
+                                                        child: Text(
+                                                            "Delete Button?")),
+                                                    content: const Text(
+                                                        "Are you sure you want to delete this item? It will be permanently deleted along with all of its contents."),
+                                                    actions: <Widget>[
+                                                      UITemplates.buttonDeco(
+                                                        displayText: 'Accept',
+                                                        vertInset: 10,
+                                                      ),
+                                                      const SizedBox(
+                                                          height: 10),
+                                                      UITemplates.buttonDeco(
+                                                        displayText: 'Cancel',
+                                                        vertInset: 10,
+                                                      ),
+                                                    ],
+                                                  );
+                                                });
+                                          },
+                                          child: button,
+                                        ))
+                                    .toList()
+                                : _buttons
+                                    .map((button) => GestureDetector(
+                                          onTap: () {
+                                            print(button);
+                                            setState(() {
+                                              buttonUtils
+                                                  .addButtonToList(button);
+                                              TextToSpeech.speak(button.key
+                                                  .toString()
+                                                  .replaceAll('<', '')
+                                                  .replaceAll('>', '')
+                                                  .replaceAll("'", ''));
                                             });
-                                      },
-                                      child: button,
-                                    ))
-                                .toList(),
-                      ))),
-        bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          key: navKey,
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.add),
-              label: 'Add',
+                                          },
+                                          onLongPress: () {
+                                            showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return AlertDialog(
+                                                    title: const Center(
+                                                        child: Text(
+                                                            "Delete Button?")),
+                                                    content: const Text(
+                                                        "Are you sure you want to delete this item? It will be permenently deleted along with all of its contents."),
+                                                    actions: <Widget>[
+                                                      GestureDetector(),
+                                                      UITemplates.buttonDeco(
+                                                        displayText: 'Accept',
+                                                        vertInset: 10,
+                                                      ),
+                                                      const SizedBox(
+                                                          height: 10),
+                                                      UITemplates.buttonDeco(
+                                                        displayText: 'Cancel',
+                                                        vertInset: 10,
+                                                      ),
+                                                    ],
+                                                  );
+                                                });
+                                          },
+                                          child: button,
+                                        ))
+                                    .toList(),
+                          ))),
+            bottomNavigationBar: BottomNavigationBar(
+              type: BottomNavigationBarType.fixed,
+              key: navKey,
+              items: const <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.add),
+                  label: 'Add',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.keyboard),
+                  label: 'Keyboard',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.home),
+                  label: 'Home',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.camera),
+                  label: 'Camera',
+                ),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.settings), label: 'Settings'),
+              ],
+              onTap: _onItemTapped,
+              currentIndex: 2,
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.keyboard),
-              label: 'Keyboard',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.camera),
-              label: 'Camera',
-            ),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.settings), label: 'Settings'),
-          ],
-          onTap: _onItemTapped,
-          currentIndex: 2,
-        ),
-      );
-    }));
+          );
+        })));
   }
 }
