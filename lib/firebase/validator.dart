@@ -29,24 +29,24 @@ class Validator {
   }
 
   static String? validatePassword({required String? password}) {
-  if (password == null) {
+    if (password == null) {
+      return null;
+    }
+
+    if (password.isEmpty) {
+      return 'Password can\'t be empty';
+    } else if (password.length < 6) {
+      return 'Enter a password of at least 6 characters';
+    } else if (!RegExp(r'[A-Z]').hasMatch(password)) {
+      return 'Password must contain at least one uppercase letter';
+    } else if (!RegExp(r'[a-z]').hasMatch(password)) {
+      return 'Password must contain at least one lowercase letter';
+    } else if (!RegExp(r'\d').hasMatch(password)) {
+      return 'Password must contain at least one number';
+    } else if (!RegExp(r'[!@#\$%\^&\*\(\)]').hasMatch(password)) {
+      return 'Password must contain at least one special character';
+    }
+
     return null;
   }
-
-  if (password.isEmpty) {
-    return 'Password can\'t be empty';
-  } else if (password.length < 6) {
-    return 'Enter a password of at least 6 characters';
-  } else if (!RegExp(r'[A-Z]').hasMatch(password)) {
-    return 'Password must contain at least one uppercase letter';
-  } else if (!RegExp(r'[a-z]').hasMatch(password)) {
-    return 'Password must contain at least one lowercase letter';
-  } else if (!RegExp(r'\d').hasMatch(password)) {
-    return 'Password must contain at least one number';
-  } else if (!RegExp(r'[!@#\$%\^&\*\(\)]').hasMatch(password)) {
-    return 'Password must contain at least one special character';
-  }
-
-  return null;
-}
 }

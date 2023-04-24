@@ -1,10 +1,10 @@
 import 'package:aacademic/firebase/validator.dart';
 import 'package:flutter/material.dart';
 import 'package:aacademic/firebase/fire_auth.dart';
+import 'package:aacademic/utils/UI_templates.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
-
 
   @override
   _ForgotPasswordPageState createState() => _ForgotPasswordPageState();
@@ -17,7 +17,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
   final _focusEmail = FocusNode();
 
-  final bool _isProcessing = false;
+  bool _isProcessing = false;
 
   @override
   Widget build(BuildContext context) {
@@ -26,47 +26,60 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         _focusEmail.unfocus();
       },
       child: Scaffold(
+        //page background color
+        backgroundColor: const Color.fromARGB(255, 225, 225, 225),
+        //top bar
         appBar: AppBar(
-          title: const Text('Forgot Password'),
-        ),
+            title: const Text('Forgot Password'),
+            titleTextStyle: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+                color: Colors.white)),
         body: Padding(
           padding: const EdgeInsets.all(24.0),
           child: Center(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Form(
                   key: _registerFormKey,
                   child: Column(
                     children: <Widget>[
+                      //email textfield
                       TextFormField(
                         controller: _emailTextController,
                         focusNode: _focusEmail,
                         validator: (value) => Validator.validateEmail(
                           email: value,
                         ),
-                        decoration: InputDecoration(
-                          hintText: "Email",
-                          errorBorder: UnderlineInputBorder(
-                            borderRadius: BorderRadius.circular(6.0),
-                            borderSide: const BorderSide(
-                              color: Colors.red,
-                            ),
-                          ),
-                        ),
+                        decoration:
+                            UITemplates.textFieldDeco(hintText: "Email"),
                       ),
+                      const SizedBox(height: 5),
                       const SizedBox(height: 16.0),
                       _isProcessing
                           ? const CircularProgressIndicator()
-                          : ElevatedButton(
-                              onPressed: () {
-                                FireAuth.forgotPassword(
-                                    email: _emailTextController.text);
+                          //reset password button
+                          : GestureDetector(
+                              onTap: () async {
+                                _focusEmail.unfocus();
+
+                                if (_registerFormKey.currentState!.validate()) {
+                                  setState(() {
+                                    _isProcessing = true;
+                                  });
+
+                                  FireAuth.forgotPassword(
+                                      email: _emailTextController.text.trim(),
+                                      context: context);
+
+                                  setState(() {
+                                    _isProcessing = false;
+                                  });
+                                }
                               },
-                              child: const Text(
-                                'Reset Password',
-                                style: TextStyle(color: Colors.white),
-                              ),
+                              child: UITemplates.buttonDeco(
+                                  displayText: "Reset Password", vertInset: 24),
                             ),
                     ],
                   ),
