@@ -1,10 +1,10 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
-import 'package:aacademic/ui/custom_appbar.dart';
+import 'package:aacademic/ui/imageboard_ui.dart/custom_appbar.dart';
 import 'package:aacademic/camera/camera_page.dart';
 import 'package:aacademic/firebase/fire_auth.dart';
 import 'package:aacademic/firebase/validator.dart';
-import 'package:aacademic/ui/custom_appbar.dart';
+import 'package:aacademic/ui/imageboard_ui.dart/custom_appbar.dart';
 import 'package:aacademic/ui/login/login_page.dart';
 import 'package:aacademic/ui/settings/settings_page.dart';
 import 'package:aacademic/ui/add_menu/color_button.dart';
@@ -21,6 +21,8 @@ import 'package:aacademic/firebase/firebase_options.dart';
 import 'package:aacademic/utils/imageboard_utils.dart';
 
 String currentLanguage = "en-US";
+int horiGridSize = 2;
+int vertGridSize = 3;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -78,7 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   //button variables
   String buttonName = "";
-  String buttonSize = "";
+  String buttonLocation = "";
   Color? buttonColor;
   File? _selectedImage;
   ButtonUtils buttonUtils = ButtonUtils();
@@ -450,69 +452,99 @@ class _MyHomePageState extends State<MyHomePage> {
         //imageboard
         body: Center(
             child: RefreshIndicator(
-              onRefresh: _refresh,
-              child: _buttons.isEmpty
-                ? const CircularProgressIndicator()
-                : GridView.count(
-                    scrollDirection: orientation == Orientation.portrait
-                        ? Axis.vertical
-                        : Axis.horizontal,
-                    crossAxisCount: orientation == Orientation.portrait ? 3 : 2,
-                    crossAxisSpacing:
-                        orientation == Orientation.portrait ? 20 : 5,
-                    mainAxisSpacing:
-                        orientation == Orientation.portrait ? 20 : 5,
-                    padding: const EdgeInsets.all(15),
-                    children: _selectedFolderButtons.isNotEmpty
-                        ? _selectedFolderButtons
-                            .map((button) => GestureDetector(
-                                  onTap: () {
-                                    print("ADDING TO LIST");
-                                    setState(() {
-                                      buttonUtils.addButtonToList(button);
-                                      TextToSpeech.speak(button.key
-                                          .toString()
-                                          .replaceAll('<', '')
-                                          .replaceAll('>', '')
-                                          .replaceAll("'", ''));
-                                    });
-                                  },
-                                  onLongPress: () {
-                                    print("LONG PRESS");
-                                    showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return const AlertDialog();
+                onRefresh: _refresh,
+                child: _buttons.isEmpty
+                    ? const CircularProgressIndicator()
+                    : GridView.count(
+                        scrollDirection: orientation == Orientation.portrait
+                            ? Axis.vertical
+                            : Axis.horizontal,
+                        crossAxisCount:
+                            orientation == Orientation.portrait ? 3 : 2,
+                        crossAxisSpacing:
+                            orientation == Orientation.portrait ? 20 : 5,
+                        mainAxisSpacing:
+                            orientation == Orientation.portrait ? 20 : 5,
+                        padding: const EdgeInsets.all(15),
+                        children: _selectedFolderButtons.isNotEmpty
+                            ? _selectedFolderButtons
+                                .map((button) => GestureDetector(
+                                      onTap: () {
+                                        print('ADDING TO LIST');
+                                        setState(() {
+                                          buttonUtils.addButtonToList(button);
+                                          TextToSpeech.speak(button.key
+                                              .toString()
+                                              .replaceAll('<', '')
+                                              .replaceAll('>', '')
+                                              .replaceAll("'", ''));
                                         });
-                                  },
-                                  child: button,
-                                ))
-                            .toList()
-                        : _buttons
-                            .map((button) => GestureDetector(
-                                  onTap: () {
-                                    print("ADDING TO LIST");
-                                    setState(() {
-                                      buttonUtils.addButtonToList(button);
-                                      TextToSpeech.speak(button.key
-                                          .toString()
-                                          .replaceAll('<', '')
-                                          .replaceAll('>', '')
-                                          .replaceAll("'", ''));
-                                    });
-                                  },
-                                  onLongPress: () {
-                                    print("LONG PRESS");
-                                    showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return const AlertDialog();
+                                      },
+                                      onLongPress: () {
+                                        showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return AlertDialog(
+                                                title: const Center(child: Text("Delete Button?")),
+                                                content: const Text("Are you sure you want to delete this item? It will be permanently deleted along with all of its contents."),
+                                                actions: <Widget>[
+                                                  UITemplates.buttonDeco(
+                                                    displayText: 'Accept', 
+                                                    vertInset: 10,
+                                                  ),
+                                                  const SizedBox(height: 10),
+                                                  UITemplates.buttonDeco(
+                                                    displayText: 'Cancel',
+                                                    vertInset: 10,
+                                                  ),
+                                                ],
+                                              );
+                                            });
+                                      },
+                                      child: button,
+                                    ))
+                                .toList()
+                            : _buttons
+                                .map((button) => GestureDetector(
+                                      onTap: () {
+                                        print(button);
+                                        setState(() {
+                                          buttonUtils.addButtonToList(button);
+                                          TextToSpeech.speak(button.key
+                                              .toString()
+                                              .replaceAll('<', '')
+                                              .replaceAll('>', '')
+                                              .replaceAll("'", ''));
                                         });
-                                  },
-                                  child: button,
-                                ))
-                            .toList(),
-                  ))),
+                                      },
+                                      onLongPress: () {
+                                        showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return AlertDialog(
+                                                title: const Center(child: Text("Delete Button?")),
+                                                content: const Text("Are you sure you want to delete this item? It will be permenently deleted along with all of its contents."),
+                                                actions: <Widget>[
+                                                  GestureDetector(
+
+                                                  ),
+                                                  UITemplates.buttonDeco(
+                                                    displayText: 'Accept', 
+                                                    vertInset: 10,
+                                                  ),
+                                                  const SizedBox(height: 10),
+                                                  UITemplates.buttonDeco(
+                                                    displayText: 'Cancel',
+                                                    vertInset: 10,
+                                                  ),
+                                                ],
+                                              );
+                                            });
+                                      },
+                                      child: button,
+                                    ))
+                                .toList(),
+                      ))),
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           key: navKey,
