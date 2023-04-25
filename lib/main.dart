@@ -141,7 +141,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           const EdgeInsets.symmetric(horizontal: 5.0),
                       scrollable: true,
                       title: const Text(
-                        'Add a New Button',
+                        'Add a New Button or Folder',
                         textAlign: TextAlign.center,
                       ),
                       titleTextStyle: const TextStyle(
@@ -185,8 +185,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                     ),
                                                     decoration: UITemplates
                                                         .textFieldDeco(
-                                                            hintText:
-                                                                "Button Name"),
+                                                            hintText: "Name"),
                                                   ),
                                                   const SizedBox(height: 10),
                                                   //button or folder checkbox row
@@ -309,35 +308,52 @@ class _MyHomePageState extends State<MyHomePage> {
                                                       ]),
                                                   const SizedBox(height: 10),
                                                   //folder dropdown for adding buttons to specific folder
-                                                  // DropdownButtonFormField(
-                                                  //     decoration: UITemplates
-                                                  //         .textFieldDeco(
-                                                  //             hintText:
-                                                  //                 "Folder"),
-                                                  //     value: null,
-                                                  //     onChanged: null,
-                                                  //     items: null),
-                                                  // const SizedBox(height: 10),
-                                                  //camera roll button
-                                                  GestureDetector(
-                                                    onTap: () {
-                                                      imageboardUtils
-                                                          .chooseImage()
-                                                          .then(
-                                                              (selectedImage) {
-                                                        setState(() {
-                                                          _onImageSelected(
-                                                              selectedImage!);
-                                                        });
-                                                      });
-                                                    },
-                                                    child:
-                                                        UITemplates.buttonDeco(
-                                                            displayText:
-                                                                "Camera Roll",
-                                                            vertInset: 10),
+                                                  Visibility(
+                                                    visible: _isButtonChecked,
+                                                    child: Column(
+                                                      children: [
+                                                        DropdownButtonFormField(
+                                                            decoration: UITemplates
+                                                                .textFieldDeco(
+                                                                    hintText:
+                                                                        "Select Folder"),
+                                                            value: null,
+                                                            onChanged: null,
+                                                            items: null),
+                                                        const SizedBox(
+                                                            height: 10),
+                                                      ],
+                                                    ),
                                                   ),
-                                                  const SizedBox(height: 10),
+                                                  //camera roll button for selecting images for buttons
+                                                  Visibility(
+                                                    visible: _isButtonChecked,
+                                                    child: Column(
+                                                      children: [
+                                                        GestureDetector(
+                                                          onTap: () {
+                                                            imageboardUtils
+                                                                .chooseImage()
+                                                                .then(
+                                                                    (selectedImage) {
+                                                              setState(() {
+                                                                _onImageSelected(
+                                                                    selectedImage!);
+                                                              });
+                                                            });
+                                                          },
+                                                          child: UITemplates
+                                                              .buttonDeco(
+                                                                  displayText:
+                                                                      "Camera Roll",
+                                                                  vertInset:
+                                                                      10),
+                                                        ),
+                                                        const SizedBox(
+                                                            height: 10),
+                                                      ],
+                                                    ),
+                                                  ),
                                                   //select color button
                                                   GestureDetector(
                                                       key: _buttonColorKey,
@@ -432,6 +448,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                                           onTap: () {
                                                             Navigator.pop(
                                                                 context);
+                                                            _isButtonChecked =
+                                                                false;
+                                                            _isFolderChecked =
+                                                                false;
                                                           },
                                                           child: UITemplates
                                                               .buttonDeco(
