@@ -136,6 +136,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 return Scaffold(
                   backgroundColor: Colors.grey,
                   body: AlertDialog(
+                      insetPadding: const EdgeInsets.symmetric(horizontal: 10),
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 5.0),
                       scrollable: true,
                       title: const Text(
                         'Add a New Button',
@@ -305,6 +308,16 @@ class _MyHomePageState extends State<MyHomePage> {
                                                         ),
                                                       ]),
                                                   const SizedBox(height: 10),
+                                                  //folder dropdown for adding buttons to specific folder
+                                                  // DropdownButtonFormField(
+                                                  //     decoration: UITemplates
+                                                  //         .textFieldDeco(
+                                                  //             hintText:
+                                                  //                 "Folder"),
+                                                  //     value: null,
+                                                  //     onChanged: null,
+                                                  //     items: null),
+                                                  // const SizedBox(height: 10),
                                                   //camera roll button
                                                   GestureDetector(
                                                     onTap: () {
