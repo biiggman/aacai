@@ -25,10 +25,33 @@ class ImageboardUtils {
   Future<void> uploadImage(String name, Color buttonColor) async {
     String uid = FirebaseAuth.instance.currentUser!.uid;
 
-    CollectionReference imageboardRef = FirebaseFirestore.instance
+    CollectionReference imageboardRef;
+
+    //if (isFolder = true) {
+    //  await FirebaseFirestore.instance
+    //  .collection('user-information')
+    ///  .doc(uid)
+    //  .collection('folders')
+    //  .doc(folderName)
+    //  .set({
+    //    'folder_name': folderName,
+    //    'folder_color': buttonColor,
+    //  })
+    //}
+
+    //if (folderName == 'imageboard') {
+    imageboardRef = FirebaseFirestore.instance
         .collection('user-information')
         .doc(uid)
         .collection('imageboard');
+    //} else {
+    //  imageboardRef = FirebaseFirestore.instance
+    //      .collection('user-information')
+    //     .doc(uid)
+    //      .collection('folders')
+    //      .doc(folderName)
+    //      .collection('images');
+    //}
 
     DocumentReference uploadedImage = imageboardRef.doc();
     String uploadedImageID = uploadedImage.id;
@@ -132,7 +155,7 @@ class ButtonUtils {
       String folderId,
       Map<String, List<RawMaterialButton>> folderButtonsMap,
       Function(List<RawMaterialButton>) onFolderSelect) {
-    const folderIcon = Icon(Icons.folder);
+    const folderIcon = Icon(Icons.folder, size: 48);
     RawMaterialButton button = RawMaterialButton(
       key: Key(name),
       onPressed: () {
@@ -143,11 +166,9 @@ class ButtonUtils {
         TextToSpeech.speak(name);
       },
       elevation: 2.0,
-
       shape: RoundedRectangleBorder(
           side: BorderSide(color: color, width: 2),
           borderRadius: BorderRadius.circular(18)),
-      //fillColor: buttonColor,
       padding: const EdgeInsets.all(3.0),
       child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
         const Expanded(

@@ -44,7 +44,7 @@ class _CameraPageState extends State<CameraPage> {
         imageWidth: cameraImage.width,
         imageMean: 0,
         imageStd: 255,
-        numResultsPerClass: 1,
+        numResultsPerClass: 2,
         threshold: 0.6,
       ))!;
 

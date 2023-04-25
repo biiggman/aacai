@@ -105,6 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+    populateButtons();
   }
 
   void onColorSelected(Color color) {
@@ -453,6 +454,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
       buttons.add(folderButton);
     }
+    
+    //sorts the entire list by colors. this allows users to define what the colors mean to them.
+    buttons.sort((a, b) {
+      int aColorValue = (a.shape as RoundedRectangleBorder).side.color.value;
+      int bColorValue = (b.shape as RoundedRectangleBorder).side.color.value;
+      
+      return bColorValue.compareTo(aColorValue);
+
+    });
     setState(() {
       _buttons = buttons;
     });
@@ -460,7 +470,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    populateButtons();
     return WillPopScope(
         onWillPop: () async => false,
         child: OrientationBuilder(builder: ((context, orientation) {
@@ -505,36 +514,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                             });
                                           },
                                           onLongPress: () {
-                                            showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return AlertDialog(
-                                                    title: const Center(
-                                                        child: Text(
-                                                            "Delete Button?")),
-                                                    content: const Text(
-                                                        "Are you sure you want to delete this item? It will be permanently deleted along with all of its contents."),
-                                                    actions: <Widget>[
-                                                      UITemplates.buttonDeco(
-                                                        displayText: 'Accept',
-                                                        vertInset: 10,
-                                                      ),
-                                                      const SizedBox(
-                                                          height: 10),
-                                                      UITemplates.buttonDeco(
-                                                        displayText: 'Cancel',
-                                                        vertInset: 10,
-                                                      ),
-                                                    ],
-                                                  );
-                                                });
                                           },
                                           child: button,
                                         ))
                                     .toList()
                                 : _buttons
                                     .map((button) => GestureDetector(
+                                      excludeFromSemantics: true,
                                           onTap: () {
                                             print(button);
                                             setState(() {
@@ -546,33 +532,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                                   .replaceAll('>', '')
                                                   .replaceAll("'", ''));
                                             });
-                                          },
-                                          onLongPress: () {
-                                            showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return AlertDialog(
-                                                    title: const Center(
-                                                        child: Text(
-                                                            "Delete Button?")),
-                                                    content: const Text(
-                                                        "Are you sure you want to delete this item? It will be permenently deleted along with all of its contents."),
-                                                    actions: <Widget>[
-                                                      GestureDetector(),
-                                                      UITemplates.buttonDeco(
-                                                        displayText: 'Accept',
-                                                        vertInset: 10,
-                                                      ),
-                                                      const SizedBox(
-                                                          height: 10),
-                                                      UITemplates.buttonDeco(
-                                                        displayText: 'Cancel',
-                                                        vertInset: 10,
-                                                      ),
-                                                    ],
-                                                  );
-                                                });
                                           },
                                           child: button,
                                         ))
