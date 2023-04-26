@@ -243,6 +243,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                 setState(() {
                                                                   _isButtonChecked =
                                                                       value!;
+                                                                  _isFolderChecked =
+                                                                      false;
                                                                 });
                                                               },
                                                             ),
@@ -300,6 +302,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                 setState(() {
                                                                   _isFolderChecked =
                                                                       value!;
+                                                                  _isButtonChecked =
+                                                                      false;
                                                                 });
                                                               },
                                                             ),
@@ -396,13 +400,31 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                     true;
                                                               });
                                                             }
-
-                                                            if (buttonColor ==
-                                                                    null ||
-                                                                _selectedImage ==
-                                                                    null ||
-                                                                buttonName ==
-                                                                    "") {
+                                                            //if for adding button
+                                                            if (_isButtonChecked =
+                                                                true) {
+                                                              if (buttonColor == null ||
+                                                                  _selectedImage ==
+                                                                      null ||
+                                                                  buttonName ==
+                                                                      "") {
+                                                                ScaffoldMessenger.of(
+                                                                        context)
+                                                                    .showSnackBar(
+                                                                        FireAuth
+                                                                            .customSnackBar(
+                                                                  content:
+                                                                      'Please finish making selections',
+                                                                  color: Colors
+                                                                      .red,
+                                                                ));
+                                                              }
+                                                              imageboardUtils
+                                                                  .uploadImage(
+                                                                      buttonName,
+                                                                      buttonColor!);
+                                                              Navigator.pop(
+                                                                  context);
                                                               ScaffoldMessenger
                                                                       .of(
                                                                           context)
@@ -410,28 +432,47 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                       FireAuth
                                                                           .customSnackBar(
                                                                 content:
-                                                                    'Please finish making selections',
-                                                                color:
-                                                                    Colors.red,
+                                                                    'Button added! Pull down to refresh',
+                                                                color: Colors
+                                                                    .green,
                                                               ));
                                                             }
-
-                                                            imageboardUtils
-                                                                .uploadImage(
-                                                                    buttonName,
-                                                                    buttonColor!);
-                                                            Navigator.pop(
-                                                                context);
-                                                            ScaffoldMessenger
-                                                                    .of(context)
-                                                                .showSnackBar(
-                                                                    FireAuth
-                                                                        .customSnackBar(
-                                                              content:
-                                                                  'Button added! Pull down to refresh',
-                                                              color:
-                                                                  Colors.green,
-                                                            ));
+                                                            //else if for adding folder
+                                                            else if (_isFolderChecked =
+                                                                true) {
+                                                              if (buttonColor ==
+                                                                      null ||
+                                                                  buttonName ==
+                                                                      "") {
+                                                                ScaffoldMessenger.of(
+                                                                        context)
+                                                                    .showSnackBar(
+                                                                        FireAuth
+                                                                            .customSnackBar(
+                                                                  content:
+                                                                      'Please finish making selections',
+                                                                  color: Colors
+                                                                      .red,
+                                                                ));
+                                                              }
+                                                              imageboardUtils
+                                                                  .uploadImage(
+                                                                      buttonName,
+                                                                      buttonColor!);
+                                                              Navigator.pop(
+                                                                  context);
+                                                              ScaffoldMessenger
+                                                                      .of(
+                                                                          context)
+                                                                  .showSnackBar(
+                                                                      FireAuth
+                                                                          .customSnackBar(
+                                                                content:
+                                                                    'Button added! Pull down to refresh',
+                                                                color: Colors
+                                                                    .green,
+                                                              ));
+                                                            }
                                                           },
                                                           child: UITemplates
                                                               .buttonDeco(
