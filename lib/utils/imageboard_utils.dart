@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:aacademic/utils/tts.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -117,9 +117,14 @@ class ImageboardUtils {
 class ButtonUtils {
   String uid = FirebaseAuth.instance.currentUser!.uid;
 
-  //create button parameters
-  RawMaterialButton createButton(String name, String location, Color color) {
-    RawMaterialButton button = RawMaterialButton(
+  
+
+  List<RawMaterialButton> tappedButtons = [];
+  List<String> tappedButtonNames = [];
+
+  void addButtonToList(String name, String location, Color color) {
+    //creates a copy of the button
+    RawMaterialButton newButton = RawMaterialButton(
       key: Key(name),
       onPressed: null,
       elevation: 2.0,
@@ -146,74 +151,19 @@ class ButtonUtils {
         )
       ]),
     );
-    return button;
-  }
-
-  RawMaterialButton createFolder(
-      String name,
-      Color color,
-      String folderId,
-      Map<String, List<RawMaterialButton>> folderButtonsMap,
-      Function(List<RawMaterialButton>) onFolderSelect) {
-    const folderIcon = Icon(Icons.folder, size: 48);
-    RawMaterialButton button = RawMaterialButton(
-      key: Key(name),
-      onPressed: () {
-        print(folderId);
-        List<RawMaterialButton>? folderButtons = folderButtonsMap[folderId];
-        print(folderButtons);
-        onFolderSelect(folderButtons ?? []);
-        TextToSpeech.speak(name);
-      },
-      elevation: 2.0,
-      shape: RoundedRectangleBorder(
-          side: BorderSide(color: color, width: 2),
-          borderRadius: BorderRadius.circular(18)),
-      padding: const EdgeInsets.all(3.0),
-      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        const Expanded(
-          child: folderIcon,
-        ),
-        Column(
-          children: [
-            Text(
-              name,
-              style: const TextStyle(fontSize: 16, color: Colors.black),
-            ),
-          ],
-        )
-      ]),
-    );
-    return button;
-  }
-
-  List<RawMaterialButton> tappedButtons = [];
-  List<String> tappedButtonNames = [];
-
-  void addButtonToList(RawMaterialButton button) {
-    //creates a copy of the button
-    RawMaterialButton newButton = RawMaterialButton(
-      onPressed: null,
-      onLongPress: null,
-      elevation: button.elevation,
-      constraints: button.constraints,
-      shape: button.shape,
-      padding: button.padding,
-      child: button.child,
-    );
 
     //extracts name of the button
-    String buttonName = button.key
-        .toString()
-        .replaceAll('<', '')
-        .replaceAll('>', '')
-        .replaceAll("'", '');
+    //String buttonName = newButton.key
+    //    .toString()
+    //    .replaceAll('<', '')
+    //    .replaceAll('>', '')
+    //    .replaceAll("'", '');
 
     //adds button copy object and the name of the button to respected lists
     tappedButtons.add(newButton);
-    tappedButtonNames.add(buttonName);
+    tappedButtonNames.add(name);
 
     //debug test to see if working
-    print(buttonName);
+    print(name);
   }
 }

@@ -1,14 +1,16 @@
 import 'dart:io';
+import 'package:aacademic/ui/button_menus/delete_menu.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:aacademic/ui/imageboard_ui.dart/custom_appbar.dart';
 import 'package:aacademic/camera/camera_page.dart';
 import 'package:aacademic/firebase/fire_auth.dart';
 import 'package:aacademic/firebase/validator.dart';
 import 'package:aacademic/ui/imageboard_ui.dart/custom_appbar.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:aacademic/ui/login/login_page.dart';
 import 'package:aacademic/ui/settings/settings_page.dart';
-import 'package:aacademic/ui/add_menu/color_button.dart';
-import 'package:aacademic/ui/add_menu/preview_button.dart';
+import 'package:aacademic/ui/button_menus/color_button.dart';
+import 'package:aacademic/ui/button_menus/preview_button.dart';
 import 'package:aacademic/utils/UI_templates.dart';
 import 'package:aacademic/utils/themes.dart';
 import 'package:aacademic/utils/tts.dart';
@@ -52,22 +54,20 @@ class MyApp extends StatelessWidget {
         '/settings': (context) => const SettingsPage(),
       },
       theme: Provider.of<ThemeModel>(context).currentTheme,
-      home: //const LoginPage()
-
-          //ROUTE FOR HOMEPAGE THAT CHECKS FOR LOGIN. NEEDS ROUTE TO ACCOUNT IN SETTINGS TO AVOID SOFTLOCK OUT OF LOGIN PAGE
-          FutureBuilder(
-              future: FirebaseAuth.instance.authStateChanges().first,
-              builder: (context, AsyncSnapshot<User?> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
-                } else if (snapshot.hasData) {
-                  return const MyHomePage(
-                    title: 'AAC.AI',
-                  );
-                } else {
-                  return const LoginPage();
-                }
-              }),
+      //skips login page if logged in
+      home: FutureBuilder(
+          future: FirebaseAuth.instance.authStateChanges().first,
+          builder: (context, AsyncSnapshot<User?> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            } else if (snapshot.hasData) {
+              return const MyHomePage(
+                title: 'AAC.AI',
+              );
+            } else {
+              return const LoginPage();
+            }
+          }),
     );
   }
 }
@@ -366,16 +366,105 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  //create button parameters
+  RawMaterialButton createButton(String name, String location, Color color,
+      bool inFolder, String DocID, String folderID) {
+    RawMaterialButton button = RawMaterialButton(
+      key: Key(name),
+      onPressed: () {
+        setState(() {
+          buttonUtils.addButtonToList(name, location, color);
+          TextToSpeech.speak(name);
+        });
+      },
+      onLongPress: () {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return DeleteMenu(isFolder: inFolder, id: DocID, folderID: folderID,);
+            });
+      },
+      elevation: 2.0,
+      shape: RoundedRectangleBorder(
+          side: BorderSide(color: color, width: 2),
+          borderRadius: BorderRadius.circular(18)),
+      padding: const EdgeInsets.all(3.0),
+      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        Expanded(
+          child: CachedNetworkImage(
+            imageUrl: location,
+            height: 100,
+            width: 100,
+            fit: BoxFit.contain,
+          ),
+        ),
+        Column(
+          children: [
+            Text(
+              name,
+              style: const TextStyle(fontSize: 16, color: Colors.black),
+            ),
+          ],
+        )
+      ]),
+    );
+    return button;
+  }
+
+  RawMaterialButton createFolder(
+      String name,
+      Color color,
+      String folderId,
+      Map<String, List<RawMaterialButton>> folderButtonsMap,
+      Function(List<RawMaterialButton>) onFolderSelect) {
+    const folderIcon = Icon(Icons.folder, size: 48);
+    RawMaterialButton button = RawMaterialButton(
+      onPressed: () {
+        print(folderId);
+        List<RawMaterialButton>? folderButtons = folderButtonsMap[folderId];
+        print(folderButtons);
+        onFolderSelect(folderButtons ?? []);
+        TextToSpeech.speak(name);
+      },
+      onLongPress: () {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return DeleteMenu(isFolder: true, folderID: folderId);
+            });
+      },
+      elevation: 2.0,
+      shape: RoundedRectangleBorder(
+          side: BorderSide(color: color, width: 2),
+          borderRadius: BorderRadius.circular(18)),
+      padding: const EdgeInsets.all(3.0),
+      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        const Expanded(
+          child: folderIcon,
+        ),
+        Column(
+          children: [
+            Text(
+              name,
+              style: const TextStyle(fontSize: 16, color: Colors.black),
+            ),
+          ],
+        )
+      ]),
+    );
+    return button;
+  }
+
   String uid = FirebaseAuth.instance.currentUser!.uid;
 
   Future<void> populateButtons() async {
-    QuerySnapshot<Map<String, dynamic>> imageboardRef = await FirebaseFirestore
-        .instance
-        .collection('user-information')
-        .doc(uid)
-        .collection('imageboard')
-        .orderBy('image_color', descending: true)
-        .get();
+    QuerySnapshot<Map<String, dynamic>> imageboardRef =
+        await FirebaseFirestore.instance
+            .collection('user-information')
+            .doc(uid)
+            .collection('imageboard')
+            //.orderBy('image_color', descending: true)
+            .get();
 
     List<RawMaterialButton> buttons = [];
 
@@ -389,9 +478,10 @@ class _MyHomePageState extends State<MyHomePage> {
       String buttonName = doc['image_name'];
       String buttonLocation = doc['image_location'];
       Color buttonColor = Color(colorValue);
+      bool inFolder = false;
 
-      RawMaterialButton imageButton =
-          buttonUtils.createButton(buttonName, buttonLocation, buttonColor);
+      RawMaterialButton imageButton = createButton(
+          buttonName, buttonLocation, buttonColor, inFolder = false, doc.id, "");
       buttons.add(imageButton);
     }
 
@@ -417,7 +507,7 @@ class _MyHomePageState extends State<MyHomePage> {
       String buttonName = folderDoc['folder_name'];
       Color buttonColor = Color(colorValue);
 
-      RawMaterialButton folderButton = buttonUtils.createFolder(
+      RawMaterialButton folderButton = createFolder(
           buttonName, buttonColor, folderDoc.id, folderButtonsMap, (buttons) {
         setState(() {
           _selectedFolderButtons = buttons;
@@ -444,9 +534,16 @@ class _MyHomePageState extends State<MyHomePage> {
         String buttonName = imageDoc['image_name'];
         String buttonLocation = imageDoc['image_location'];
         Color buttonColor = Color(colorValue);
+        bool isFolder = false;
 
-        RawMaterialButton imageButton =
-            buttonUtils.createButton(buttonName, buttonLocation, buttonColor);
+        RawMaterialButton imageButton = createButton(
+          buttonName,
+          buttonLocation,
+          buttonColor,
+          isFolder,
+          imageDoc.id,
+          folderDoc.id
+        );
         folderButtons.add(imageButton);
       }
 
@@ -454,14 +551,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
       buttons.add(folderButton);
     }
-    
+
     //sorts the entire list by colors. this allows users to define what the colors mean to them.
     buttons.sort((a, b) {
       int aColorValue = (a.shape as RoundedRectangleBorder).side.color.value;
       int bColorValue = (b.shape as RoundedRectangleBorder).side.color.value;
-      
-      return bColorValue.compareTo(aColorValue);
 
+      return bColorValue.compareTo(aColorValue);
     });
     setState(() {
       _buttons = buttons;
@@ -500,42 +596,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             padding: const EdgeInsets.all(15),
                             children: _selectedFolderButtons.isNotEmpty
                                 ? _selectedFolderButtons
-                                    .map((button) => GestureDetector(
-                                          onTap: () {
-                                            print('ADDING TO LIST');
-                                            setState(() {
-                                              buttonUtils
-                                                  .addButtonToList(button);
-                                              TextToSpeech.speak(button.key
-                                                  .toString()
-                                                  .replaceAll('<', '')
-                                                  .replaceAll('>', '')
-                                                  .replaceAll("'", ''));
-                                            });
-                                          },
-                                          onLongPress: () {
-                                          },
-                                          child: button,
-                                        ))
-                                    .toList()
                                 : _buttons
-                                    .map((button) => GestureDetector(
-                                      excludeFromSemantics: true,
-                                          onTap: () {
-                                            print(button);
-                                            setState(() {
-                                              buttonUtils
-                                                  .addButtonToList(button);
-                                              TextToSpeech.speak(button.key
-                                                  .toString()
-                                                  .replaceAll('<', '')
-                                                  .replaceAll('>', '')
-                                                  .replaceAll("'", ''));
-                                            });
-                                          },
-                                          child: button,
-                                        ))
-                                    .toList(),
                           ))),
             bottomNavigationBar: BottomNavigationBar(
               type: BottomNavigationBarType.fixed,
