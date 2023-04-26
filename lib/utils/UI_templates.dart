@@ -57,4 +57,6 @@ class UITemplates {
       ),
     );
   }
+
+  //add checkbox deco here
 }
