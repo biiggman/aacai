@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 
-enum MyThemeKeys { LIGHT, DARK, PRO, TRI, ACHROMA }
+enum ThemeType { LIGHT, DARK, PRO, TRI, ACHROMA }
 
 class MyThemes {
   static const THEME_KEY = "theme_key";
@@ -247,21 +247,54 @@ class MyThemes {
       ),
     )),
   );
+}
 
-  static ThemeData getThemeFromKey(MyThemeKeys themeKey) {
-    switch (themeKey) {
-      case MyThemeKeys.LIGHT:
-        return lightTheme;
-      case MyThemeKeys.DARK:
-        return darkTheme;
-      case MyThemeKeys.PRO:
-        return protanopiaTheme;
-      case MyThemeKeys.TRI:
-        return tritanopiaTheme;
-      case MyThemeKeys.ACHROMA:
-        return achromatopsiaTheme;
-      default:
-        return lightTheme;
+class ThemeModel extends ChangeNotifier {
+  ThemeData currentTheme = MyThemes.lightTheme;
+  ThemeType _ThemeType = ThemeType.LIGHT;
+
+  setLightTheme() {
+    if (_ThemeType != ThemeType.LIGHT) {
+      currentTheme = MyThemes.lightTheme;
+      _ThemeType = ThemeType.LIGHT;
+
+      return notifyListeners();
+    }
+  }
+
+  setDarkTheme() {
+    if (_ThemeType != ThemeType.DARK) {
+      currentTheme = MyThemes.darkTheme;
+      _ThemeType = ThemeType.DARK;
+
+      return notifyListeners();
+    }
+  }
+
+  setProTheme() {
+    if (_ThemeType != ThemeType.PRO) {
+      currentTheme = MyThemes.protanopiaTheme;
+      _ThemeType = ThemeType.PRO;
+
+      return notifyListeners();
+    }
+  }
+
+  setTriTheme() {
+    if (_ThemeType != ThemeType.TRI) {
+      currentTheme = MyThemes.tritanopiaTheme;
+      _ThemeType = ThemeType.TRI;
+
+      return notifyListeners();
+    }
+  }
+
+  setAchroTheme() {
+    if (_ThemeType != ThemeType.ACHROMA) {
+      currentTheme = MyThemes.achromatopsiaTheme;
+      _ThemeType = ThemeType.ACHROMA;
+
+      return notifyListeners();
     }
   }
 }

@@ -1,3 +1,5 @@
+import 'package:aacademic/main.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -34,9 +36,10 @@ class _LoginPageState extends State<LoginPage> {
 
     if (user != null) {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => ProfilePage(
-            user: user,
+        CupertinoPageRoute(
+          fullscreenDialog: true,
+          builder: (context) => const MyHomePage(
+            title: 'AAC.AI',
           ),
         ),
       );
@@ -52,7 +55,9 @@ class _LoginPageState extends State<LoginPage> {
     //  final appleSignInAvailable =
     //     Provider.of<AppleSignInAvailable>(context, listen: false);
 
-    return GestureDetector(
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: GestureDetector(
         onTap: () {
           _focusEmail.unfocus();
           _focusPassword.unfocus();
@@ -63,6 +68,8 @@ class _LoginPageState extends State<LoginPage> {
           //top bar
           appBar: AppBar(
               title: const Text('Welcome'),
+              automaticallyImplyLeading: false,
+              centerTitle: true,
               titleTextStyle: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 40,
@@ -146,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
                                       ),
                                       focusedBorder: const OutlineInputBorder(
                                           borderSide: BorderSide(
-                                              color: const Color(0xff6A145D))),
+                                              color: Color(0xff6A145D))),
                                       fillColor: const Color(0xffABC99B),
                                       filled: true),
                                 ),
@@ -160,7 +167,7 @@ class _LoginPageState extends State<LoginPage> {
                                         Navigator.of(context).push(
                                           MaterialPageRoute(
                                             builder: (context) =>
-                                                ForgotPasswordPage(),
+                                                const ForgotPasswordPage(),
                                           ),
                                         );
                                       },
@@ -203,7 +210,9 @@ class _LoginPageState extends State<LoginPage> {
                                                   .pushReplacement(
                                                 MaterialPageRoute(
                                                   builder: (context) =>
-                                                      ProfilePage(user: user),
+                                                      ProfilePage(
+                                                    user: user,
+                                                  ),
                                                 ),
                                               );
                                             }
@@ -255,7 +264,8 @@ class _LoginPageState extends State<LoginPage> {
                                       if (user != null) {
                                         Navigator.of(context).pushReplacement(
                                           MaterialPageRoute(
-                                            builder: (context) => ProfilePage(
+                                            builder: (context) =>
+                                                ProfilePage(
                                               user: user,
                                             ),
                                           ),
@@ -269,8 +279,9 @@ class _LoginPageState extends State<LoginPage> {
                                 GestureDetector(
                                   onTap: () {
                                     Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) => RegisterPage(),
+                                      CupertinoPageRoute(
+                                        builder: (context) =>
+                                            const RegisterPage(),
                                       ),
                                     );
                                   },
@@ -292,6 +303,6 @@ class _LoginPageState extends State<LoginPage> {
                           )
                         ]));
               }),
-        ));
+        )));
   }
 }
