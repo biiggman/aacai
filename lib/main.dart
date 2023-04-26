@@ -100,6 +100,8 @@ class _MyHomePageState extends State<MyHomePage> {
   final _sourceImageKey = GlobalKey();
   final _buttonColorKey = GlobalKey();
   bool _isProcessing = false;
+  bool _isButtonChecked = false;
+  bool _isFolderChecked = false;
   bool _loading = false;
 
   @override
@@ -151,9 +153,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 return Scaffold(
                   backgroundColor: Colors.grey,
                   body: AlertDialog(
+                      insetPadding: const EdgeInsets.symmetric(horizontal: 10),
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 5.0),
                       scrollable: true,
                       title: const Text(
-                        'Add a New Button',
+                        'Add a New Button or Folder',
                         textAlign: TextAlign.center,
                       ),
                       titleTextStyle: const TextStyle(
@@ -197,30 +202,179 @@ class _MyHomePageState extends State<MyHomePage> {
                                                     ),
                                                     decoration: UITemplates
                                                         .textFieldDeco(
-                                                            hintText:
-                                                                "Button Name"),
+                                                            hintText: "Name"),
                                                   ),
                                                   const SizedBox(height: 10),
-                                                  //camera roll button
-                                                  GestureDetector(
-                                                    onTap: () {
-                                                      imageboardUtils
-                                                          .chooseImage()
-                                                          .then(
-                                                              (selectedImage) {
-                                                        setState(() {
-                                                          _onImageSelected(
-                                                              selectedImage!);
-                                                        });
-                                                      });
-                                                    },
-                                                    child:
-                                                        UITemplates.buttonDeco(
-                                                            displayText:
-                                                                "Camera Roll",
-                                                            vertInset: 10),
-                                                  ),
+                                                  //button or folder checkbox row
+                                                  Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        //add a button checkbox
+                                                        Expanded(
+                                                          child:
+                                                              GestureDetector(
+                                                            child:
+                                                                CheckboxListTile(
+                                                              dense: true,
+                                                              controlAffinity:
+                                                                  ListTileControlAffinity
+                                                                      .leading,
+                                                              title: const Text(
+                                                                "Button",
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontSize: 16,
+                                                                ),
+                                                              ),
+                                                              tileColor: Theme.of(
+                                                                      context)
+                                                                  .primaryColor,
+                                                              activeColor:
+                                                                  const Color(
+                                                                      0xff7ca200),
+                                                              side: const BorderSide(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  width: 1.5),
+                                                              checkboxShape: RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              4.0)),
+                                                              shape: RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              8.0)),
+                                                              value:
+                                                                  _isButtonChecked,
+                                                              onChanged: (bool?
+                                                                  value) {
+                                                                setState(() {
+                                                                  _isButtonChecked =
+                                                                      value!;
+                                                                  _isFolderChecked =
+                                                                      false;
+                                                                });
+                                                              },
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 5,
+                                                        ),
+                                                        //add a folder checkbox
+                                                        Expanded(
+                                                          child:
+                                                              GestureDetector(
+                                                            child:
+                                                                CheckboxListTile(
+                                                              dense: true,
+                                                              controlAffinity:
+                                                                  ListTileControlAffinity
+                                                                      .leading,
+                                                              title: const Text(
+                                                                "Folder",
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontSize: 16,
+                                                                ),
+                                                              ),
+                                                              tileColor: Theme.of(
+                                                                      context)
+                                                                  .primaryColor,
+                                                              activeColor:
+                                                                  const Color(
+                                                                      0xff7ca200),
+                                                              side: const BorderSide(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  width: 1.5),
+                                                              checkboxShape: RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              4.0)),
+                                                              shape: RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              8.0)),
+                                                              value:
+                                                                  _isFolderChecked,
+                                                              onChanged: (bool?
+                                                                  value) {
+                                                                setState(() {
+                                                                  _isFolderChecked =
+                                                                      value!;
+                                                                  _isButtonChecked =
+                                                                      false;
+                                                                });
+                                                              },
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ]),
                                                   const SizedBox(height: 10),
+                                                  //folder dropdown for adding buttons to specific folder
+                                                  Visibility(
+                                                    visible: _isButtonChecked,
+                                                    child: Column(
+                                                      children: [
+                                                        DropdownButtonFormField(
+                                                            decoration: UITemplates
+                                                                .textFieldDeco(
+                                                                    hintText:
+                                                                        "Select Folder"),
+                                                            value: null,
+                                                            onChanged: null,
+                                                            items: null),
+                                                        const SizedBox(
+                                                            height: 10),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  //camera roll button for selecting images for buttons
+                                                  Visibility(
+                                                    visible: _isButtonChecked,
+                                                    child: Column(
+                                                      children: [
+                                                        GestureDetector(
+                                                          onTap: () {
+                                                            imageboardUtils
+                                                                .chooseImage()
+                                                                .then(
+                                                                    (selectedImage) {
+                                                              setState(() {
+                                                                _onImageSelected(
+                                                                    selectedImage!);
+                                                              });
+                                                            });
+                                                          },
+                                                          child: UITemplates
+                                                              .buttonDeco(
+                                                                  displayText:
+                                                                      "Camera Roll",
+                                                                  vertInset:
+                                                                      10),
+                                                        ),
+                                                        const SizedBox(
+                                                            height: 10),
+                                                      ],
+                                                    ),
+                                                  ),
                                                   //select color button
                                                   GestureDetector(
                                                       key: _buttonColorKey,
@@ -245,6 +399,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                         )
                                                       : const SizedBox(),
                                                   const SizedBox(height: 10),
+                                                  //add or cancel button row
                                                   Row(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
@@ -262,13 +417,31 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                     true;
                                                               });
                                                             }
-
-                                                            if (buttonColor ==
-                                                                    null ||
-                                                                _selectedImage ==
-                                                                    null ||
-                                                                buttonName ==
-                                                                    "") {
+                                                            //if for adding button
+                                                            if (_isButtonChecked =
+                                                                true) {
+                                                              if (buttonColor == null ||
+                                                                  _selectedImage ==
+                                                                      null ||
+                                                                  buttonName ==
+                                                                      "") {
+                                                                ScaffoldMessenger.of(
+                                                                        context)
+                                                                    .showSnackBar(
+                                                                        FireAuth
+                                                                            .customSnackBar(
+                                                                  content:
+                                                                      'Please finish making selections',
+                                                                  color: Colors
+                                                                      .red,
+                                                                ));
+                                                              }
+                                                              imageboardUtils
+                                                                  .uploadImage(
+                                                                      buttonName,
+                                                                      buttonColor!);
+                                                              Navigator.pop(
+                                                                  context);
                                                               ScaffoldMessenger
                                                                       .of(
                                                                           context)
@@ -276,28 +449,47 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                       FireAuth
                                                                           .customSnackBar(
                                                                 content:
-                                                                    'Please finish making selections',
-                                                                color:
-                                                                    Colors.red,
+                                                                    'Button added! Pull down to refresh',
+                                                                color: Colors
+                                                                    .green,
                                                               ));
                                                             }
-
-                                                            imageboardUtils
-                                                                .uploadImage(
-                                                                    buttonName,
-                                                                    buttonColor!);
-                                                            Navigator.pop(
-                                                                context);
-                                                            ScaffoldMessenger
-                                                                    .of(context)
-                                                                .showSnackBar(
-                                                                    FireAuth
-                                                                        .customSnackBar(
-                                                              content:
-                                                                  'Button added! Pull down to refresh',
-                                                              color:
-                                                                  Colors.green,
-                                                            ));
+                                                            //else if for adding folder
+                                                            else if (_isFolderChecked =
+                                                                true) {
+                                                              if (buttonColor ==
+                                                                      null ||
+                                                                  buttonName ==
+                                                                      "") {
+                                                                ScaffoldMessenger.of(
+                                                                        context)
+                                                                    .showSnackBar(
+                                                                        FireAuth
+                                                                            .customSnackBar(
+                                                                  content:
+                                                                      'Please finish making selections',
+                                                                  color: Colors
+                                                                      .red,
+                                                                ));
+                                                              }
+                                                              imageboardUtils
+                                                                  .uploadImage(
+                                                                      buttonName,
+                                                                      buttonColor!);
+                                                              Navigator.pop(
+                                                                  context);
+                                                              ScaffoldMessenger
+                                                                      .of(
+                                                                          context)
+                                                                  .showSnackBar(
+                                                                      FireAuth
+                                                                          .customSnackBar(
+                                                                content:
+                                                                    'Button added! Pull down to refresh',
+                                                                color: Colors
+                                                                    .green,
+                                                              ));
+                                                            }
                                                           },
                                                           child: UITemplates
                                                               .buttonDeco(
@@ -307,13 +499,17 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                       10),
                                                         ),
                                                       ),
-                                                      const SizedBox(width: 5),
+                                                      const SizedBox(width: 10),
                                                       //cancel button
                                                       Expanded(
                                                         child: GestureDetector(
                                                           onTap: () {
                                                             Navigator.pop(
                                                                 context);
+                                                            _isButtonChecked =
+                                                                false;
+                                                            _isFolderChecked =
+                                                                false;
                                                           },
                                                           child: UITemplates
                                                               .buttonDeco(
