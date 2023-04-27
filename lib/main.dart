@@ -1,14 +1,16 @@
 import 'dart:io';
+import 'package:aacademic/ui/button_menus/delete_menu.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:aacademic/ui/imageboard_ui.dart/custom_appbar.dart';
 import 'package:aacademic/camera/camera_page.dart';
 import 'package:aacademic/firebase/fire_auth.dart';
 import 'package:aacademic/firebase/validator.dart';
 import 'package:aacademic/ui/imageboard_ui.dart/custom_appbar.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:aacademic/ui/login/login_page.dart';
 import 'package:aacademic/ui/settings/settings_page.dart';
-import 'package:aacademic/ui/add_menu/color_button.dart';
-import 'package:aacademic/ui/add_menu/preview_button.dart';
+import 'package:aacademic/ui/button_menus/color_button.dart';
+import 'package:aacademic/ui/button_menus/preview_button.dart';
 import 'package:aacademic/utils/UI_templates.dart';
 import 'package:aacademic/utils/themes.dart';
 import 'package:aacademic/utils/tts.dart';
@@ -21,8 +23,13 @@ import 'package:aacademic/firebase/firebase_options.dart';
 import 'package:aacademic/utils/imageboard_utils.dart';
 import 'package:provider/provider.dart';
 
+//current language selected
 String currentLanguage = "en-US";
+
+//number of rows when viewing imageboard in landscape mode
 int horiGridSize = 2;
+
+//number of columns when viewing imageboard in portrait mode
 int vertGridSize = 3;
 
 void main() async {
@@ -34,8 +41,6 @@ void main() async {
     create: ((context) => ThemeModel()),
     child: const MyApp(),
   ));
-
-  //const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -52,22 +57,20 @@ class MyApp extends StatelessWidget {
         '/settings': (context) => const SettingsPage(),
       },
       theme: Provider.of<ThemeModel>(context).currentTheme,
-      home: //const LoginPage()
-
-          //ROUTE FOR HOMEPAGE THAT CHECKS FOR LOGIN. NEEDS ROUTE TO ACCOUNT IN SETTINGS TO AVOID SOFTLOCK OUT OF LOGIN PAGE
-          FutureBuilder(
-              future: FirebaseAuth.instance.authStateChanges().first,
-              builder: (context, AsyncSnapshot<User?> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
-                } else if (snapshot.hasData) {
-                  return const MyHomePage(
-                    title: 'AAC.AI',
-                  );
-                } else {
-                  return const LoginPage();
-                }
-              }),
+      //skips login page if logged in
+      home: FutureBuilder(
+          future: FirebaseAuth.instance.authStateChanges().first,
+          builder: (context, AsyncSnapshot<User?> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            } else if (snapshot.hasData) {
+              return const MyHomePage(
+                title: 'AAC.AI',
+              );
+            } else {
+              return const LoginPage();
+            }
+          }),
     );
   }
 }
@@ -82,16 +85,25 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  //navigation bar index
   int _selectedIndex = 2;
+
+  //imageboard lists
   late Future<List<RawMaterialButton>> _imageboardRef;
   List<RawMaterialButton> _selectedFolderButtons = [];
   List<RawMaterialButton> _buttons = [];
+
+  //current user
+  String uid = FirebaseAuth.instance.currentUser!.uid;
 
   //button variables
   String buttonName = "";
   String buttonLocation = "";
   Color? buttonColor;
   File? _selectedImage;
+  String? _selectedFolder;
+
+  //buttonUtils class
   ButtonUtils buttonUtils = ButtonUtils();
 
   //keys here
@@ -99,28 +111,35 @@ class _MyHomePageState extends State<MyHomePage> {
   final _addButtonKey = GlobalKey<FormState>();
   final _sourceImageKey = GlobalKey();
   final _buttonColorKey = GlobalKey();
+
+  //misc variables
   bool _isProcessing = false;
   bool _isButtonChecked = false;
   bool _isFolderChecked = false;
   bool _loading = false;
 
+  //initial state of AAC.AI
   @override
   void initState() {
     super.initState();
+    populateButtons();
   }
 
+  //refreshes color on selection
   void onColorSelected(Color color) {
     setState(() {
       buttonColor = color;
     });
   }
 
+  //refreshes image on selection
   void _onImageSelected(File selectedImage) {
     setState(() {
       _selectedImage = selectedImage;
     });
   }
 
+  //handles pull down to refresh
   Future<void> fetchData() async {
     setState(() {
       _loading = true;
@@ -138,6 +157,9 @@ class _MyHomePageState extends State<MyHomePage> {
     await fetchData();
   }
 
+  final TextEditingController _textEditingController = TextEditingController();
+
+  //navigation bar logic
   void _onItemTapped(int index) async {
     setState(() {
       _selectedIndex = index;
@@ -262,6 +284,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                       value!;
                                                                   _isFolderChecked =
                                                                       false;
+                                                                  _selectedFolder =
+                                                                      null;
+                                                                  print(
+                                                                      'folder: $_isFolderChecked');
+                                                                  print(
+                                                                      'button: $_isButtonChecked');
                                                                 });
                                                               },
                                                             ),
@@ -321,6 +349,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                       value!;
                                                                   _isButtonChecked =
                                                                       false;
+                                                                  _selectedImage ==
+                                                                      null;
+                                                                  print(
+                                                                      'folder: $_isFolderChecked');
+                                                                  print(
+                                                                      'button: $_isButtonChecked');
                                                                 });
                                                               },
                                                             ),
@@ -333,16 +367,89 @@ class _MyHomePageState extends State<MyHomePage> {
                                                     visible: _isButtonChecked,
                                                     child: Column(
                                                       children: [
-                                                        DropdownButtonFormField(
-                                                            decoration: UITemplates
-                                                                .textFieldDeco(
-                                                                    hintText:
-                                                                        "Select Folder"),
-                                                            value: null,
-                                                            onChanged: null,
-                                                            items: null),
-                                                        const SizedBox(
-                                                            height: 10),
+                                                        StreamBuilder<
+                                                                QuerySnapshot<
+                                                                    Map<String,
+                                                                        dynamic>>>(
+                                                            stream:
+                                                                imageboardUtils
+                                                                    .getFolders(),
+                                                            builder: (BuildContext
+                                                                    context,
+                                                                AsyncSnapshot<
+                                                                        QuerySnapshot<
+                                                                            Map<String,
+                                                                                dynamic>>>
+                                                                    snapshot) {
+                                                              if (snapshot
+                                                                  .hasError) {
+                                                                return Text(
+                                                                    'Error: {$snapshot.error}');
+                                                              }
+                                                              if (snapshot
+                                                                      .connectionState ==
+                                                                  ConnectionState
+                                                                      .waiting) {
+                                                                return const CircularProgressIndicator();
+                                                              }
+                                                              List<
+                                                                      DropdownMenuItem<
+                                                                          String>>
+                                                                  dropDownItems =
+                                                                  [];
+                                                              if (snapshot
+                                                                      .data!
+                                                                      .docs
+                                                                      .length ==
+                                                                  1) {
+                                                                dropDownItems =
+                                                                    [];
+                                                              } else {
+                                                                for (var folderDoc
+                                                                    in snapshot
+                                                                        .data!
+                                                                        .docs) {
+                                                                  Map<String,
+                                                                          dynamic>
+                                                                      data =
+                                                                      folderDoc
+                                                                          .data();
+                                                                  if (data.containsKey(
+                                                                      'folder_name')) {
+                                                                    String
+                                                                        folderName =
+                                                                        folderDoc[
+                                                                            'folder_name'];
+                                                                    dropDownItems
+                                                                        .add(
+                                                                            DropdownMenuItem(
+                                                                      value:
+                                                                          folderName,
+                                                                      child: Text(
+                                                                          folderName),
+                                                                    ));
+                                                                  }
+                                                                }
+                                                              }
+                                                              return DropdownButtonFormField(
+                                                                  decoration: UITemplates
+                                                                      .textFieldDeco(
+                                                                          hintText:
+                                                                              'Select Folder'),
+                                                                  value:
+                                                                      _selectedFolder,
+                                                                  items:
+                                                                      dropDownItems,
+                                                                  onChanged:
+                                                                      (String?
+                                                                          newValue) {
+                                                                    setState(
+                                                                        () {
+                                                                      _selectedFolder =
+                                                                          newValue;
+                                                                    });
+                                                                  });
+                                                            })
                                                       ],
                                                     ),
                                                   ),
@@ -418,7 +525,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                               });
                                                             }
                                                             //if for adding button
-                                                            if (_isButtonChecked =
+                                                            if (_isButtonChecked ==
                                                                 true) {
                                                               if (buttonColor == null ||
                                                                   _selectedImage ==
@@ -435,32 +542,40 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                   color: Colors
                                                                       .red,
                                                                 ));
+                                                              } else {
+                                                                print(
+                                                                    _isFolderChecked);
+                                                                print(
+                                                                    _selectedImage);
+                                                                imageboardUtils.uploadImage(
+                                                                    buttonName,
+                                                                    buttonColor!,
+                                                                    _isFolderChecked,
+                                                                    _selectedFolder);
+                                                                Navigator.pop(
+                                                                    context);
+                                                                ScaffoldMessenger.of(
+                                                                        context)
+                                                                    .showSnackBar(
+                                                                        FireAuth
+                                                                            .customSnackBar(
+                                                                  content:
+                                                                      'Button added! Pull down to refresh',
+                                                                  color: Colors
+                                                                      .green,
+                                                                ));
                                                               }
-                                                              imageboardUtils
-                                                                  .uploadImage(
-                                                                      buttonName,
-                                                                      buttonColor!);
-                                                              Navigator.pop(
-                                                                  context);
-                                                              ScaffoldMessenger
-                                                                      .of(
-                                                                          context)
-                                                                  .showSnackBar(
-                                                                      FireAuth
-                                                                          .customSnackBar(
-                                                                content:
-                                                                    'Button added! Pull down to refresh',
-                                                                color: Colors
-                                                                    .green,
-                                                              ));
                                                             }
                                                             //else if for adding folder
-                                                            else if (_isFolderChecked =
+                                                            else if (_isFolderChecked ==
                                                                 true) {
                                                               if (buttonColor ==
                                                                       null ||
                                                                   buttonName ==
                                                                       "") {
+                                                                print(
+                                                                    'ADDED FOLDER');
+
                                                                 ScaffoldMessenger.of(
                                                                         context)
                                                                     .showSnackBar(
@@ -471,24 +586,25 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                   color: Colors
                                                                       .red,
                                                                 ));
+                                                              } else {
+                                                                imageboardUtils.uploadImage(
+                                                                    buttonName,
+                                                                    buttonColor!,
+                                                                    _isFolderChecked,
+                                                                    null);
+                                                                Navigator.pop(
+                                                                    context);
+                                                                ScaffoldMessenger.of(
+                                                                        context)
+                                                                    .showSnackBar(
+                                                                        FireAuth
+                                                                            .customSnackBar(
+                                                                  content:
+                                                                      'Button added! Pull down to refresh',
+                                                                  color: Colors
+                                                                      .green,
+                                                                ));
                                                               }
-                                                              imageboardUtils
-                                                                  .uploadImage(
-                                                                      buttonName,
-                                                                      buttonColor!);
-                                                              Navigator.pop(
-                                                                  context);
-                                                              ScaffoldMessenger
-                                                                      .of(
-                                                                          context)
-                                                                  .showSnackBar(
-                                                                      FireAuth
-                                                                          .customSnackBar(
-                                                                content:
-                                                                    'Button added! Pull down to refresh',
-                                                                color: Colors
-                                                                    .green,
-                                                              ));
                                                             }
                                                           },
                                                           child: UITemplates
@@ -531,12 +647,61 @@ class _MyHomePageState extends State<MyHomePage> {
               }).then((_) {
             setState(() {
               _selectedImage = null;
+              _isButtonChecked = false;
+              _isFolderChecked = false;
             });
           });
         }
         break;
 
       case 1:
+        {
+          showModalBottomSheet<void>(
+              context: context,
+              isScrollControlled: true,
+              builder: (BuildContext context) {
+                return SingleChildScrollView(
+                    child: Container(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
+                  ),
+                  height: 70 + MediaQuery.of(context).viewInsets.bottom,
+                  color: Colors.white60,
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: TextFormField(
+                          controller: _textEditingController,
+                          minLines: null,
+                          maxLines: null,
+                          autocorrect: true,
+                          expands: true,
+                          decoration: const InputDecoration(
+                              hintText: "Text to Speech",
+                              hintStyle: TextStyle(color: Colors.white),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.white),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Color(0xff6A145D))),
+                              fillColor: Color(0xffABC99B),
+                              filled: true),
+                        ),
+                      ),
+                      IconButton(
+                          onPressed: () {
+                            TextToSpeech.speak(_textEditingController.text);
+                            _textEditingController.clear();
+                          },
+                          icon: const Icon(Icons.send_rounded)),
+                    ],
+                  ),
+                ));
+              }).then((_) {
+            _textEditingController.clear();
+          });
+        }
         break;
 
       case 2:
@@ -561,16 +726,107 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  String uid = FirebaseAuth.instance.currentUser!.uid;
+  //create button parameters
+  RawMaterialButton createButton(String name, String location, Color color,
+      bool inFolder, String DocID, String folderID) {
+    RawMaterialButton button = RawMaterialButton(
+      key: Key(name),
+      onPressed: () {
+        setState(() {
+          buttonUtils.addButtonToList(name, location, color);
+          TextToSpeech.speak(name);
+        });
+      },
+      onLongPress: () {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return DeleteMenu(
+                isFolder: inFolder,
+                id: DocID,
+                folderID: folderID,
+              );
+            });
+      },
+      elevation: 2.0,
+      shape: RoundedRectangleBorder(
+          side: BorderSide(color: color, width: 2),
+          borderRadius: BorderRadius.circular(18)),
+      padding: const EdgeInsets.all(3.0),
+      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        Expanded(
+          child: CachedNetworkImage(
+            imageUrl: location,
+            height: 100,
+            width: 100,
+            fit: BoxFit.contain,
+          ),
+        ),
+        Column(
+          children: [
+            Text(
+              name,
+              style: const TextStyle(fontSize: 16, color: Colors.black),
+            ),
+          ],
+        )
+      ]),
+    );
+    return button;
+  }
+
+  RawMaterialButton createFolder(
+      String name,
+      Color color,
+      String folderId,
+      Map<String, List<RawMaterialButton>> folderButtonsMap,
+      Function(List<RawMaterialButton>) onFolderSelect) {
+    const folderIcon = Icon(Icons.folder, size: 48);
+    RawMaterialButton button = RawMaterialButton(
+      onPressed: () {
+        print(folderId);
+        List<RawMaterialButton>? folderButtons = folderButtonsMap[folderId];
+        print(folderButtons);
+        onFolderSelect(folderButtons ?? []);
+        TextToSpeech.speak(name);
+      },
+      onLongPress: () {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return DeleteMenu(isFolder: true, folderID: folderId);
+            });
+      },
+      elevation: 2.0,
+      shape: RoundedRectangleBorder(
+          side: BorderSide(color: color, width: 2),
+          borderRadius: BorderRadius.circular(18)),
+      padding: const EdgeInsets.all(3.0),
+      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        const Expanded(
+          child: folderIcon,
+        ),
+        Column(
+          children: [
+            Text(
+              name,
+              style: const TextStyle(fontSize: 16, color: Colors.black),
+            ),
+          ],
+        )
+      ]),
+    );
+    return button;
+  }
 
   Future<void> populateButtons() async {
-    QuerySnapshot<Map<String, dynamic>> imageboardRef = await FirebaseFirestore
-        .instance
-        .collection('user-information')
-        .doc(uid)
-        .collection('imageboard')
-        .orderBy('image_color', descending: true)
-        .get();
+    QuerySnapshot<Map<String, dynamic>> imageboardRef =
+        await FirebaseFirestore.instance
+            .collection('user-information')
+            .doc(uid)
+            .collection('imageboard')
+            //.orderBy('image_color', descending: true)
+            .get();
 
     List<RawMaterialButton> buttons = [];
 
@@ -584,9 +840,10 @@ class _MyHomePageState extends State<MyHomePage> {
       String buttonName = doc['image_name'];
       String buttonLocation = doc['image_location'];
       Color buttonColor = Color(colorValue);
+      bool inFolder = false;
 
-      RawMaterialButton imageButton =
-          buttonUtils.createButton(buttonName, buttonLocation, buttonColor);
+      RawMaterialButton imageButton = createButton(buttonName, buttonLocation,
+          buttonColor, inFolder = false, doc.id, "");
       buttons.add(imageButton);
     }
 
@@ -612,7 +869,7 @@ class _MyHomePageState extends State<MyHomePage> {
       String buttonName = folderDoc['folder_name'];
       Color buttonColor = Color(colorValue);
 
-      RawMaterialButton folderButton = buttonUtils.createFolder(
+      RawMaterialButton folderButton = createFolder(
           buttonName, buttonColor, folderDoc.id, folderButtonsMap, (buttons) {
         setState(() {
           _selectedFolderButtons = buttons;
@@ -634,14 +891,17 @@ class _MyHomePageState extends State<MyHomePage> {
 
       for (var imageDoc in imageRef.docs) {
         //create a RawMaterialBUtton for the buttons within a folder
-
+        if (imageDoc.id == 'initial') {
+          continue;
+        }
         int colorValue = imageDoc['image_color'];
         String buttonName = imageDoc['image_name'];
         String buttonLocation = imageDoc['image_location'];
         Color buttonColor = Color(colorValue);
+        bool isFolder = false;
 
-        RawMaterialButton imageButton =
-            buttonUtils.createButton(buttonName, buttonLocation, buttonColor);
+        RawMaterialButton imageButton = createButton(buttonName, buttonLocation,
+            buttonColor, isFolder, imageDoc.id, folderDoc.id);
         folderButtons.add(imageButton);
       }
 
@@ -649,6 +909,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
       buttons.add(folderButton);
     }
+
+    //sorts the entire list by colors. this allows users to define what the colors mean to them.
+    buttons.sort((a, b) {
+      int aColorValue = (a.shape as RoundedRectangleBorder).side.color.value;
+      int bColorValue = (b.shape as RoundedRectangleBorder).side.color.value;
+
+      return bColorValue.compareTo(aColorValue);
+    });
     setState(() {
       _buttons = buttons;
     });
@@ -656,7 +924,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    populateButtons();
     return WillPopScope(
         onWillPop: () async => false,
         child: OrientationBuilder(builder: ((context, orientation) {
@@ -687,93 +954,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             padding: const EdgeInsets.all(15),
                             children: _selectedFolderButtons.isNotEmpty
                                 ? _selectedFolderButtons
-                                    .map((button) => GestureDetector(
-                                          onTap: () {
-                                            print('ADDING TO LIST');
-                                            setState(() {
-                                              buttonUtils
-                                                  .addButtonToList(button);
-                                              TextToSpeech.speak(button.key
-                                                  .toString()
-                                                  .replaceAll('<', '')
-                                                  .replaceAll('>', '')
-                                                  .replaceAll("'", ''));
-                                            });
-                                          },
-                                          onLongPress: () {
-                                            showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return AlertDialog(
-                                                    title: const Center(
-                                                        child: Text(
-                                                            "Delete Button?")),
-                                                    content: const Text(
-                                                        "Are you sure you want to delete this item? It will be permanently deleted along with all of its contents."),
-                                                    actions: <Widget>[
-                                                      UITemplates.buttonDeco(
-                                                        displayText: 'Accept',
-                                                        vertInset: 10,
-                                                      ),
-                                                      const SizedBox(
-                                                          height: 10),
-                                                      UITemplates.buttonDeco(
-                                                        displayText: 'Cancel',
-                                                        vertInset: 10,
-                                                      ),
-                                                    ],
-                                                  );
-                                                });
-                                          },
-                                          child: button,
-                                        ))
-                                    .toList()
-                                : _buttons
-                                    .map((button) => GestureDetector(
-                                          onTap: () {
-                                            print(button);
-                                            setState(() {
-                                              buttonUtils
-                                                  .addButtonToList(button);
-                                              TextToSpeech.speak(button.key
-                                                  .toString()
-                                                  .replaceAll('<', '')
-                                                  .replaceAll('>', '')
-                                                  .replaceAll("'", ''));
-                                            });
-                                          },
-                                          onLongPress: () {
-                                            showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return AlertDialog(
-                                                    title: const Center(
-                                                        child: Text(
-                                                            "Delete Button?")),
-                                                    content: const Text(
-                                                        "Are you sure you want to delete this item? It will be permenently deleted along with all of its contents."),
-                                                    actions: <Widget>[
-                                                      GestureDetector(),
-                                                      UITemplates.buttonDeco(
-                                                        displayText: 'Accept',
-                                                        vertInset: 10,
-                                                      ),
-                                                      const SizedBox(
-                                                          height: 10),
-                                                      UITemplates.buttonDeco(
-                                                        displayText: 'Cancel',
-                                                        vertInset: 10,
-                                                      ),
-                                                    ],
-                                                  );
-                                                });
-                                          },
-                                          child: button,
-                                        ))
-                                    .toList(),
-                          ))),
+                                : _buttons))),
             bottomNavigationBar: BottomNavigationBar(
               type: BottomNavigationBarType.fixed,
               key: navKey,

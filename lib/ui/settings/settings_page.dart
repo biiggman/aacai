@@ -1,5 +1,5 @@
 import 'package:aacademic/ui/login/login_page.dart';
-import 'package:aacademic/ui/login/profile_page.dart';
+
 import 'package:aacademic/ui/settings/email_reset_page.dart';
 import 'package:aacademic/ui/settings/password_reset_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -127,6 +127,19 @@ class _GridviewPageState extends State<GridviewPage> {
         body: SettingsList(sections: [
           SettingsSection(title: const Text("Portrait"), tiles: <SettingsTile>[
             SettingsTile(
+                title: const Text('1x1'),
+                onPressed: (BuildContext context) {
+                  setState(() {
+                    vertGridSize = 1;
+                  });
+                  ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(FireAuth.customSnackBar(
+                    content: 'Portrait columns set to 1!',
+                    color: Colors.green,
+                  ));
+                }),
+            SettingsTile(
                 title: const Text('2x2'),
                 onPressed: (BuildContext context) {
                   setState(() {
@@ -154,6 +167,19 @@ class _GridviewPageState extends State<GridviewPage> {
                 }),
           ]),
           SettingsSection(title: const Text("Landscape"), tiles: <SettingsTile>[
+            SettingsTile(
+                title: const Text('1x1'),
+                onPressed: (BuildContext context) {
+                  setState(() {
+                    horiGridSize = 1;
+                  });
+                  ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(FireAuth.customSnackBar(
+                    content: 'Landscape rows set to 1!',
+                    color: Colors.green,
+                  ));
+                }),
             SettingsTile(
                 title: const Text('2x2'),
                 onPressed: (BuildContext context) {
@@ -241,12 +267,16 @@ class _LanguagePageState extends State<LanguagePage> {
 
 class _SettingsPageState extends State<SettingsPage> {
   String? data;
+  bool _isLoggedIn = false;
+  User? user = FirebaseAuth.instance.currentUser;
+  bool _isSigningOut = false;
 
   void _loadData() async {
     final _loadedData =
         await rootBundle.loadString('assets/privacy_policy.txt');
     setState(() {
       data = _loadedData;
+      _checkLoggedIn();
     });
   }
 
@@ -256,8 +286,13 @@ class _SettingsPageState extends State<SettingsPage> {
     _loadData();
   }
 
-  User? user = FirebaseAuth.instance.currentUser;
-  bool _isSigningOut = false;
+  void _checkLoggedIn() {
+    if (user != null) {
+      setState(() {
+        _isLoggedIn = true;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -23,16 +23,20 @@ class _PreviewButtonState extends State<PreviewButton> {
 
   @override
   Widget build(BuildContext context) {
-    return RawMaterialButton(
-        onPressed: () {},
-        shape: RoundedRectangleBorder(
-            side: BorderSide(color: _color, width: 2),
-            borderRadius: BorderRadius.circular(18)),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(16),
-          child: widget.selectedImage != null
-              ? Image.file(widget.selectedImage!, fit: BoxFit.contain)
-              : const SizedBox(),
-        ));
+    return Center(
+      child: RawMaterialButton(
+          onPressed: () {},
+          shape: RoundedRectangleBorder(
+              side: BorderSide(color: _color, width: 2),
+              borderRadius: BorderRadius.circular(18)),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(16),
+            child: widget.selectedImage != null
+                ? SizedBox(
+                  width: 150, height: 150,
+                  child: Image.file(widget.selectedImage!, fit: BoxFit.contain))
+                : const SizedBox(),
+          )),
+    );
   }
 }
