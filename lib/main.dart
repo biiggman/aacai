@@ -137,9 +137,21 @@ class _MyHomePageState extends State<MyHomePage> {
                   height: 70,
                   color: Colors.white60,
                   child: TextFormField(
+                    autocorrect: true,
+                    expands: true,
                     onFieldSubmitted: (value) {
                       TextToSpeech.speak(value);
                     },
+                    decoration: const InputDecoration(
+                        hintText: "Text to Speech",
+                        hintStyle: TextStyle(color: Colors.white),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xff6A145D))),
+                        fillColor: Color(0xffABC99B),
+                        filled: true),
                   ),
                 );
               });
