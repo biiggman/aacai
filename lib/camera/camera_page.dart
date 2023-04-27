@@ -20,7 +20,7 @@ class _CameraPageState extends State<CameraPage> {
 
   initCamera() {
     cameraController =
-        CameraController(widget.cameras[0], ResolutionPreset.high);
+        CameraController(widget.cameras[0], ResolutionPreset.max);
     cameraController.initialize().then((value) {
       setState(() {
         cameraController.startImageStream((image) => {
@@ -32,34 +32,40 @@ class _CameraPageState extends State<CameraPage> {
   }
 
   runModel() async {
-    //check if the interpreter is busy
-
     if (predicting) return;
     predicting = true;
 
-    recognitionsList = (await Tflite.detectObjectOnFrame(
-      bytesList: cameraImage.planes.map((plane) {
-        return plane.bytes;
-      }).toList(),
-      imageHeight: cameraImage.height,
-      imageWidth: cameraImage.width,
-      imageMean: 127.5,
-      imageStd: 127.5,
-      numResultsPerClass: 1,
-      threshold: 0.4,
-    ))!;
+    try {
+      recognitionsList = (await Tflite.detectObjectOnFrame(
+        bytesList: cameraImage.planes.map((plane) {
+          return plane.bytes;
+        }).toList(),
+        imageHeight: cameraImage.height,
+        imageWidth: cameraImage.width,
+        imageMean: 0,
+        imageStd: 255,
+        numResultsPerClass: 1,
+        threshold: 0.6,
+      ))!;
 
-    setState(() {
-      recognitionsList;
+      setState(() {
+        // update the state with new recognitions list and stop predicting
+        recognitionsList;
+        predicting = false;
+      });
+    } catch (e) {
+      // handle any exceptions and stop predicting
+      print("Failed to run model: $e");
       predicting = false;
-    });
+    }
   }
 
   Future loadModel() async {
     Tflite.close();
     await Tflite.loadModel(
-        model: "assets/ssd_mobilenet.tflite",
-        labels: "assets/ssd_mobilenet.txt");
+      model: "assets/detect.tflite",
+      labels: "assets/labelmap.txt",
+    );
   }
 
   @override
@@ -143,6 +149,15 @@ class _CameraPageState extends State<CameraPage> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.black,
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).primaryColor,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ),
         body: Container(
           margin: const EdgeInsets.only(top: 50),
           color: Colors.black,

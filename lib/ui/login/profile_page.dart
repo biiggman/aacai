@@ -1,5 +1,6 @@
 import 'package:aacademic/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'login_page.dart';
 import '/firebase/fire_auth.dart';
@@ -106,7 +107,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         _isSigningOut = false;
                       });
                       Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
+                        CupertinoPageRoute(
+                          fullscreenDialog: true,
                           builder: (context) => const LoginPage(),
                         ),
                       );
