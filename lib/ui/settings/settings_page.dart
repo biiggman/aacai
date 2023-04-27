@@ -1,5 +1,6 @@
 import 'package:aacademic/ui/login/login_page.dart';
 import 'package:aacademic/ui/login/profile_page.dart';
+import 'package:aacademic/ui/settings/password_reset_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:aacademic/firebase/fire_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -106,37 +107,6 @@ class _ThemePageState extends State<ThemePage> {
         ));
   }
 }
-
-//************************************************************** */
-
-//Password Reset page declaration
-class PasswordResetPage extends StatefulWidget {
-  const PasswordResetPage({Key? key}) : super(key: key);
-
-  @override
-  State<PasswordResetPage> createState() => _PasswordResetPageState();
-}
-
-class _PasswordResetPageState extends State<PasswordResetPage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text('Settings'),
-        ),
-        body: SettingsList(sections: [
-          SettingsSection(
-              title: const Text("Change Password"),
-              tiles: <SettingsTile>[
-                SettingsTile(
-                  title: const Text('Password Reset'),
-                ),
-              ])
-        ]));
-  }
-}
-
-//************************************************************** */
 
 //Email Reset page declaration
 class UsernameResetPage extends StatefulWidget {
@@ -333,10 +303,9 @@ class _SettingsPageState extends State<SettingsPage> {
                 trailing: const Icon(Icons.chevron_right),
                 title: const Text('Change Password'),
                 onPressed: (BuildContext context) {
-                  Navigator.push(
-                      context,
-                      CupertinoPageRoute(
-                          builder: ((context) => const PasswordResetPage())));
+                  Navigator.of(context).push(CupertinoPageRoute(
+                    builder: (context) => const PasswordResetPage(),
+                  ));
                 },
               ),
               SettingsTile.navigation(

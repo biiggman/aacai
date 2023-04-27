@@ -352,4 +352,45 @@ class FireAuth {
       }
     }
   }
+
+  //update password
+  static Future<void> updatePassword(
+      {required String oldPassword,
+      required String newPassword,
+      required BuildContext context}) async {
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (await verifyPassword(oldPassword)) {
+      user?.updatePassword(newPassword).then;
+      {
+        ScaffoldMessenger.of(context).showSnackBar(FireAuth.customSnackBar(
+          content: 'Password changed!',
+          color: Colors.green,
+        ));
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(FireAuth.customSnackBar(
+        content: 'Error changing password, please check current password',
+        color: Colors.red,
+      ));
+    }
+  }
+
+//verify old Password for password update
+  static Future<bool> verifyPassword(String oldPassword) async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+
+    try {
+      final user = auth.currentUser;
+      final credential = EmailAuthProvider.credential(
+        email: user!.email.toString(),
+        password: oldPassword,
+      );
+
+      final authResult = await user.reauthenticateWithCredential(credential);
+      return authResult.user != null;
+    } catch (e) {
+      return false;
+    }
+  }
 }
