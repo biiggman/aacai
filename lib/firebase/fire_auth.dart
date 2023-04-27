@@ -200,8 +200,11 @@ class FireAuth {
       }
     } else {
       final GoogleSignIn googleSignIn = GoogleSignIn(
-          clientId:
-              "1062028064938-rlnv4910m182n0l2jfjjrfh645k2qogu.apps.googleusercontent.com");
+          clientId: Platform.isAndroid
+              //android client ID
+              ? "1062028064938-ltcfikbalg14ann9q6mtjv5281uasp57.apps.googleusercontent.com"
+              //ios client ID
+              : "1062028064938-e4inidfj0v6eho6mm7r4n4u6qa4m821f.apps.googleusercontent.com");
 
       final GoogleSignInAccount? googleSignInAccount =
           await googleSignIn.signIn();

@@ -157,6 +157,8 @@ class _MyHomePageState extends State<MyHomePage> {
     await fetchData();
   }
 
+  final TextEditingController _textEditingController = TextEditingController();
+
   //navigation bar logic
   void _onItemTapped(int index) async {
     setState(() {
@@ -165,40 +167,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
     switch (index) {
       case 0:
-        //tappedButtons.add(test);
-        break;
-
-      case 1:
-        {
-          showModalBottomSheet<void>(
-              context: context,
-              builder: (BuildContext context) {
-                return Container(
-                  height: 70,
-                  color: Colors.white60,
-                  child: TextFormField(
-                    autocorrect: true,
-                    expands: true,
-                    onFieldSubmitted: (value) {
-                      TextToSpeech.speak(value);
-                    },
-                    decoration: const InputDecoration(
-                        hintText: "Text to Speech",
-                        hintStyle: TextStyle(color: Colors.white),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xff6A145D))),
-                        fillColor: Color(0xffABC99B),
-                        filled: true),
-                  ),
-                );
-              });
-        }
-        break;
-
-      case 2:
         {
           ImageboardUtils imageboardUtils = ImageboardUtils();
           showDialog(
@@ -601,7 +569,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                       "") {
                                                                 print(
                                                                     'ADDED FOLDER');
-                                                                    
+
                                                                 ScaffoldMessenger.of(
                                                                         context)
                                                                     .showSnackBar(
@@ -680,6 +648,55 @@ class _MyHomePageState extends State<MyHomePage> {
         break;
 
       case 1:
+        {
+          showModalBottomSheet<void>(
+              context: context,
+              isScrollControlled: true,
+              builder: (BuildContext context) {
+                return SingleChildScrollView(
+                    child: Container(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
+                  ),
+                  height: 70 + MediaQuery.of(context).viewInsets.bottom,
+                  color: Colors.white60,
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: Container(
+                          child: TextFormField(
+                            controller: _textEditingController,
+                            minLines: null,
+                            maxLines: null,
+                            autocorrect: true,
+                            expands: true,
+                            decoration: const InputDecoration(
+                                hintText: "Text to Speech",
+                                hintStyle: TextStyle(color: Colors.white),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.white),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Color(0xff6A145D))),
+                                fillColor: Color(0xffABC99B),
+                                filled: true),
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                          onPressed: () {
+                            TextToSpeech.speak(_textEditingController.text);
+                            _textEditingController.clear();
+                          },
+                          icon: const Icon(Icons.send_rounded)),
+                    ],
+                  ),
+                ));
+              }).then((_) {
+            _textEditingController.clear();
+          });
+        }
         break;
 
       case 2:
