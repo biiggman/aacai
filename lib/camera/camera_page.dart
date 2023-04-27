@@ -68,12 +68,19 @@ class _CameraPageState extends State<CameraPage> {
     );
   }
 
-  @override
+   @override
   void dispose() {
     super.dispose();
 
-    cameraController.stopImageStream();
-    cameraController.dispose();
+    if (cameraController != null && cameraController.value.isInitialized) {
+      try {
+        cameraController.stopImageStream();
+        cameraController.dispose();
+      } catch (e) {
+        print("Failed to dispose cameraController: $e");
+      }
+    }
+
     Tflite.close();
   }
 
