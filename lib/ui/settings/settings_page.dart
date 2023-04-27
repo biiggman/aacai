@@ -1,4 +1,7 @@
 import 'package:aacademic/ui/login/login_page.dart';
+
+import 'package:aacademic/ui/settings/email_reset_page.dart';
+import 'package:aacademic/ui/settings/password_reset_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:aacademic/firebase/fire_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -105,66 +108,6 @@ class _ThemePageState extends State<ThemePage> {
         ));
   }
 }
-
-//************************************************************** */
-
-//Password Reset page declaration
-class PasswordResetPage extends StatefulWidget {
-  const PasswordResetPage({Key? key}) : super(key: key);
-
-  @override
-  State<PasswordResetPage> createState() => _PasswordResetPageState();
-}
-
-class _PasswordResetPageState extends State<PasswordResetPage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text('Settings'),
-        ),
-        body: SettingsList(sections: [
-          SettingsSection(
-              title: const Text("Change Password"),
-              tiles: <SettingsTile>[
-                SettingsTile(
-                  title: const Text('Password Reset'),
-                ),
-              ])
-        ]));
-  }
-}
-
-//************************************************************** */
-
-//Email Reset page declaration
-class UsernameResetPage extends StatefulWidget {
-  const UsernameResetPage({Key? key}) : super(key: key);
-
-  @override
-  State<UsernameResetPage> createState() => _UsernameResetPageState();
-}
-
-class _UsernameResetPageState extends State<UsernameResetPage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text('Settings'),
-        ),
-        body: SettingsList(sections: [
-          SettingsSection(
-              title: const Text("Change Email"),
-              tiles: <SettingsTile>[
-                SettingsTile(
-                  title: const Text('Email Reset'),
-                ),
-              ])
-        ]));
-  }
-}
-
-//************************************************************** */
 
 //Gridview changer declaration
 class GridviewPage extends StatefulWidget {
@@ -359,55 +302,53 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
       body: SettingsList(
         sections: [
-          if (_isLoggedIn)
-            SettingsSection(
-              title: const Text('Account'),
-              tiles: <SettingsTile>[
-                SettingsTile.navigation(
-                  leading: const Icon(Icons.vpn_key),
-                  trailing: const Icon(Icons.chevron_right),
-                  title: const Text('Change Password'),
-                  onPressed: (BuildContext context) {
-                    Navigator.push(
-                        context,
-                        CupertinoPageRoute(
-                            builder: ((context) => const PasswordResetPage())));
-                  },
-                ),
-                SettingsTile.navigation(
-                  leading: const Icon(Icons.account_circle),
-                  trailing: const Icon(Icons.chevron_right),
-                  title: const Text('Change Email'),
-                  onPressed: (BuildContext context) {
-                    Navigator.push(
-                        context,
-                        CupertinoPageRoute(
-                            builder: ((context) => const UsernameResetPage())));
-                  },
-                ),
-                SettingsTile.navigation(
-                  leading: const Icon(Icons.logout),
-                  trailing: const Icon(Icons.chevron_right),
-                  title: const Text('Logout'),
-                  onPressed: (BuildContext context) async {
-                    if (user != null) {
-                      setState(() {
-                        _isSigningOut = true;
-                      });
-                      await FirebaseAuth.instance.signOut();
-                      setState(() {
-                        _isSigningOut = false;
-                      });
-                      Navigator.of(context).pushReplacement(
-                        CupertinoPageRoute(
-                          builder: (context) => const LoginPage(),
-                        ),
-                      );
-                    }
-                  },
-                ),
-              ],
-            ),
+          SettingsSection(
+            title: const Text('Account'),
+            tiles: <SettingsTile>[
+              SettingsTile.navigation(
+                leading: const Icon(Icons.vpn_key),
+                trailing: const Icon(Icons.chevron_right),
+                title: const Text('Change Password'),
+                onPressed: (BuildContext context) {
+                  Navigator.of(context).push(CupertinoPageRoute(
+                    builder: (context) => const PasswordResetPage(),
+                  ));
+                },
+              ),
+              SettingsTile.navigation(
+                leading: const Icon(Icons.account_circle),
+                trailing: const Icon(Icons.chevron_right),
+                title: const Text('Change Email'),
+                onPressed: (BuildContext context) {
+                  Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                          builder: ((context) => const EmailResetPage())));
+                },
+              ),
+              SettingsTile.navigation(
+                leading: const Icon(Icons.logout),
+                trailing: const Icon(Icons.chevron_right),
+                title: const Text('Logout'),
+                onPressed: (BuildContext context) async {
+                  if (user != null) {
+                    setState(() {
+                      _isSigningOut = true;
+                    });
+                    await FirebaseAuth.instance.signOut();
+                    setState(() {
+                      _isSigningOut = false;
+                    });
+                    Navigator.of(context).pushReplacement(
+                      CupertinoPageRoute(
+                        builder: (context) => const LoginPage(),
+                      ),
+                    );
+                  }
+                },
+              ),
+            ],
+          ),
           SettingsSection(
             title: const Text('Settings'),
             tiles: <SettingsTile>[
