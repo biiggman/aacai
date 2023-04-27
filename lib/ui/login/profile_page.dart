@@ -1,4 +1,5 @@
 import 'package:aacademic/main.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +31,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile'),
+        title: Text('profile_title'.tr()),
       ),
       body: Center(
         child: Column(
@@ -48,14 +49,14 @@ class _ProfilePageState extends State<ProfilePage> {
             const SizedBox(height: 16.0),
             _currentUser.emailVerified
                 ? Text(
-                    'Email verified',
+                    'email_verified_pos'.tr(),
                     style: Theme.of(context)
                         .textTheme
                         .bodyText1!
                         .copyWith(color: Colors.green),
                   )
                 : Text(
-                    'Email not verified',
+                    'email_verify_neg'.tr(),
                     style: Theme.of(context)
                         .textTheme
                         .bodyText1!
@@ -77,7 +78,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             _isSendingVerification = false;
                           });
                         },
-                        child: const Text('Verify email'),
+                        child: Text('email_verify_btn'.tr()),
                       ),
                       const SizedBox(width: 8.0),
                       IconButton(
@@ -119,7 +120,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         borderRadius: BorderRadius.circular(30),
                       ),
                     ),
-                    child: const Text('Sign out'),
+                    child: Text('profile_signout'.tr()),
                   ),
             const SizedBox(height: 16.0),
             ElevatedButton(
@@ -132,7 +133,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           )),
                 );
               },
-              child: const Text('Go to Home'),
+              child: Text('profile_home_nav'.tr()),
             ),
           ],
         ),

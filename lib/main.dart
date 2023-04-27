@@ -1,10 +1,10 @@
 import 'dart:io';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:aacademic/ui/imageboard_ui.dart/custom_appbar.dart';
 import 'package:aacademic/camera/camera_page.dart';
 import 'package:aacademic/firebase/fire_auth.dart';
 import 'package:aacademic/firebase/validator.dart';
-import 'package:aacademic/ui/imageboard_ui.dart/custom_appbar.dart';
 import 'package:aacademic/ui/login/login_page.dart';
 import 'package:aacademic/ui/settings/settings_page.dart';
 import 'package:aacademic/ui/add_menu/color_button.dart';
@@ -27,13 +27,18 @@ int vertGridSize = 3;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(ChangeNotifierProvider<ThemeModel>(
-    create: ((context) => ThemeModel()),
-    child: const MyApp(),
-  ));
+      create: ((context) => ThemeModel()),
+      child: EasyLocalization(
+        supportedLocales: const [Locale('en', 'US'), Locale('es', 'ES')],
+        path: 'assets/translations/',
+        fallbackLocale: const Locale('en', 'US'),
+        child: const MyApp(),
+      )));
 
   //const MyApp());
 }
@@ -52,6 +57,11 @@ class MyApp extends StatelessWidget {
         '/settings': (context) => const SettingsPage(),
       },
       theme: Provider.of<ThemeModel>(context).currentTheme,
+
+      //language support here
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
       home: //const LoginPage()
 
           //ROUTE FOR HOMEPAGE THAT CHECKS FOR LOGIN. NEEDS ROUTE TO ACCOUNT IN SETTINGS TO AVOID SOFTLOCK OUT OF LOGIN PAGE
@@ -191,8 +201,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       contentPadding:
                           const EdgeInsets.symmetric(horizontal: 5.0),
                       scrollable: true,
-                      title: const Text(
-                        'Add a New Button or Folder',
+                      title: Text(
+                        'main_add_hint'.tr(),
                         textAlign: TextAlign.center,
                       ),
                       titleTextStyle: const TextStyle(
@@ -236,7 +246,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                                     ),
                                                     decoration: UITemplates
                                                         .textFieldDeco(
-                                                            hintText: "Name"),
+                                                            hintText:
+                                                                "main_template_hint"
+                                                                    .tr()),
                                                   ),
                                                   const SizedBox(height: 10),
                                                   //button or folder checkbox row
@@ -255,10 +267,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                                               controlAffinity:
                                                                   ListTileControlAffinity
                                                                       .leading,
-                                                              title: const Text(
-                                                                "Button",
+                                                              title: Text(
+                                                                "main_btnadd_btn"
+                                                                    .tr(),
                                                                 style:
-                                                                    TextStyle(
+                                                                    const TextStyle(
                                                                   color: Colors
                                                                       .white,
                                                                   fontWeight:
@@ -314,10 +327,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                                               controlAffinity:
                                                                   ListTileControlAffinity
                                                                       .leading,
-                                                              title: const Text(
-                                                                "Folder",
+                                                              title: Text(
+                                                                "main_folderadd_btn"
+                                                                    .tr(),
                                                                 style:
-                                                                    TextStyle(
+                                                                    const TextStyle(
                                                                   color: Colors
                                                                       .white,
                                                                   fontWeight:
@@ -371,7 +385,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                                             decoration: UITemplates
                                                                 .textFieldDeco(
                                                                     hintText:
-                                                                        "Select Folder"),
+                                                                        "main_select_fodler"
+                                                                            .tr()),
                                                             value: null,
                                                             onChanged: null,
                                                             items: null),
@@ -400,7 +415,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                                           child: UITemplates
                                                               .buttonDeco(
                                                                   displayText:
-                                                                      "Camera Roll",
+                                                                      "main_camera_img_src"
+                                                                          .tr(),
                                                                   vertInset:
                                                                       10),
                                                         ),
@@ -465,7 +481,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                         FireAuth
                                                                             .customSnackBar(
                                                                   content:
-                                                                      'Please finish making selections',
+                                                                      'main_button_add_false'
+                                                                          .tr(),
                                                                   color: Colors
                                                                       .red,
                                                                 ));
@@ -483,7 +500,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                       FireAuth
                                                                           .customSnackBar(
                                                                 content:
-                                                                    'Button added! Pull down to refresh',
+                                                                    'main_button_add_true'
+                                                                        .tr(),
                                                                 color: Colors
                                                                     .green,
                                                               ));
@@ -501,7 +519,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                         FireAuth
                                                                             .customSnackBar(
                                                                   content:
-                                                                      'Please finish making selections',
+                                                                      'main_button_add_false'
+                                                                          .tr(),
                                                                   color: Colors
                                                                       .red,
                                                                 ));
@@ -519,7 +538,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                       FireAuth
                                                                           .customSnackBar(
                                                                 content:
-                                                                    'Button added! Pull down to refresh',
+                                                                    'main_button_add_true'
+                                                                        .tr(),
                                                                 color: Colors
                                                                     .green,
                                                               ));
@@ -528,7 +548,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                                           child: UITemplates
                                                               .buttonDeco(
                                                                   displayText:
-                                                                      'Add',
+                                                                      'main_add_btn'
+                                                                          .tr(),
                                                                   vertInset:
                                                                       10),
                                                         ),
@@ -548,7 +569,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                                           child: UITemplates
                                                               .buttonDeco(
                                                                   displayText:
-                                                                      'Cancel',
+                                                                      'main_cancel_btn'
+                                                                          .tr(),
                                                                   vertInset:
                                                                       10),
                                                         ),
@@ -740,20 +762,26 @@ class _MyHomePageState extends State<MyHomePage> {
                                                 builder:
                                                     (BuildContext context) {
                                                   return AlertDialog(
-                                                    title: const Center(
+                                                    title: Center(
                                                         child: Text(
-                                                            "Delete Button?")),
-                                                    content: const Text(
-                                                        "Are you sure you want to delete this item? It will be permanently deleted along with all of its contents."),
+                                                            "main_del_prompt"
+                                                                .tr())),
+                                                    content: Text(
+                                                        "main_del_prompt_confirm"
+                                                            .tr()),
                                                     actions: <Widget>[
                                                       UITemplates.buttonDeco(
-                                                        displayText: 'Accept',
+                                                        displayText:
+                                                            'main_del_prompt_acc'
+                                                                .tr(),
                                                         vertInset: 10,
                                                       ),
                                                       const SizedBox(
                                                           height: 10),
                                                       UITemplates.buttonDeco(
-                                                        displayText: 'Cancel',
+                                                        displayText:
+                                                            'main_del_prompt_rej'
+                                                                .tr(),
                                                         vertInset: 10,
                                                       ),
                                                     ],

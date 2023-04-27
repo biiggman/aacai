@@ -15,6 +15,7 @@ dependencies:
   path:
   image_picker: ^0.8.4+2
   provider: ^6.0.5
+  easy_localization: ^3.0.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -62,37 +63,11 @@ flutter:
   
   assets:
   - assets/
-
-    #stock images
-      #adjectives
-  - assets/images/adjectives/Big.jpg
-  - assets/images/adjectives/old.jpg
-  - assets/images/adjectives/Small.jpg
-  - assets/images/adjectives/Young.jpg
-
-      #nouns
-  - assets/images/nouns/Dog.jpg
-  - assets/images/nouns/Cat.jpg
-
-      #pronouns
-  - assets/images/pronouns/i.jpg
-  - assets/images/pronouns/You.jpg
-
-      #responses
-  - assets/images/responses/Bye.jpg
-  - assets/images/responses/Hi.jpg
-  - assets/images/responses/No.jpg
-  - assets/images/responses/Yes.jpg
-
-      #verbs
-  - assets/images/verbs/Drink.jpg
-  - assets/images/verbs/Go.jpg
-  - assets/images/verbs/Stop.jpg
-  - assets/images/verbs/Talk.jpg
-
+    ##removed stuff goes here
     #logos
   - assets/logos/logo.png
   - assets/logos/google.png
+  - assets/translations/
 flutter_launch_icons:
     android: "launcher_icon"
     ios: true
