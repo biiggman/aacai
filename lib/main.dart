@@ -23,8 +23,13 @@ import 'package:aacademic/firebase/firebase_options.dart';
 import 'package:aacademic/utils/imageboard_utils.dart';
 import 'package:provider/provider.dart';
 
+//current language selected
 String currentLanguage = "en-US";
+
+//number of rows when viewing imageboard in landscape mode
 int horiGridSize = 2;
+
+//number of columns when viewing imageboard in portrait mode
 int vertGridSize = 3;
 
 void main() async {
@@ -36,8 +41,6 @@ void main() async {
     create: ((context) => ThemeModel()),
     child: const MyApp(),
   ));
-
-  //const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -82,16 +85,25 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  //navigation bar index
   int _selectedIndex = 2;
+
+  //imageboard lists
   late Future<List<RawMaterialButton>> _imageboardRef;
   List<RawMaterialButton> _selectedFolderButtons = [];
   List<RawMaterialButton> _buttons = [];
+
+  //current user
+  String uid = FirebaseAuth.instance.currentUser!.uid;
 
   //button variables
   String buttonName = "";
   String buttonLocation = "";
   Color? buttonColor;
   File? _selectedImage;
+  String? _selectedFolder;
+
+  //buttonUtils class
   ButtonUtils buttonUtils = ButtonUtils();
 
   //keys here
@@ -99,29 +111,35 @@ class _MyHomePageState extends State<MyHomePage> {
   final _addButtonKey = GlobalKey<FormState>();
   final _sourceImageKey = GlobalKey();
   final _buttonColorKey = GlobalKey();
+
+  //misc variables
   bool _isProcessing = false;
   bool _isButtonChecked = false;
   bool _isFolderChecked = false;
   bool _loading = false;
 
+  //initial state of AAC.AI
   @override
   void initState() {
     super.initState();
     populateButtons();
   }
 
+  //refreshes color on selection
   void onColorSelected(Color color) {
     setState(() {
       buttonColor = color;
     });
   }
 
+  //refreshes image on selection
   void _onImageSelected(File selectedImage) {
     setState(() {
       _selectedImage = selectedImage;
     });
   }
 
+  //handles pull down to refresh
   Future<void> fetchData() async {
     setState(() {
       _loading = true;
@@ -139,6 +157,7 @@ class _MyHomePageState extends State<MyHomePage> {
     await fetchData();
   }
 
+  //navigation bar logic
   void _onItemTapped(int index) async {
     setState(() {
       _selectedIndex = index;
@@ -263,6 +282,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                       value!;
                                                                   _isFolderChecked =
                                                                       false;
+                                                                  print(
+                                                                      'folder: $_isFolderChecked');
+                                                                  print(
+                                                                      'button: $_isButtonChecked');
                                                                 });
                                                               },
                                                             ),
@@ -322,6 +345,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                       value!;
                                                                   _isButtonChecked =
                                                                       false;
+                                                                  print(
+                                                                      'folder: $_isFolderChecked');
+                                                                  print(
+                                                                      'button: $_isButtonChecked');
                                                                 });
                                                               },
                                                             ),
@@ -334,16 +361,89 @@ class _MyHomePageState extends State<MyHomePage> {
                                                     visible: _isButtonChecked,
                                                     child: Column(
                                                       children: [
-                                                        DropdownButtonFormField(
-                                                            decoration: UITemplates
-                                                                .textFieldDeco(
-                                                                    hintText:
-                                                                        "Select Folder"),
-                                                            value: null,
-                                                            onChanged: null,
-                                                            items: null),
-                                                        const SizedBox(
-                                                            height: 10),
+                                                        StreamBuilder<
+                                                                QuerySnapshot<
+                                                                    Map<String,
+                                                                        dynamic>>>(
+                                                            stream:
+                                                                imageboardUtils
+                                                                    .getFolders(),
+                                                            builder: (BuildContext
+                                                                    context,
+                                                                AsyncSnapshot<
+                                                                        QuerySnapshot<
+                                                                            Map<String,
+                                                                                dynamic>>>
+                                                                    snapshot) {
+                                                              if (snapshot
+                                                                  .hasError) {
+                                                                return Text(
+                                                                    'Error: {$snapshot.error}');
+                                                              }
+                                                              if (snapshot
+                                                                      .connectionState ==
+                                                                  ConnectionState
+                                                                      .waiting) {
+                                                                return const CircularProgressIndicator();
+                                                              }
+                                                              List<
+                                                                      DropdownMenuItem<
+                                                                          String>>
+                                                                  dropDownItems =
+                                                                  [];
+                                                              if (snapshot
+                                                                      .data!
+                                                                      .docs
+                                                                      .length ==
+                                                                  1) {
+                                                                dropDownItems =
+                                                                    [];
+                                                              } else {
+                                                                for (var folderDoc
+                                                                    in snapshot
+                                                                        .data!
+                                                                        .docs) {
+                                                                  Map<String,
+                                                                          dynamic>
+                                                                      data =
+                                                                      folderDoc
+                                                                          .data();
+                                                                  if (data.containsKey(
+                                                                      'folder_name')) {
+                                                                    String
+                                                                        folderName =
+                                                                        folderDoc[
+                                                                            'folder_name'];
+                                                                    dropDownItems
+                                                                        .add(
+                                                                            DropdownMenuItem(
+                                                                      value:
+                                                                          folderName,
+                                                                      child: Text(
+                                                                          folderName),
+                                                                    ));
+                                                                  }
+                                                                }
+                                                              }
+                                                              return DropdownButtonFormField(
+                                                                  decoration: UITemplates
+                                                                      .textFieldDeco(
+                                                                          hintText:
+                                                                              'Select Folder'),
+                                                                  value:
+                                                                      _selectedFolder,
+                                                                  items:
+                                                                      dropDownItems,
+                                                                  onChanged:
+                                                                      (String?
+                                                                          newValue) {
+                                                                    setState(
+                                                                        () {
+                                                                      _selectedFolder =
+                                                                          newValue;
+                                                                    });
+                                                                  });
+                                                            })
                                                       ],
                                                     ),
                                                   ),
@@ -419,7 +519,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                               });
                                                             }
                                                             //if for adding button
-                                                            if (_isButtonChecked =
+                                                            if (_isButtonChecked ==
                                                                 true) {
                                                               if (buttonColor == null ||
                                                                   _selectedImage ==
@@ -437,10 +537,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                       .red,
                                                                 ));
                                                               }
-                                                              imageboardUtils
-                                                                  .uploadImage(
-                                                                      buttonName,
-                                                                      buttonColor!);
+                                                              print(
+                                                                  _isFolderChecked);
+                                                              imageboardUtils.uploadImage(
+                                                                  buttonName,
+                                                                  buttonColor!,
+                                                                  _isFolderChecked,
+                                                                  _selectedFolder);
                                                               Navigator.pop(
                                                                   context);
                                                               ScaffoldMessenger
@@ -456,12 +559,15 @@ class _MyHomePageState extends State<MyHomePage> {
                                                               ));
                                                             }
                                                             //else if for adding folder
-                                                            else if (_isFolderChecked =
+                                                            else if (_isFolderChecked ==
                                                                 true) {
                                                               if (buttonColor ==
                                                                       null ||
                                                                   buttonName ==
                                                                       "") {
+                                                                print(
+                                                                    'ADDED FOLDER');
+                                                                    
                                                                 ScaffoldMessenger.of(
                                                                         context)
                                                                     .showSnackBar(
@@ -476,7 +582,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                                               imageboardUtils
                                                                   .uploadImage(
                                                                       buttonName,
-                                                                      buttonColor!);
+                                                                      buttonColor!,
+                                                                      _isFolderChecked,
+                                                                      null);
                                                               Navigator.pop(
                                                                   context);
                                                               ScaffoldMessenger
@@ -577,7 +685,11 @@ class _MyHomePageState extends State<MyHomePage> {
         showDialog(
             context: context,
             builder: (BuildContext context) {
-              return DeleteMenu(isFolder: inFolder, id: DocID, folderID: folderID,);
+              return DeleteMenu(
+                isFolder: inFolder,
+                id: DocID,
+                folderID: folderID,
+              );
             });
       },
       elevation: 2.0,
@@ -651,8 +763,6 @@ class _MyHomePageState extends State<MyHomePage> {
     return button;
   }
 
-  String uid = FirebaseAuth.instance.currentUser!.uid;
-
   Future<void> populateButtons() async {
     QuerySnapshot<Map<String, dynamic>> imageboardRef =
         await FirebaseFirestore.instance
@@ -676,8 +786,8 @@ class _MyHomePageState extends State<MyHomePage> {
       Color buttonColor = Color(colorValue);
       bool inFolder = false;
 
-      RawMaterialButton imageButton = createButton(
-          buttonName, buttonLocation, buttonColor, inFolder = false, doc.id, "");
+      RawMaterialButton imageButton = createButton(buttonName, buttonLocation,
+          buttonColor, inFolder = false, doc.id, "");
       buttons.add(imageButton);
     }
 
@@ -725,21 +835,17 @@ class _MyHomePageState extends State<MyHomePage> {
 
       for (var imageDoc in imageRef.docs) {
         //create a RawMaterialBUtton for the buttons within a folder
-
+        if (imageDoc.id == 'initial') {
+          continue;
+        }
         int colorValue = imageDoc['image_color'];
         String buttonName = imageDoc['image_name'];
         String buttonLocation = imageDoc['image_location'];
         Color buttonColor = Color(colorValue);
         bool isFolder = false;
 
-        RawMaterialButton imageButton = createButton(
-          buttonName,
-          buttonLocation,
-          buttonColor,
-          isFolder,
-          imageDoc.id,
-          folderDoc.id
-        );
+        RawMaterialButton imageButton = createButton(buttonName, buttonLocation,
+            buttonColor, isFolder, imageDoc.id, folderDoc.id);
         folderButtons.add(imageButton);
       }
 
@@ -792,8 +898,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             padding: const EdgeInsets.all(15),
                             children: _selectedFolderButtons.isNotEmpty
                                 ? _selectedFolderButtons
-                                : _buttons
-                          ))),
+                                : _buttons))),
             bottomNavigationBar: BottomNavigationBar(
               type: BottomNavigationBarType.fixed,
               key: navKey,

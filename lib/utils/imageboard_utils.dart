@@ -22,102 +22,125 @@ class ImageboardUtils {
     return null;
   }
 
-  Future<void> uploadImage(String name, Color buttonColor) async {
+  Future<void> uploadImage(
+      String name, Color buttonColor, bool isFolder, String? folderName) async {
     String uid = FirebaseAuth.instance.currentUser!.uid;
 
     CollectionReference imageboardRef;
+    print('folderName: $folderName');
 
-    //if (isFolder = true) {
-    //  await FirebaseFirestore.instance
-    //  .collection('user-information')
-    ///  .doc(uid)
-    //  .collection('folders')
-    //  .doc(folderName)
-    //  .set({
-    //    'folder_name': folderName,
-    //    'folder_color': buttonColor,
-    //  })
-    //}
-
-    //if (folderName == 'imageboard') {
-    imageboardRef = FirebaseFirestore.instance
-        .collection('user-information')
-        .doc(uid)
-        .collection('imageboard');
-    //} else {
-    //  imageboardRef = FirebaseFirestore.instance
-    //      .collection('user-information')
-    //     .doc(uid)
-    //      .collection('folders')
-    //      .doc(folderName)
-    //      .collection('images');
-    //}
-
-    DocumentReference uploadedImage = imageboardRef.doc();
-    String uploadedImageID = uploadedImage.id;
-
-    final tempDir = await getTemporaryDirectory();
-    final tempFilePath = '${tempDir.path}/image.jpg';
-
-    //checks if image file is a jpeg
-    if (!(_selectedImage!.path.endsWith('.jpeg') ||
-        _selectedImage!.path.endsWith('.jpg'))) {
-      //if not a jpeg, compress by 50% and convert image to jpeg
-      print("NOT A JPEG");
-      img.Image? image = img.decodeImage(_selectedImage!.readAsBytesSync());
-      img.Image resizedImage = img.copyResize(image!, width: 500);
-      final compressedImageBytes = img.encodeJpg(resizedImage, quality: 50);
-      await File(tempFilePath).writeAsBytes(compressedImageBytes);
-
-      //upload image to server
-      Reference firebaseStorageRef = FirebaseStorage.instance
-          .ref()
-          .child('users')
-          .child(uid)
-          .child(uploadedImageID);
-
-      UploadTask uploadTask = firebaseStorageRef.putFile(File(tempFilePath));
-      TaskSnapshot taskSnapshot = await uploadTask;
-      String imageUrl = await taskSnapshot.ref.getDownloadURL();
+    if (isFolder == true) {
       final int buttonColorValue = buttonColor.value;
+      print('FOLDER CREATED');
+      final folderRef = FirebaseFirestore.instance
+          .collection('user-information')
+          .doc(uid)
+          .collection('folders')
+          .doc(name);
 
-      //upload image to database
-      await imageboardRef.add({
-        'image_name': name,
-        'image_location': imageUrl,
-        'image_color': buttonColorValue,
+      await folderRef.set({
+        'folder_name': name,
+        'folder_color': buttonColorValue,
       });
 
-      print('Image uploaded to $imageUrl');
+      //add subcollection IMAGES
+      final imagesRef = folderRef.collection('images');
+      await imagesRef.doc('initial').set({});
+      print('SUBCOLLECTION IMAGES CREATED UNDER $folderRef.doc');
     } else {
-      //if image is a jpeg, skip compression and conversion and continue as normal!!
-      print("IS A JPEG");
-      Reference firebaseStorageRef = FirebaseStorage.instance
-          .ref()
-          .child('users')
-          .child(uid)
-          .child(uploadedImageID);
+      if (folderName == null) {
+        print('BUTTON CREATED IN IMAGEBOARD');
+        imageboardRef = FirebaseFirestore.instance
+            .collection('user-information')
+            .doc(uid)
+            .collection('imageboard');
+      } else {
+        print('BUTTON CREATED IN FOLDER $folderName');
+        imageboardRef = FirebaseFirestore.instance
+            .collection('user-information')
+            .doc(uid)
+            .collection('folders')
+            .doc(folderName)
+            .collection('images');
+      }
+      print('DOES THIS WORK?');
+      DocumentReference uploadedImage = imageboardRef.doc();
+      String uploadedImageID = uploadedImage.id;
 
-      UploadTask uploadTask = firebaseStorageRef.putFile(_selectedImage!);
-      TaskSnapshot taskSnapshot = await uploadTask;
-      String imageUrl = await taskSnapshot.ref.getDownloadURL();
-      final int buttonColorValue = buttonColor.value;
+      final tempDir = await getTemporaryDirectory();
+      final tempFilePath = '${tempDir.path}/image.jpg';
 
-      await imageboardRef.add({
-        'image_name': name,
-        'image_location': imageUrl,
-        'image_color': buttonColorValue,
-      });
+      //checks if image file is a jpeg
+      if (!(_selectedImage!.path.endsWith('.jpeg') ||
+          _selectedImage!.path.endsWith('.jpg'))) {
+        //if not a jpeg, compress by 50% and convert image to jpeg
+        print("NOT A JPEG");
+        img.Image? image = img.decodeImage(_selectedImage!.readAsBytesSync());
+        img.Image resizedImage = img.copyResize(image!, width: 500);
+        final compressedImageBytes = img.encodeJpg(resizedImage, quality: 50);
+        await File(tempFilePath).writeAsBytes(compressedImageBytes);
 
-      print('Image uploaded to $imageUrl');
+        //upload image to server
+        Reference firebaseStorageRef = FirebaseStorage.instance
+            .ref()
+            .child('users')
+            .child(uid)
+            .child(uploadedImageID);
+
+        UploadTask uploadTask = firebaseStorageRef.putFile(File(tempFilePath));
+        TaskSnapshot taskSnapshot = await uploadTask;
+        String imageUrl = await taskSnapshot.ref.getDownloadURL();
+        final int buttonColorValue = buttonColor.value;
+
+        //upload image to database
+        await imageboardRef.add({
+          'image_name': name,
+          'image_location': imageUrl,
+          'image_color': buttonColorValue,
+        });
+        print('uloaded to database $imageboardRef');
+        print('Image uploaded to $imageUrl');
+      } else {
+        //if image is a jpeg, skip compression and conversion and continue as normal!!
+        print("IS A JPEG");
+        Reference firebaseStorageRef = FirebaseStorage.instance
+            .ref()
+            .child('users')
+            .child(uid)
+            .child(uploadedImageID);
+
+        UploadTask uploadTask = firebaseStorageRef.putFile(_selectedImage!);
+        TaskSnapshot taskSnapshot = await uploadTask;
+        String imageUrl = await taskSnapshot.ref.getDownloadURL();
+        final int buttonColorValue = buttonColor.value;
+
+        await imageboardRef.add({
+          'image_name': name,
+          'image_location': imageUrl,
+          'image_color': buttonColorValue,
+        });
+
+        print('Image uploaded to $imageUrl');
+      }
     }
+  }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> getFolders() {
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+
+    Stream<QuerySnapshot<Map<String, dynamic>>> foldersStream =
+        FirebaseFirestore.instance
+            .collection('user-information')
+            .doc(uid)
+            .collection('folders')
+            .snapshots();
+
+    return foldersStream;
   }
 }
 
 class ButtonUtils {
   String uid = FirebaseAuth.instance.currentUser!.uid;
-
-  
 
   List<RawMaterialButton> tappedButtons = [];
   List<String> tappedButtonNames = [];
