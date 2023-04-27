@@ -1,5 +1,6 @@
 import 'package:aacademic/ui/login/login_page.dart';
 import 'package:aacademic/ui/login/profile_page.dart';
+import 'package:aacademic/ui/settings/email_reset_page.dart';
 import 'package:aacademic/ui/settings/password_reset_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:aacademic/firebase/fire_auth.dart';
@@ -107,35 +108,6 @@ class _ThemePageState extends State<ThemePage> {
         ));
   }
 }
-
-//Email Reset page declaration
-class UsernameResetPage extends StatefulWidget {
-  const UsernameResetPage({Key? key}) : super(key: key);
-
-  @override
-  State<UsernameResetPage> createState() => _UsernameResetPageState();
-}
-
-class _UsernameResetPageState extends State<UsernameResetPage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text('Settings'),
-        ),
-        body: SettingsList(sections: [
-          SettingsSection(
-              title: const Text("Change Email"),
-              tiles: <SettingsTile>[
-                SettingsTile(
-                  title: const Text('Email Reset'),
-                ),
-              ])
-        ]));
-  }
-}
-
-//************************************************************** */
 
 //Gridview changer declaration
 class GridviewPage extends StatefulWidget {
@@ -316,7 +288,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   Navigator.push(
                       context,
                       CupertinoPageRoute(
-                          builder: ((context) => const UsernameResetPage())));
+                          builder: ((context) => const EmailResetPage())));
                 },
               ),
               SettingsTile.navigation(

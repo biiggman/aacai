@@ -353,8 +353,8 @@ class FireAuth {
     }
   }
 
-  //update password
-  static Future<void> updatePassword(
+  //update password using old and new passwords
+  static Future<void> changePassword(
       {required String oldPassword,
       required String newPassword,
       required BuildContext context}) async {
@@ -376,7 +376,7 @@ class FireAuth {
     }
   }
 
-//verify old Password for password update
+//verify old password for password update
   static Future<bool> verifyPassword(String oldPassword) async {
     final FirebaseAuth auth = FirebaseAuth.instance;
 
@@ -391,6 +391,27 @@ class FireAuth {
       return authResult.user != null;
     } catch (e) {
       return false;
+    }
+  }
+
+//update email using new email
+  static Future<void> changeEmail(
+      {required String newEmail, required BuildContext context}) async {
+    final user = FirebaseAuth.instance.currentUser;
+
+    try {
+      user?.updateEmail(newEmail).then;
+      {
+        ScaffoldMessenger.of(context).showSnackBar(FireAuth.customSnackBar(
+          content: 'Email changed!',
+          color: Colors.green,
+        ));
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(FireAuth.customSnackBar(
+        content: 'Error changing Email, please try again',
+        color: Colors.red,
+      ));
     }
   }
 }

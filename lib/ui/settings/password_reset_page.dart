@@ -172,7 +172,7 @@ class _PasswordResetPageState extends State<PasswordResetPage> {
                                     _isProcessing = true;
                                   });
 
-                                  FireAuth.updatePassword(
+                                  FireAuth.changePassword(
                                     oldPassword:
                                         _oldPasswordTextController.text.trim(),
                                     newPassword:
