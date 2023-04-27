@@ -22,12 +22,28 @@ class _DeleteMenuState extends State<DeleteMenu> {
   Future<void> deleteButton() async {
     if (widget.isFolder == true) {
       print('IS A FOLDER');
+
+      //deletes folder itself
       await FirebaseFirestore.instance
           .collection('user-information')
           .doc(uid)
           .collection('folders')
           .doc(widget.folderID)
           .delete();
+
+      //delete 'images' subcollection files
+      await FirebaseFirestore.instance
+      .collection('user-information')
+      .doc(uid)
+      .collection('folders')
+      .doc(widget.folderID)
+      .collection('images')
+      .get()
+      .then((QuerySnapshot) {
+        for (var DocumentSnapshot in QuerySnapshot.docs) {
+          DocumentSnapshot.reference.delete();
+         }
+      });
     }
     if (widget.isFolder == false && widget.folderID != "") {
       print('IN A FOLDER');

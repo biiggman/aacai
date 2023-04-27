@@ -284,6 +284,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                       value!;
                                                                   _isFolderChecked =
                                                                       false;
+                                                                  _selectedFolder =
+                                                                      null;
                                                                   print(
                                                                       'folder: $_isFolderChecked');
                                                                   print(
@@ -347,6 +349,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                       value!;
                                                                   _isButtonChecked =
                                                                       false;
+                                                                  _selectedImage ==
+                                                                      null;
                                                                   print(
                                                                       'folder: $_isFolderChecked');
                                                                   print(
@@ -538,27 +542,29 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                   color: Colors
                                                                       .red,
                                                                 ));
+                                                              } else {
+                                                                print(
+                                                                    _isFolderChecked);
+                                                                print(
+                                                                    _selectedImage);
+                                                                imageboardUtils.uploadImage(
+                                                                    buttonName,
+                                                                    buttonColor!,
+                                                                    _isFolderChecked,
+                                                                    _selectedFolder);
+                                                                Navigator.pop(
+                                                                    context);
+                                                                ScaffoldMessenger.of(
+                                                                        context)
+                                                                    .showSnackBar(
+                                                                        FireAuth
+                                                                            .customSnackBar(
+                                                                  content:
+                                                                      'Button added! Pull down to refresh',
+                                                                  color: Colors
+                                                                      .green,
+                                                                ));
                                                               }
-                                                              print(
-                                                                  _isFolderChecked);
-                                                              imageboardUtils.uploadImage(
-                                                                  buttonName,
-                                                                  buttonColor!,
-                                                                  _isFolderChecked,
-                                                                  _selectedFolder);
-                                                              Navigator.pop(
-                                                                  context);
-                                                              ScaffoldMessenger
-                                                                      .of(
-                                                                          context)
-                                                                  .showSnackBar(
-                                                                      FireAuth
-                                                                          .customSnackBar(
-                                                                content:
-                                                                    'Button added! Pull down to refresh',
-                                                                color: Colors
-                                                                    .green,
-                                                              ));
                                                             }
                                                             //else if for adding folder
                                                             else if (_isFolderChecked ==
@@ -580,26 +586,25 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                   color: Colors
                                                                       .red,
                                                                 ));
+                                                              } else {
+                                                                imageboardUtils.uploadImage(
+                                                                    buttonName,
+                                                                    buttonColor!,
+                                                                    _isFolderChecked,
+                                                                    null);
+                                                                Navigator.pop(
+                                                                    context);
+                                                                ScaffoldMessenger.of(
+                                                                        context)
+                                                                    .showSnackBar(
+                                                                        FireAuth
+                                                                            .customSnackBar(
+                                                                  content:
+                                                                      'Button added! Pull down to refresh',
+                                                                  color: Colors
+                                                                      .green,
+                                                                ));
                                                               }
-                                                              imageboardUtils
-                                                                  .uploadImage(
-                                                                      buttonName,
-                                                                      buttonColor!,
-                                                                      _isFolderChecked,
-                                                                      null);
-                                                              Navigator.pop(
-                                                                  context);
-                                                              ScaffoldMessenger
-                                                                      .of(
-                                                                          context)
-                                                                  .showSnackBar(
-                                                                      FireAuth
-                                                                          .customSnackBar(
-                                                                content:
-                                                                    'Button added! Pull down to refresh',
-                                                                color: Colors
-                                                                    .green,
-                                                              ));
                                                             }
                                                           },
                                                           child: UITemplates
@@ -642,6 +647,8 @@ class _MyHomePageState extends State<MyHomePage> {
               }).then((_) {
             setState(() {
               _selectedImage = null;
+              _isButtonChecked = false;
+              _isFolderChecked = false;
             });
           });
         }
@@ -663,25 +670,23 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Row(
                     children: <Widget>[
                       Expanded(
-                        child: Container(
-                          child: TextFormField(
-                            controller: _textEditingController,
-                            minLines: null,
-                            maxLines: null,
-                            autocorrect: true,
-                            expands: true,
-                            decoration: const InputDecoration(
-                                hintText: "Text to Speech",
-                                hintStyle: TextStyle(color: Colors.white),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Color(0xff6A145D))),
-                                fillColor: Color(0xffABC99B),
-                                filled: true),
-                          ),
+                        child: TextFormField(
+                          controller: _textEditingController,
+                          minLines: null,
+                          maxLines: null,
+                          autocorrect: true,
+                          expands: true,
+                          decoration: const InputDecoration(
+                              hintText: "Text to Speech",
+                              hintStyle: TextStyle(color: Colors.white),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.white),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Color(0xff6A145D))),
+                              fillColor: Color(0xffABC99B),
+                              filled: true),
                         ),
                       ),
                       IconButton(
