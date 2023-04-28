@@ -1,5 +1,6 @@
 import 'package:aacademic/ui/login/login_page.dart';
 import 'package:aacademic/ui/login/profile_page.dart';
+import 'package:aacademic/ui/settings/language_controller.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:aacademic/firebase/fire_auth.dart';
@@ -262,6 +263,8 @@ class LanguagePage extends StatefulWidget {
 class _LanguagePageState extends State<LanguagePage> {
   @override
   Widget build(BuildContext context) {
+    LanguageController langCtrlVariable = context.read<LanguageController>();
+    context.watch<LanguageController>();
     return Scaffold(
         appBar: AppBar(
           title: Text('settings_languagepage_top'.tr()),
@@ -275,6 +278,7 @@ class _LanguagePageState extends State<LanguagePage> {
                   title: Text('settings_languagepage_es_ES_btn'.tr()),
                   onPressed: (BuildContext context) {
                     context.setLocale(const Locale('es', 'ES'));
+                    langCtrlVariable.onLanguageChanged();
                     ScaffoldMessenger.of(context).removeCurrentSnackBar();
                     ScaffoldMessenger.of(context)
                         .showSnackBar(FireAuth.customSnackBar(
@@ -288,10 +292,7 @@ class _LanguagePageState extends State<LanguagePage> {
                   title: Text('settings_languagepage_en_US_btn'.tr()),
                   onPressed: (BuildContext context) {
                     context.setLocale(const Locale('en', 'US'));
-                    /*
-                setState(() {
-                  currentLanguage = "en-US";
-                });*/
+                    langCtrlVariable.onLanguageChanged();
                     ScaffoldMessenger.of(context).removeCurrentSnackBar();
                     ScaffoldMessenger.of(context)
                         .showSnackBar(FireAuth.customSnackBar(
@@ -329,6 +330,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<LanguageController>();
     return Scaffold(
       appBar: AppBar(
         title: Text('settings_page_top'.tr()),

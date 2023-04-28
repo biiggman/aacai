@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:aacademic/ui/settings/language_controller.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:aacademic/ui/imageboard_ui.dart/custom_appbar.dart';
@@ -31,14 +32,28 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(ChangeNotifierProvider<ThemeModel>(
-      create: ((context) => ThemeModel()),
+  runApp(MultiProvider(
+      providers: [
+        ChangeNotifierProvider<ThemeModel>(
+          create: (context) => ThemeModel(),
+        ),
+        ChangeNotifierProvider<LanguageController>(
+            create: (_) => LanguageController())
+      ],
       child: EasyLocalization(
         supportedLocales: const [Locale('en', 'US'), Locale('es', 'ES')],
         path: 'assets/translations/',
         fallbackLocale: const Locale('en', 'US'),
         child: const MyApp(),
-      )));
+      )
+      /*ChangeNotifierProvider<ThemeModel>(
+      create: ((context) => ThemeModel()),
+      child: EasyLocalization(
+        supportedLocales: const [Locale('en', 'US'), Locale('es', 'ES')],
+        path: 'assets/translations/',
+        fallbackLocale: const Locale('en', 'US'),
+        child: const MyApp(),*/
+      ));
 
   //const MyApp());
 }
