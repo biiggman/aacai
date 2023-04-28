@@ -959,8 +959,9 @@ class _MyHomePageState extends State<MyHomePage> {
       int aColorValue = (a.shape as RoundedRectangleBorder).side.color.value;
       int bColorValue = (b.shape as RoundedRectangleBorder).side.color.value;
 
-      return aColorValue.compareTo(bColorValue);
+      return aColorValue.compareTo(aColorValue);
     });
+
     setState(() {
       _buttons = buttons;
     });

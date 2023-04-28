@@ -23,7 +23,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
   //speaks list as a sentence
   void _speakSentence() {
     setState(() {
-      String sentence = widget.buttonsName.join(' ');
+      String sentence = widget.buttonsName.join(', ');
       TextToSpeechSentence.speak(sentence);
     });
   }

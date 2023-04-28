@@ -253,6 +253,10 @@ class _LanguagePageState extends State<LanguagePage> {
                       content: 'settings_languagepage_es_ES_true'.tr(),
                       color: Colors.green,
                     ));
+
+                    setState(() {
+                      currentLanguage = "es-ES";
+                    });
                   },
                 ),
                 SettingsTile.navigation(
@@ -267,6 +271,9 @@ class _LanguagePageState extends State<LanguagePage> {
                       content: 'settings_languagepage_en_US_true'.tr(),
                       color: Colors.green,
                     ));
+                    setState(() {
+                      currentLanguage = "en-US";
+                    });
                   },
                 ),
               ])
@@ -315,53 +322,53 @@ class _SettingsPageState extends State<SettingsPage> {
       body: SettingsList(
         sections: [
           if (_isLoggedIn)
-          SettingsSection(
-            title: Text('settings_acct_header'.tr()),
-            tiles: <SettingsTile>[
-              SettingsTile.navigation(
-                leading: const Icon(Icons.vpn_key),
-                trailing: const Icon(Icons.chevron_right),
-                title: Text('settings_acct_pwreset_nav'.tr()),
-                onPressed: (BuildContext context) {
-                  Navigator.of(context).push(CupertinoPageRoute(
-                    builder: (context) => const PasswordResetPage(),
-                  ));
-                },
-              ),
-              SettingsTile.navigation(
-                leading: const Icon(Icons.account_circle),
-                trailing: const Icon(Icons.chevron_right),
-                title: Text('settings_acct_emailreset_nav'.tr()),
-                onPressed: (BuildContext context) {
-                  Navigator.push(
-                      context,
-                      CupertinoPageRoute(
-                          builder: ((context) => const EmailResetPage())));
-                },
-              ),
-              SettingsTile.navigation(
-                leading: const Icon(Icons.logout),
-                trailing: const Icon(Icons.chevron_right),
-                title: Text('settings_acct_logout'.tr()),
-                onPressed: (BuildContext context) async {
-                  if (user != null) {
-                    setState(() {
-                      _isSigningOut = true;
-                    });
-                    await FirebaseAuth.instance.signOut();
-                    setState(() {
-                      _isSigningOut = false;
-                    });
-                    Navigator.of(context).pushReplacement(
-                      CupertinoPageRoute(
-                        builder: (context) => const LoginPage(),
-                      ),
-                    );
-                  }
-                },
-              ),
-            ],
-          ),
+            SettingsSection(
+              title: Text('settings_acct_header'.tr()),
+              tiles: <SettingsTile>[
+                SettingsTile.navigation(
+                  leading: const Icon(Icons.vpn_key),
+                  trailing: const Icon(Icons.chevron_right),
+                  title: Text('settings_acct_pwreset_nav'.tr()),
+                  onPressed: (BuildContext context) {
+                    Navigator.of(context).push(CupertinoPageRoute(
+                      builder: (context) => const PasswordResetPage(),
+                    ));
+                  },
+                ),
+                SettingsTile.navigation(
+                  leading: const Icon(Icons.account_circle),
+                  trailing: const Icon(Icons.chevron_right),
+                  title: Text('settings_acct_emailreset_nav'.tr()),
+                  onPressed: (BuildContext context) {
+                    Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                            builder: ((context) => const EmailResetPage())));
+                  },
+                ),
+                SettingsTile.navigation(
+                  leading: const Icon(Icons.logout),
+                  trailing: const Icon(Icons.chevron_right),
+                  title: Text('settings_acct_logout'.tr()),
+                  onPressed: (BuildContext context) async {
+                    if (user != null) {
+                      setState(() {
+                        _isSigningOut = true;
+                      });
+                      await FirebaseAuth.instance.signOut();
+                      setState(() {
+                        _isSigningOut = false;
+                      });
+                      Navigator.of(context).pushReplacement(
+                        CupertinoPageRoute(
+                          builder: (context) => const LoginPage(),
+                        ),
+                      );
+                    }
+                  },
+                ),
+              ],
+            ),
           SettingsSection(
             title: Text('settings_page_top'.tr()),
             tiles: <SettingsTile>[
