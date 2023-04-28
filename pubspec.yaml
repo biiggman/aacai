@@ -67,7 +67,9 @@ flutter:
     #logos
   - assets/logos/logo.png
   - assets/logos/google.png
-  - assets/translations/
+  - assets/translations/en-US.json
+  - assets/translations/es-ES.json
+  
 flutter_launch_icons:
     android: "launcher_icon"
     ios: true
