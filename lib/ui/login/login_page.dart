@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../utils/themes.dart';
-import 'profile_page.dart';
 import 'register_page.dart';
 import 'package:aacademic/firebase/fire_auth.dart';
 import 'package:aacademic/firebase/validator.dart';
@@ -68,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
               backgroundColor: const Color.fromARGB(255, 225, 225, 225),
               //top bar
               appBar: AppBar(
-                  title: Text("login_welcome_header".tr()),
+                  title: const Text('Welcome'),
                   automaticallyImplyLeading: false,
                   centerTitle: true,
                   titleTextStyle: const TextStyle(
@@ -113,8 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                                         email: value,
                                       ),
                                       decoration: UITemplates.textFieldDeco(
-                                          hintText:
-                                              "login_email_hinttext".tr()),
+                                          hintText: "Email"),
                                     ),
                                     const SizedBox(height: 5),
                                     //password textfield
@@ -127,8 +125,7 @@ class _LoginPageState extends State<LoginPage> {
                                         password: value,
                                       ),
                                       decoration: InputDecoration(
-                                          hintText: "login_password_hinttext"
-                                              .tr(),
+                                          hintText: "Password",
                                           hintStyle: const TextStyle(
                                               color: Colors.white),
                                           //Icon button toggles password visibility
@@ -178,10 +175,10 @@ class _LoginPageState extends State<LoginPage> {
                                               ),
                                             );
                                           },
-                                          child: Text(
-                                            'login_forgot_pw'.tr(),
-                                            style: const TextStyle(
-                                                color: Colors.grey),
+                                          child: const Text(
+                                            'Forgot Password?',
+                                            style:
+                                                TextStyle(color: Colors.grey),
                                           ),
                                         ),
                                       ],
@@ -220,8 +217,8 @@ class _LoginPageState extends State<LoginPage> {
                                                       .pushReplacement(
                                                     MaterialPageRoute(
                                                       builder: (context) =>
-                                                          ProfilePage(
-                                                        user: user,
+                                                          const MyHomePage(
+                                                        title: 'AAC.AI',
                                                       ),
                                                     ),
                                                   );
@@ -229,30 +226,29 @@ class _LoginPageState extends State<LoginPage> {
                                               }
                                             },
                                             child: UITemplates.buttonDeco(
-                                                displayText:
-                                                    "login_signin_prompt".tr(),
+                                                displayText: "Sign in",
                                                 vertInset: 24),
                                           ),
 
                                     const SizedBox(height: 15),
                                     //or continue with row
                                     Row(
-                                      children: [
-                                        const Expanded(
+                                      children: const [
+                                        Expanded(
                                           child: Divider(
                                             thickness: 2,
                                             color: Color(0xff6A145D),
                                           ),
                                         ),
                                         Padding(
-                                          padding: const EdgeInsets.all(8.0),
+                                          padding: EdgeInsets.all(8.0),
                                           child: Text(
-                                            'login_continue_prompt'.tr(),
-                                            style: const TextStyle(
-                                                color: Colors.grey),
+                                            'Or continue with',
+                                            style:
+                                                TextStyle(color: Colors.grey),
                                           ),
                                         ),
-                                        const Expanded(
+                                        Expanded(
                                           child: Divider(
                                               thickness: 2,
                                               color: Color(0xff6A145D)),
@@ -278,8 +274,8 @@ class _LoginPageState extends State<LoginPage> {
                                                 .pushReplacement(
                                               MaterialPageRoute(
                                                 builder: (context) =>
-                                                    ProfilePage(
-                                                  user: user,
+                                                    const MyHomePage(
+                                                  title: 'AAC.AI',
                                                 ),
                                               ),
                                             );
@@ -302,11 +298,11 @@ class _LoginPageState extends State<LoginPage> {
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
-                                        children: [
-                                          Text("login_noacc_prompt".tr()),
+                                        children: const [
+                                          Text('Dont have an account? '),
                                           Text(
-                                            'login_register_prompt'.tr(),
-                                            style: const TextStyle(
+                                            'Register now',
+                                            style: TextStyle(
                                                 color: Colors.blue,
                                                 fontWeight: FontWeight.bold),
                                           ),
