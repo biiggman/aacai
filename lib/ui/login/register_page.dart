@@ -128,6 +128,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             normalCharCount: 1,
                             width: 400,
                             height: 150,
+                            strings: customStrings(),
                             onSuccess: () {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 FireAuth.customSnackBar(
