@@ -465,10 +465,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                 }
                                                               }
                                                               return DropdownButtonFormField(
-                                                                  decoration: UITemplates
-                                                                      .textFieldDeco(
-                                                                          hintText:
-                                                                              'Select Folder'),
+                                                                  decoration: UITemplates.textFieldDeco(
+                                                                      hintText:
+                                                                          'main_select_fodler'
+                                                                              .tr()),
                                                                   value:
                                                                       _selectedFolder,
                                                                   items:
@@ -598,7 +598,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                         FireAuth
                                                                             .customSnackBar(
                                                                   content:
-                                                                      'Button added! Pull down to refresh',
+                                                                      'main_button_add_true'
+                                                                          .tr(),
                                                                   color: Colors
                                                                       .green,
                                                                 ));
@@ -639,7 +640,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                         FireAuth
                                                                             .customSnackBar(
                                                                   content:
-                                                                      'Button added! Pull down to refresh',
+                                                                      'main_button_add_true'
+                                                                          .tr(),
                                                                   color: Colors
                                                                       .green,
                                                                 ));
