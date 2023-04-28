@@ -449,7 +449,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                           newValue;
                                                                     });
                                                                   });
-                                                            })
+                                                            }),
+                                                        const SizedBox(
+                                                            height: 10),
                                                       ],
                                                     ),
                                                   ),

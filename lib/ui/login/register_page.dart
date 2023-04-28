@@ -127,6 +127,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             normalCharCount: 1,
                             width: 400,
                             height: 150,
+                            strings: customStrings(),
                             onSuccess: () {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 FireAuth.customSnackBar(
@@ -168,7 +169,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                             .pushAndRemoveUntil(
                                           MaterialPageRoute(
                                             builder: (context) =>
-                                                const MyHomePage(title: 'AAC.AI'),
+                                                const MyHomePage(
+                                                    title: 'AAC.AI'),
                                           ),
                                           ModalRoute.withName('/'),
                                         );
