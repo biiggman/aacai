@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:aacademic/ui/settings/language_controller.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:aacademic/ui/button_menus/delete_menu.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:aacademic/ui/imageboard_ui.dart/custom_appbar.dart';
@@ -34,13 +36,34 @@ int vertGridSize = 3;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(ChangeNotifierProvider<ThemeModel>(
-    create: ((context) => ThemeModel()),
-    child: const MyApp(),
-  ));
+  runApp(MultiProvider(
+      providers: [
+        ChangeNotifierProvider<ThemeModel>(
+          create: (context) => ThemeModel(),
+        ),
+        ChangeNotifierProvider<LanguageController>(
+            create: (_) => LanguageController())
+      ],
+      child: EasyLocalization(
+        supportedLocales: const [Locale('en', 'US'), Locale('es', 'ES')],
+        path: 'assets/translations',
+        fallbackLocale: const Locale('en', 'US'),
+        child: const MyApp(),
+      )
+      /*ChangeNotifierProvider<ThemeModel>(
+      create: ((context) => ThemeModel()),
+      child: EasyLocalization(
+        supportedLocales: const [Locale('en', 'US'), Locale('es', 'ES')],
+        path: 'assets/translations/',
+        fallbackLocale: const Locale('en', 'US'),
+        child: const MyApp(),*/
+      ));
+
+  //const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -57,20 +80,27 @@ class MyApp extends StatelessWidget {
         '/settings': (context) => const SettingsPage(),
       },
       theme: Provider.of<ThemeModel>(context).currentTheme,
-      //skips login page if logged in
-      home: FutureBuilder(
-          future: FirebaseAuth.instance.authStateChanges().first,
-          builder: (context, AsyncSnapshot<User?> snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
-            } else if (snapshot.hasData) {
-              return const MyHomePage(
-                title: 'AAC.AI',
-              );
-            } else {
-              return const LoginPage();
-            }
-          }),
+
+      //language support here
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
+      home: //const LoginPage()
+
+          //ROUTE FOR HOMEPAGE THAT CHECKS FOR LOGIN. NEEDS ROUTE TO ACCOUNT IN SETTINGS TO AVOID SOFTLOCK OUT OF LOGIN PAGE
+          FutureBuilder(
+              future: FirebaseAuth.instance.authStateChanges().first,
+              builder: (context, AsyncSnapshot<User?> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                } else if (snapshot.hasData) {
+                  return const MyHomePage(
+                    title: 'AAC.AI',
+                  );
+                } else {
+                  return const LoginPage();
+                }
+              }),
     );
   }
 }
@@ -179,8 +209,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       contentPadding:
                           const EdgeInsets.symmetric(horizontal: 5.0),
                       scrollable: true,
-                      title: const Text(
-                        'Add a New Button or Folder',
+                      title: Text(
+                        'main_add_hint'.tr(),
                         textAlign: TextAlign.center,
                       ),
                       titleTextStyle: const TextStyle(
@@ -224,7 +254,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                                     ),
                                                     decoration: UITemplates
                                                         .textFieldDeco(
-                                                            hintText: "Name"),
+                                                            hintText:
+                                                                "main_template_hint"
+                                                                    .tr()),
                                                   ),
                                                   const SizedBox(height: 10),
                                                   //button or folder checkbox row
@@ -243,10 +275,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                                               controlAffinity:
                                                                   ListTileControlAffinity
                                                                       .leading,
-                                                              title: const Text(
-                                                                "Button",
+                                                              title: Text(
+                                                                "main_btnadd_btn"
+                                                                    .tr(),
                                                                 style:
-                                                                    TextStyle(
+                                                                    const TextStyle(
                                                                   color: Colors
                                                                       .white,
                                                                   fontWeight:
@@ -308,10 +341,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                                               controlAffinity:
                                                                   ListTileControlAffinity
                                                                       .leading,
-                                                              title: const Text(
-                                                                "Folder",
+                                                              title: Text(
+                                                                "main_folderadd_btn"
+                                                                    .tr(),
                                                                 style:
-                                                                    TextStyle(
+                                                                    const TextStyle(
                                                                   color: Colors
                                                                       .white,
                                                                   fontWeight:
@@ -473,7 +507,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                                           child: UITemplates
                                                               .buttonDeco(
                                                                   displayText:
-                                                                      "Camera Roll",
+                                                                      "main_camera_img_src"
+                                                                          .tr(),
                                                                   vertInset:
                                                                       10),
                                                         ),
@@ -538,7 +573,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                         FireAuth
                                                                             .customSnackBar(
                                                                   content:
-                                                                      'Please finish making selections',
+                                                                      'main_button_add_false'
+                                                                          .tr(),
                                                                   color: Colors
                                                                       .red,
                                                                 ));
@@ -582,7 +618,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                         FireAuth
                                                                             .customSnackBar(
                                                                   content:
-                                                                      'Please finish making selections',
+                                                                      'main_button_add_false'
+                                                                          .tr(),
                                                                   color: Colors
                                                                       .red,
                                                                 ));
@@ -610,7 +647,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                                           child: UITemplates
                                                               .buttonDeco(
                                                                   displayText:
-                                                                      'Add',
+                                                                      'main_add_btn'
+                                                                          .tr(),
                                                                   vertInset:
                                                                       10),
                                                         ),
@@ -630,7 +668,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                                           child: UITemplates
                                                               .buttonDeco(
                                                                   displayText:
-                                                                      'Cancel',
+                                                                      'main_cancel_btn'
+                                                                          .tr(),
                                                                   vertInset:
                                                                       10),
                                                         ),
