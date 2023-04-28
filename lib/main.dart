@@ -862,13 +862,13 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> populateButtons() async {
-    QuerySnapshot<Map<String, dynamic>> imageboardRef =
-        await FirebaseFirestore.instance
-            .collection('user-information')
-            .doc(uid)
-            .collection('imageboard')
-            //.orderBy('image_color', descending: true)
-            .get();
+    QuerySnapshot<Map<String, dynamic>> imageboardRef = await FirebaseFirestore
+        .instance
+        .collection('user-information')
+        .doc(uid)
+        .collection('imageboard')
+        .orderBy('image_color', descending: true)
+        .get();
 
     List<RawMaterialButton> buttons = [];
 
@@ -895,6 +895,7 @@ class _MyHomePageState extends State<MyHomePage> {
         .collection('user-information')
         .doc(uid)
         .collection('folders')
+        .orderBy('folder_color', descending: true)
         .get();
 
     //data map of buttons within a respected folder
@@ -929,6 +930,7 @@ class _MyHomePageState extends State<MyHomePage> {
           .collection('folders')
           .doc(folderDoc.id)
           .collection('images')
+          .orderBy('image_color', descending: true)
           .get();
 
       for (var imageDoc in imageRef.docs) {
@@ -957,7 +959,7 @@ class _MyHomePageState extends State<MyHomePage> {
       int aColorValue = (a.shape as RoundedRectangleBorder).side.color.value;
       int bColorValue = (b.shape as RoundedRectangleBorder).side.color.value;
 
-      return bColorValue.compareTo(aColorValue);
+      return aColorValue.compareTo(bColorValue);
     });
     setState(() {
       _buttons = buttons;
