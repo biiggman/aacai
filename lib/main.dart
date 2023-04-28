@@ -7,7 +7,6 @@ import 'package:aacademic/ui/imageboard_ui.dart/custom_appbar.dart';
 import 'package:aacademic/camera/camera_page.dart';
 import 'package:aacademic/firebase/fire_auth.dart';
 import 'package:aacademic/firebase/validator.dart';
-import 'package:aacademic/ui/imageboard_ui.dart/custom_appbar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:aacademic/ui/login/login_page.dart';
 import 'package:aacademic/ui/settings/settings_page.dart';
