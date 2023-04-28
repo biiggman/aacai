@@ -1,8 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:aacademic/main.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_pw_validator/flutter_pw_validator.dart';
-import 'profile_page.dart';
 import '/firebase/fire_auth.dart';
 import '/firebase/validator.dart';
 import 'package:aacademic/utils/UI_templates.dart';
@@ -169,7 +169,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                             .pushAndRemoveUntil(
                                           MaterialPageRoute(
                                             builder: (context) =>
-                                                ProfilePage(user: user),
+                                                const MyHomePage(
+                                                    title: 'AAC.AI'),
                                           ),
                                           ModalRoute.withName('/'),
                                         );

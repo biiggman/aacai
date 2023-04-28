@@ -1,5 +1,7 @@
 import 'package:aacademic/ui/login/login_page.dart';
-import 'package:aacademic/ui/login/profile_page.dart';
+
+import 'package:aacademic/ui/settings/email_reset_page.dart';
+import 'package:aacademic/ui/settings/password_reset_page.dart';
 import 'package:aacademic/ui/settings/language_controller.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -111,66 +113,6 @@ class _ThemePageState extends State<ThemePage> {
   }
 }
 
-//************************************************************** */
-
-//Password Reset page declaration
-class PasswordResetPage extends StatefulWidget {
-  const PasswordResetPage({Key? key}) : super(key: key);
-
-  @override
-  State<PasswordResetPage> createState() => _PasswordResetPageState();
-}
-
-class _PasswordResetPageState extends State<PasswordResetPage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text('settings_pwresetpage_top'.tr()),
-        ),
-        body: SettingsList(sections: [
-          SettingsSection(
-              title: Text("settings_pwresetpage_header".tr()),
-              tiles: <SettingsTile>[
-                SettingsTile(
-                  title: Text('settings_pwresetpage_tile'.tr()),
-                ),
-              ])
-        ]));
-  }
-}
-
-//************************************************************** */
-
-//Email Reset page declaration
-class UsernameResetPage extends StatefulWidget {
-  const UsernameResetPage({Key? key}) : super(key: key);
-
-  @override
-  State<UsernameResetPage> createState() => _UsernameResetPageState();
-}
-
-class _UsernameResetPageState extends State<UsernameResetPage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text('settings_emailrstpage_top'.tr()),
-        ),
-        body: SettingsList(sections: [
-          SettingsSection(
-              title: Text("settings_emailrstpage_header".tr()),
-              tiles: <SettingsTile>[
-                SettingsTile(
-                  title: Text('settings_emailrstpage_tile'.tr()),
-                ),
-              ])
-        ]));
-  }
-}
-
-//************************************************************** */
-
 //Gridview changer declaration
 class GridviewPage extends StatefulWidget {
   const GridviewPage({Key? key}) : super(key: key);
@@ -190,6 +132,19 @@ class _GridviewPageState extends State<GridviewPage> {
           SettingsSection(
               title: Text("settings_gridviewpage_portrait_header".tr()),
               tiles: <SettingsTile>[
+                SettingsTile(
+                    title: const Text('1x1'),
+                    onPressed: (BuildContext context) {
+                      setState(() {
+                        vertGridSize = 1;
+                      });
+                      ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(FireAuth.customSnackBar(
+                        content: 'Portrait columns set to 1!',
+                        color: Colors.green,
+                      ));
+                    }),
                 SettingsTile(
                     title: const Text('2x2'),
                     onPressed: (BuildContext context) {
@@ -220,6 +175,19 @@ class _GridviewPageState extends State<GridviewPage> {
           SettingsSection(
               title: Text("settings_gridviewpage_landscape_header".tr()),
               tiles: <SettingsTile>[
+                SettingsTile(
+                    title: const Text('1x1'),
+                    onPressed: (BuildContext context) {
+                      setState(() {
+                        horiGridSize = 1;
+                      });
+                      ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(FireAuth.customSnackBar(
+                        content: 'Landscape rows set to 1!',
+                        color: Colors.green,
+                      ));
+                    }),
                 SettingsTile(
                     title: const Text('2x2'),
                     onPressed: (BuildContext context) {
@@ -310,12 +278,16 @@ class _LanguagePageState extends State<LanguagePage> {
 
 class _SettingsPageState extends State<SettingsPage> {
   String? data;
+  bool _isLoggedIn = false;
+  User? user = FirebaseAuth.instance.currentUser;
+  bool _isSigningOut = false;
 
   void _loadData() async {
     final _loadedData =
         await rootBundle.loadString('assets/privacy_policy.txt');
     setState(() {
       data = _loadedData;
+      _checkLoggedIn();
     });
   }
 
@@ -325,8 +297,13 @@ class _SettingsPageState extends State<SettingsPage> {
     _loadData();
   }
 
-  User? user = FirebaseAuth.instance.currentUser;
-  bool _isSigningOut = false;
+  void _checkLoggedIn() {
+    if (user != null) {
+      setState(() {
+        _isLoggedIn = true;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -345,10 +322,9 @@ class _SettingsPageState extends State<SettingsPage> {
                 trailing: const Icon(Icons.chevron_right),
                 title: Text('settings_acct_pwreset_nav'.tr()),
                 onPressed: (BuildContext context) {
-                  Navigator.push(
-                      context,
-                      CupertinoPageRoute(
-                          builder: ((context) => const PasswordResetPage())));
+                  Navigator.of(context).push(CupertinoPageRoute(
+                    builder: (context) => const PasswordResetPage(),
+                  ));
                 },
               ),
               SettingsTile.navigation(
@@ -359,7 +335,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   Navigator.push(
                       context,
                       CupertinoPageRoute(
-                          builder: ((context) => const UsernameResetPage())));
+                          builder: ((context) => const EmailResetPage())));
                 },
               ),
               SettingsTile.navigation(

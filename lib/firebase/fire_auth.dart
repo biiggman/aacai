@@ -200,8 +200,11 @@ class FireAuth {
       }
     } else {
       final GoogleSignIn googleSignIn = GoogleSignIn(
-          clientId:
-              "1062028064938-rlnv4910m182n0l2jfjjrfh645k2qogu.apps.googleusercontent.com");
+          clientId: Platform.isAndroid
+              //android client ID
+              ? "1062028064938-ltcfikbalg14ann9q6mtjv5281uasp57.apps.googleusercontent.com"
+              //ios client ID
+              : "1062028064938-e4inidfj0v6eho6mm7r4n4u6qa4m821f.apps.googleusercontent.com");
 
       final GoogleSignInAccount? googleSignInAccount =
           await googleSignIn.signIn();
@@ -350,6 +353,68 @@ class FireAuth {
           color: Colors.red,
         ));
       }
+    }
+  }
+
+  //update password using old and new passwords
+  static Future<void> changePassword(
+      {required String oldPassword,
+      required String newPassword,
+      required BuildContext context}) async {
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (await verifyPassword(oldPassword)) {
+      user?.updatePassword(newPassword).then;
+      {
+        ScaffoldMessenger.of(context).showSnackBar(FireAuth.customSnackBar(
+          content: 'Password changed!',
+          color: Colors.green,
+        ));
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(FireAuth.customSnackBar(
+        content: 'Error changing password, please check current password',
+        color: Colors.red,
+      ));
+    }
+  }
+
+//verify old password for password update
+  static Future<bool> verifyPassword(String oldPassword) async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+
+    try {
+      final user = auth.currentUser;
+      final credential = EmailAuthProvider.credential(
+        email: user!.email.toString(),
+        password: oldPassword,
+      );
+
+      final authResult = await user.reauthenticateWithCredential(credential);
+      return authResult.user != null;
+    } catch (e) {
+      return false;
+    }
+  }
+
+//update email using new email
+  static Future<void> changeEmail(
+      {required String newEmail, required BuildContext context}) async {
+    final user = FirebaseAuth.instance.currentUser;
+
+    try {
+      user?.updateEmail(newEmail).then;
+      {
+        ScaffoldMessenger.of(context).showSnackBar(FireAuth.customSnackBar(
+          content: 'Email changed!',
+          color: Colors.green,
+        ));
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(FireAuth.customSnackBar(
+        content: 'Error changing Email, please try again',
+        color: Colors.red,
+      ));
     }
   }
 }

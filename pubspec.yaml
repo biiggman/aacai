@@ -63,7 +63,34 @@ flutter:
   
   assets:
   - assets/
-    ##removed stuff goes here
+
+    #stock images
+      #adjectives
+  - assets/images/adjectives/Big.jpg
+  - assets/images/adjectives/old.jpg
+  - assets/images/adjectives/Small.jpg
+  - assets/images/adjectives/Young.jpg
+
+      #nouns
+  - assets/images/nouns/Dog.jpg
+  - assets/images/nouns/Cat.jpg
+
+      #pronouns
+  - assets/images/pronouns/i.jpg
+  - assets/images/pronouns/You.jpg
+
+      #responses
+  - assets/images/responses/Bye.jpg
+  - assets/images/responses/Hi.jpg
+  - assets/images/responses/No.jpg
+  - assets/images/responses/Yes.jpg
+
+      #verbs
+  - assets/images/verbs/Drink.jpg
+  - assets/images/verbs/Go.jpg
+  - assets/images/verbs/Stop.jpg
+  - assets/images/verbs/Talk.jpg
+
     #logos
   - assets/logos/logo.png
   - assets/logos/google.png
