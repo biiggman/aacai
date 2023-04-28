@@ -2,6 +2,8 @@ import 'package:aacademic/ui/login/login_page.dart';
 
 import 'package:aacademic/ui/settings/email_reset_page.dart';
 import 'package:aacademic/ui/settings/password_reset_page.dart';
+import 'package:aacademic/ui/settings/language_controller.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:aacademic/firebase/fire_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -38,72 +40,74 @@ class _ThemePageState extends State<ThemePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Settings'),
+          title: Text('settings_themepage_top'.tr()),
         ),
         body: SettingsList(
           sections: [
-            SettingsSection(title: const Text("Themes"), tiles: <SettingsTile>[
-              SettingsTile(
-                  title: const Text("AAC.AI Theme"),
-                  onPressed: (BuildContext context) {
-                    Provider.of<ThemeModel>(context, listen: false)
-                        .setLightTheme();
-                    ScaffoldMessenger.of(context).removeCurrentSnackBar();
-                    ScaffoldMessenger.of(context)
-                        .showSnackBar(FireAuth.customSnackBar(
-                      content: 'Default Theme Activated!',
-                      color: Colors.green,
-                    ));
-                  }),
-              SettingsTile(
-                  title: const Text("Dark Theme"),
-                  onPressed: (BuildContext context) {
-                    Provider.of<ThemeModel>(context, listen: false)
-                        .setDarkTheme();
-                    ScaffoldMessenger.of(context).removeCurrentSnackBar();
-                    ScaffoldMessenger.of(context)
-                        .showSnackBar(FireAuth.customSnackBar(
-                      content: 'Dark Mode Activated!',
-                      color: Colors.green,
-                    ));
-                  }),
-              SettingsTile(
-                  title: const Text("Protonopia Theme"),
-                  onPressed: (BuildContext context) {
-                    Provider.of<ThemeModel>(context, listen: false)
-                        .setProTheme();
-                    ScaffoldMessenger.of(context).removeCurrentSnackBar();
-                    ScaffoldMessenger.of(context)
-                        .showSnackBar(FireAuth.customSnackBar(
-                      content: 'Protonopia Mode Activated!',
-                      color: Colors.green,
-                    ));
-                  }),
-              SettingsTile(
-                  title: const Text("Tritanopia Theme"),
-                  onPressed: (BuildContext context) {
-                    Provider.of<ThemeModel>(context, listen: false)
-                        .setTriTheme();
-                    ScaffoldMessenger.of(context).removeCurrentSnackBar();
-                    ScaffoldMessenger.of(context)
-                        .showSnackBar(FireAuth.customSnackBar(
-                      content: 'Tritanopia Mode Activated!',
-                      color: Colors.green,
-                    ));
-                  }),
-              SettingsTile(
-                  title: const Text("Achromatopsia Theme"),
-                  onPressed: (BuildContext context) {
-                    Provider.of<ThemeModel>(context, listen: false)
-                        .setAchroTheme();
-                    ScaffoldMessenger.of(context).removeCurrentSnackBar();
-                    ScaffoldMessenger.of(context)
-                        .showSnackBar(FireAuth.customSnackBar(
-                      content: 'Achromatopsia Mode Activated!',
-                      color: Colors.green,
-                    ));
-                  }),
-            ])
+            SettingsSection(
+                title: Text("settings_themepage_header".tr()),
+                tiles: <SettingsTile>[
+                  SettingsTile(
+                      title: Text("settings_themepage_def_theme".tr()),
+                      onPressed: (BuildContext context) {
+                        Provider.of<ThemeModel>(context, listen: false)
+                            .setLightTheme();
+                        ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(FireAuth.customSnackBar(
+                          content: 'settings_themepage_def_theme_active'.tr(),
+                          color: Colors.green,
+                        ));
+                      }),
+                  SettingsTile(
+                      title: Text("settings_themepage_dark_theme".tr()),
+                      onPressed: (BuildContext context) {
+                        Provider.of<ThemeModel>(context, listen: false)
+                            .setDarkTheme();
+                        ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(FireAuth.customSnackBar(
+                          content: 'settings_themepage_dark_theme_active'.tr(),
+                          color: Colors.green,
+                        ));
+                      }),
+                  SettingsTile(
+                      title: Text("settings_themepage_pro_theme".tr()),
+                      onPressed: (BuildContext context) {
+                        Provider.of<ThemeModel>(context, listen: false)
+                            .setProTheme();
+                        ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(FireAuth.customSnackBar(
+                          content: 'settings_themepage_pro_theme_active'.tr(),
+                          color: Colors.green,
+                        ));
+                      }),
+                  SettingsTile(
+                      title: Text("settings_themepage_tri_theme".tr()),
+                      onPressed: (BuildContext context) {
+                        Provider.of<ThemeModel>(context, listen: false)
+                            .setTriTheme();
+                        ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(FireAuth.customSnackBar(
+                          content: 'settings_themepage_tri_theme_active'.tr(),
+                          color: Colors.green,
+                        ));
+                      }),
+                  SettingsTile(
+                      title: Text("settings_themepage_achro_theme".tr()),
+                      onPressed: (BuildContext context) {
+                        Provider.of<ThemeModel>(context, listen: false)
+                            .setAchroTheme();
+                        ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(FireAuth.customSnackBar(
+                          content: 'settings_themepage_achro_theme_active'.tr(),
+                          color: Colors.green,
+                        ));
+                      }),
+                ])
           ],
         ));
   }
@@ -122,92 +126,97 @@ class _GridviewPageState extends State<GridviewPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Settings'),
+          title: Text('settings_gridviewpage_top'.tr()),
         ),
         body: SettingsList(sections: [
-          SettingsSection(title: const Text("Portrait"), tiles: <SettingsTile>[
-            SettingsTile(
-                title: const Text('1x1'),
-                onPressed: (BuildContext context) {
-                  setState(() {
-                    vertGridSize = 1;
-                  });
-                  ScaffoldMessenger.of(context).removeCurrentSnackBar();
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(FireAuth.customSnackBar(
-                    content: 'Portrait columns set to 1!',
-                    color: Colors.green,
-                  ));
-                }),
-            SettingsTile(
-                title: const Text('2x2'),
-                onPressed: (BuildContext context) {
-                  setState(() {
-                    vertGridSize = 2;
-                  });
-                  ScaffoldMessenger.of(context).removeCurrentSnackBar();
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(FireAuth.customSnackBar(
-                    content: 'Portrait columns set to 2!',
-                    color: Colors.green,
-                  ));
-                }),
-            SettingsTile(
-                title: const Text('3x3'),
-                onPressed: (BuildContext context) {
-                  setState(() {
-                    vertGridSize = 3;
-                  });
-                  ScaffoldMessenger.of(context).removeCurrentSnackBar();
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(FireAuth.customSnackBar(
-                    content: 'Portrait columns set to 3!',
-                    color: Colors.green,
-                  ));
-                }),
-          ]),
-          SettingsSection(title: const Text("Landscape"), tiles: <SettingsTile>[
-            SettingsTile(
-                title: const Text('1x1'),
-                onPressed: (BuildContext context) {
-                  setState(() {
-                    horiGridSize = 1;
-                  });
-                  ScaffoldMessenger.of(context).removeCurrentSnackBar();
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(FireAuth.customSnackBar(
-                    content: 'Landscape rows set to 1!',
-                    color: Colors.green,
-                  ));
-                }),
-            SettingsTile(
-                title: const Text('2x2'),
-                onPressed: (BuildContext context) {
-                  setState(() {
-                    horiGridSize = 2;
-                  });
-                  ScaffoldMessenger.of(context).removeCurrentSnackBar();
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(FireAuth.customSnackBar(
-                    content: 'Landscape rows set to 2!',
-                    color: Colors.green,
-                  ));
-                }),
-            SettingsTile(
-              title: const Text('3x3'),
-              onPressed: (BuildContext context) {
-                setState(() {
-                  horiGridSize = 3;
-                });
-                ScaffoldMessenger.of(context).removeCurrentSnackBar();
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(FireAuth.customSnackBar(
-                  content: 'Landscape rows set to 3!',
-                  color: Colors.green,
-                ));
-              },
-            ),
-          ]),
+          SettingsSection(
+              title: Text("settings_gridviewpage_portrait_header".tr()),
+              tiles: <SettingsTile>[
+                SettingsTile(
+                    title: const Text('1x1'),
+                    onPressed: (BuildContext context) {
+                      setState(() {
+                        vertGridSize = 1;
+                      });
+                      ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(FireAuth.customSnackBar(
+                        content: 'Portrait columns set to 1!',
+                        color: Colors.green,
+                      ));
+                    }),
+                SettingsTile(
+                    title: const Text('2x2'),
+                    onPressed: (BuildContext context) {
+                      setState(() {
+                        vertGridSize = 2;
+                      });
+                      ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(FireAuth.customSnackBar(
+                        content: 'settings_gridviewpage_portrait_2x2_true'.tr(),
+                        color: Colors.green,
+                      ));
+                    }),
+                SettingsTile(
+                    title: const Text('3x3'),
+                    onPressed: (BuildContext context) {
+                      setState(() {
+                        vertGridSize = 3;
+                      });
+                      ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(FireAuth.customSnackBar(
+                        content: 'settings_gridviewpage_portrait_3x3_true'.tr(),
+                        color: Colors.green,
+                      ));
+                    }),
+              ]),
+          SettingsSection(
+              title: Text("settings_gridviewpage_landscape_header".tr()),
+              tiles: <SettingsTile>[
+                SettingsTile(
+                    title: const Text('1x1'),
+                    onPressed: (BuildContext context) {
+                      setState(() {
+                        horiGridSize = 1;
+                      });
+                      ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(FireAuth.customSnackBar(
+                        content: 'Landscape rows set to 1!',
+                        color: Colors.green,
+                      ));
+                    }),
+                SettingsTile(
+                    title: const Text('2x2'),
+                    onPressed: (BuildContext context) {
+                      setState(() {
+                        horiGridSize = 2;
+                      });
+                      ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(FireAuth.customSnackBar(
+                        content:
+                            'settings_gridviewpage_landscape_2x2_true'.tr(),
+                        color: Colors.green,
+                      ));
+                    }),
+                SettingsTile(
+                  title: const Text('3x3'),
+                  onPressed: (BuildContext context) {
+                    setState(() {
+                      horiGridSize = 3;
+                    });
+                    ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(FireAuth.customSnackBar(
+                      content: "settings_gridviewpage_landscape_3x3_true".tr(),
+                      color: Colors.green,
+                    ));
+                  },
+                ),
+              ]),
         ]));
   }
 }
@@ -222,43 +231,45 @@ class LanguagePage extends StatefulWidget {
 class _LanguagePageState extends State<LanguagePage> {
   @override
   Widget build(BuildContext context) {
+    LanguageController langCtrlVariable = context.read<LanguageController>();
+    context.watch<LanguageController>();
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Language'),
+          title: Text('settings_languagepage_top'.tr()),
         ),
         body: SettingsList(sections: [
-          SettingsSection(title: const Text('Languages'), tiles: <SettingsTile>[
-            SettingsTile.navigation(
-              leading: const Icon(Icons.language),
-              title: const Text('Spanish'),
-              onPressed: (BuildContext context) {
-                setState(() {
-                  currentLanguage = "es-Es";
-                });
-                ScaffoldMessenger.of(context).removeCurrentSnackBar();
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(FireAuth.customSnackBar(
-                  content: 'Language set to Spanish',
-                  color: Colors.green,
-                ));
-              },
-            ),
-            SettingsTile.navigation(
-              leading: const Icon(Icons.language),
-              title: const Text('English'),
-              onPressed: (BuildContext context) {
-                setState(() {
-                  currentLanguage = "en-US";
-                });
-                ScaffoldMessenger.of(context).removeCurrentSnackBar();
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(FireAuth.customSnackBar(
-                  content: 'Language set to English',
-                  color: Colors.green,
-                ));
-              },
-            ),
-          ])
+          SettingsSection(
+              title: Text('settings_languagepage_header'.tr()),
+              tiles: <SettingsTile>[
+                SettingsTile.navigation(
+                  leading: const Icon(Icons.language),
+                  title: Text('settings_languagepage_es_ES_btn'.tr()),
+                  onPressed: (BuildContext context) {
+                    context.setLocale(const Locale('es', 'ES'));
+                    langCtrlVariable.onLanguageChanged();
+                    ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(FireAuth.customSnackBar(
+                      content: 'settings_languagepage_es_ES_true'.tr(),
+                      color: Colors.green,
+                    ));
+                  },
+                ),
+                SettingsTile.navigation(
+                  leading: const Icon(Icons.language),
+                  title: Text('settings_languagepage_en_US_btn'.tr()),
+                  onPressed: (BuildContext context) {
+                    context.setLocale(const Locale('en', 'US'));
+                    langCtrlVariable.onLanguageChanged();
+                    ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(FireAuth.customSnackBar(
+                      content: 'settings_languagepage_en_US_true'.tr(),
+                      color: Colors.green,
+                    ));
+                  },
+                ),
+              ])
         ]));
   }
 }
@@ -296,19 +307,20 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<LanguageController>();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Settings'),
+        title: Text('settings_page_top'.tr()),
       ),
       body: SettingsList(
         sections: [
           SettingsSection(
-            title: const Text('Account'),
+            title: Text('settings_acct_header'.tr()),
             tiles: <SettingsTile>[
               SettingsTile.navigation(
                 leading: const Icon(Icons.vpn_key),
                 trailing: const Icon(Icons.chevron_right),
-                title: const Text('Change Password'),
+                title: Text('settings_acct_pwreset_nav'.tr()),
                 onPressed: (BuildContext context) {
                   Navigator.of(context).push(CupertinoPageRoute(
                     builder: (context) => const PasswordResetPage(),
@@ -318,7 +330,7 @@ class _SettingsPageState extends State<SettingsPage> {
               SettingsTile.navigation(
                 leading: const Icon(Icons.account_circle),
                 trailing: const Icon(Icons.chevron_right),
-                title: const Text('Change Email'),
+                title: Text('settings_acct_emailreset_nav'.tr()),
                 onPressed: (BuildContext context) {
                   Navigator.push(
                       context,
@@ -329,7 +341,7 @@ class _SettingsPageState extends State<SettingsPage> {
               SettingsTile.navigation(
                 leading: const Icon(Icons.logout),
                 trailing: const Icon(Icons.chevron_right),
-                title: const Text('Logout'),
+                title: Text('settings_acct_logout'.tr()),
                 onPressed: (BuildContext context) async {
                   if (user != null) {
                     setState(() {
@@ -350,11 +362,11 @@ class _SettingsPageState extends State<SettingsPage> {
             ],
           ),
           SettingsSection(
-            title: const Text('Settings'),
+            title: Text('settings_page_top'.tr()),
             tiles: <SettingsTile>[
               SettingsTile(
                 leading: const Icon(Icons.apps),
-                title: const Text('Grid Style'),
+                title: Text('settings_grid_header'.tr()),
                 trailing: const Icon(Icons.chevron_right),
                 onPressed: (BuildContext context) {
                   Navigator.push(
@@ -365,7 +377,7 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               SettingsTile.navigation(
                   leading: const Icon(Icons.water_drop),
-                  title: const Text('Themes'),
+                  title: Text('settings_theme_header'.tr()),
                   trailing: const Icon(Icons.chevron_right),
                   onPressed: (BuildContext context) {
                     Navigator.push(
@@ -375,7 +387,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   }),
               SettingsTile.navigation(
                   leading: const Icon(Icons.language),
-                  title: const Text('Languages'),
+                  title: Text('settings_lang_header'.tr()),
                   trailing: const Icon(Icons.chevron_right),
                   onPressed: (BuildContext context) {
                     Navigator.push(
@@ -386,11 +398,11 @@ class _SettingsPageState extends State<SettingsPage> {
             ],
           ),
           SettingsSection(
-            title: const Text('Legal'),
+            title: Text('settings_legal_header'.tr()),
             tiles: <SettingsTile>[
               SettingsTile(
                   trailing: const Icon(Icons.chevron_right),
-                  title: const Text('About'),
+                  title: Text('settings_legal_about'.tr()),
                   onPressed: (BuildContext context) {
                     showAboutDialog(
                       context: context,
@@ -412,7 +424,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   }),
               SettingsTile(
                 trailing: const Icon(Icons.chevron_right),
-                title: const Text('Privacy Policy'),
+                title: Text('Settings_legal_priv_pol'.tr()),
                 onPressed: (BuildContext context) {
                   showDialog(
                       context: context,

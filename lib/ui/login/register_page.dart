@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:aacademic/main.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -39,7 +40,7 @@ class _RegisterPageState extends State<RegisterPage> {
         backgroundColor: const Color.fromARGB(255, 225, 225, 225),
         //top bar
         appBar: AppBar(
-            title: const Text('Register'),
+            title: Text('register_title'.tr()),
             titleTextStyle: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 40,
@@ -61,8 +62,8 @@ class _RegisterPageState extends State<RegisterPage> {
                             validator: (value) => Validator.validateName(
                               name: value,
                             ),
-                            decoration:
-                                UITemplates.textFieldDeco(hintText: "Name"),
+                            decoration: UITemplates.textFieldDeco(
+                                hintText: "register_name_deco".tr()),
                           ),
                           const SizedBox(height: 5),
                           //email textfield
@@ -72,8 +73,8 @@ class _RegisterPageState extends State<RegisterPage> {
                             validator: (value) => Validator.validateEmail(
                               email: value,
                             ),
-                            decoration:
-                                UITemplates.textFieldDeco(hintText: "Email"),
+                            decoration: UITemplates.textFieldDeco(
+                                hintText: "register_email_deco".tr()),
                           ),
                           const SizedBox(height: 5),
                           //password textfield
@@ -85,7 +86,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               password: value,
                             ),
                             decoration: InputDecoration(
-                                hintText: "Password",
+                                hintText: "register_pw_hint".tr(),
                                 hintStyle: const TextStyle(color: Colors.white),
                                 //Icon button toggles password visibility
                                 suffixIcon: IconButton(
@@ -131,7 +132,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             onSuccess: () {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 FireAuth.customSnackBar(
-                                  content: 'Password meets requirements',
+                                  content: 'register_pw_verify_pos'.tr(),
                                   color: Colors.green,
                                 ),
                               );
@@ -178,7 +179,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                     }
                                   },
                                   child: UITemplates.buttonDeco(
-                                      displayText: "Sign Up", vertInset: 24),
+                                      displayText: "register_signup_deco".tr(),
+                                      vertInset: 24),
                                 ),
                         ],
                       )),
