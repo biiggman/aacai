@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_pw_validator/Resource/Strings.dart';
 
 class UITemplates {
 //general textfield decoration
@@ -59,4 +60,18 @@ class UITemplates {
   }
 
   //add checkbox deco here
+}
+
+//custom strings class for pw validator
+class customStrings implements FlutterPwValidatorStrings {
+  @override
+  final String atLeast = 'At least 6 characters';
+  @override
+  final String normalLetters = "1 Lowercase letter";
+  @override
+  final String uppercaseLetters = '1 Uppercase letter';
+  @override
+  final String numericCharacters = '1 Numeric character';
+  @override
+  final String specialCharacters = '1 Special character';
 }
