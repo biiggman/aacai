@@ -453,6 +453,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                       ],
                                                     ),
                                                   ),
+                                                  const SizedBox(height: 10),
                                                   //camera roll button for selecting images for buttons
                                                   Visibility(
                                                     visible: _isButtonChecked,
