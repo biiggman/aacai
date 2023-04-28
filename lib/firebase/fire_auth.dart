@@ -272,6 +272,7 @@ class FireAuth {
           }
         } on FirebaseAuthException catch (e) {
           if (e.code == 'account-exists-with-different-credential') {
+            ScaffoldMessenger.of(context).removeCurrentSnackBar();
             ScaffoldMessenger.of(context).showSnackBar(
               FireAuth.customSnackBar(
                 content:
@@ -280,6 +281,7 @@ class FireAuth {
               ),
             );
           } else if (e.code == 'invalid-credential') {
+            ScaffoldMessenger.of(context).removeCurrentSnackBar();
             ScaffoldMessenger.of(context).showSnackBar(
               FireAuth.customSnackBar(
                 content:
@@ -289,6 +291,7 @@ class FireAuth {
             );
           }
         } catch (e) {
+          ScaffoldMessenger.of(context).removeCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar(
             FireAuth.customSnackBar(
               content: 'Error occurred using Google Sign In. Try again.',
@@ -311,6 +314,7 @@ class FireAuth {
       }
       await FirebaseAuth.instance.signOut();
     } catch (e) {
+      ScaffoldMessenger.of(context).removeCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(
         FireAuth.customSnackBar(
           content: 'Error signing out. Try again.',
@@ -366,12 +370,14 @@ class FireAuth {
     if (await verifyPassword(oldPassword)) {
       user?.updatePassword(newPassword).then;
       {
+        ScaffoldMessenger.of(context).removeCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(FireAuth.customSnackBar(
           content: 'Password changed!',
           color: Colors.green,
         ));
       }
     } else {
+      ScaffoldMessenger.of(context).removeCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(FireAuth.customSnackBar(
         content: 'Error changing password, please check current password',
         color: Colors.red,
@@ -405,12 +411,14 @@ class FireAuth {
     try {
       user?.updateEmail(newEmail).then;
       {
+        ScaffoldMessenger.of(context).removeCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(FireAuth.customSnackBar(
           content: 'Email changed!',
           color: Colors.green,
         ));
       }
     } catch (e) {
+      ScaffoldMessenger.of(context).removeCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(FireAuth.customSnackBar(
         content: 'Error changing Email, please try again',
         color: Colors.red,

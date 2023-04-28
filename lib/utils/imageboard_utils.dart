@@ -125,6 +125,8 @@ class ImageboardUtils {
     }
   }
 
+  //gets folders to populate the folders drop down box in the add menu
+
   Stream<QuerySnapshot<Map<String, dynamic>>> getFolders() {
     String uid = FirebaseAuth.instance.currentUser!.uid;
 

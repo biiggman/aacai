@@ -314,6 +314,7 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
       body: SettingsList(
         sections: [
+          if (_isLoggedIn)
           SettingsSection(
             title: Text('settings_acct_header'.tr()),
             tiles: <SettingsTile>[
