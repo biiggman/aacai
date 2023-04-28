@@ -67,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
               backgroundColor: const Color.fromARGB(255, 225, 225, 225),
               //top bar
               appBar: AppBar(
-                  title: const Text('Welcome'),
+                  title: Text('login_welcome_header'.tr()),
                   automaticallyImplyLeading: false,
                   centerTitle: true,
                   titleTextStyle: const TextStyle(
@@ -112,7 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                                         email: value,
                                       ),
                                       decoration: UITemplates.textFieldDeco(
-                                          hintText: "Email"),
+                                          hintText: "login_email_hinttext".tr()),
                                     ),
                                     const SizedBox(height: 5),
                                     //password textfield
@@ -125,7 +125,7 @@ class _LoginPageState extends State<LoginPage> {
                                         password: value,
                                       ),
                                       decoration: InputDecoration(
-                                          hintText: "Password",
+                                          hintText: "login_password_hinttext".tr(),
                                           hintStyle: const TextStyle(
                                               color: Colors.white),
                                           //Icon button toggles password visibility
@@ -175,10 +175,10 @@ class _LoginPageState extends State<LoginPage> {
                                               ),
                                             );
                                           },
-                                          child: const Text(
-                                            'Forgot Password?',
+                                          child: Text(
+                                            'login_forgot_pw'.tr(),
                                             style:
-                                                TextStyle(color: Colors.grey),
+                                                const TextStyle(color: Colors.grey),
                                           ),
                                         ),
                                       ],
@@ -226,29 +226,29 @@ class _LoginPageState extends State<LoginPage> {
                                               }
                                             },
                                             child: UITemplates.buttonDeco(
-                                                displayText: "Sign in",
+                                                displayText: "login_signin_prompt".tr(),
                                                 vertInset: 24),
                                           ),
 
                                     const SizedBox(height: 15),
                                     //or continue with row
                                     Row(
-                                      children: const [
-                                        Expanded(
+                                      children: [
+                                        const Expanded(
                                           child: Divider(
                                             thickness: 2,
                                             color: Color(0xff6A145D),
                                           ),
                                         ),
                                         Padding(
-                                          padding: EdgeInsets.all(8.0),
+                                          padding: const EdgeInsets.all(8.0),
                                           child: Text(
-                                            'Or continue with',
+                                            'login_continue_prompt'.tr(),
                                             style:
-                                                TextStyle(color: Colors.grey),
+                                                const TextStyle(color: Colors.grey),
                                           ),
                                         ),
-                                        Expanded(
+                                        const Expanded(
                                           child: Divider(
                                               thickness: 2,
                                               color: Color(0xff6A145D)),
@@ -298,11 +298,11 @@ class _LoginPageState extends State<LoginPage> {
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
-                                        children: const [
-                                          Text('Dont have an account? '),
+                                        children: [
+                                          Text('login_noacc_prompt'.tr()),
                                           Text(
-                                            'Register now',
-                                            style: TextStyle(
+                                            'login_register_prompt'.tr(),
+                                            style: const TextStyle(
                                                 color: Colors.blue,
                                                 fontWeight: FontWeight.bold),
                                           ),
