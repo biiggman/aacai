@@ -51,7 +51,6 @@ class _CustomAppBarState extends State<CustomAppBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.white,
       centerTitle: false,
       automaticallyImplyLeading: false,
       actions: widget.buttons.isNotEmpty

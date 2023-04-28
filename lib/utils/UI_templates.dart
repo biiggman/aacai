@@ -6,19 +6,21 @@ class UITemplates {
   static InputDecoration textFieldDeco({required String hintText}) {
     return (InputDecoration(
         hintText: hintText,
-        hintStyle: const TextStyle(color: Colors.white),
-        enabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.white)),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(6.0),
           borderSide: const BorderSide(
             color: Colors.red,
           ),
+          /* hintStyle: const TextStyle(color: Colors.white),
+        enabledBorder: const OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.white)),
+
         ),
         focusedBorder: const OutlineInputBorder(
             borderSide: BorderSide(color: Color(0xff6A145D))),
         fillColor: const Color(0xffABC99B),
-        filled: true));
+        filled: true*/
+        )));
   }
 
 //general button decoration
