@@ -2,7 +2,7 @@
     "color_button_title": "Select Color",
     "color_button_deco_displaytext": "Color",
 
-    "forgot_pw_ab_title": "Forgot Password",
+    "forgot_pw_appbar_title": "Forgot Password",
     "forgot_pw_deco_hint": "Email",
     "forgot_pw_button_deco_text": "Reset Password",
 
