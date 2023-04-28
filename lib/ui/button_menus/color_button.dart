@@ -1,4 +1,5 @@
 import 'package:aacademic/utils/UI_templates.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
@@ -31,7 +32,8 @@ class _ColorButtonState extends State<ColorButton> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: const Text("Select Color", textAlign: TextAlign.center),
+              title:
+                  Text("color_button_title".tr(), textAlign: TextAlign.center),
               titleTextStyle: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
@@ -52,7 +54,8 @@ class _ColorButtonState extends State<ColorButton> {
           },
         );
       },
-      child: UITemplates.buttonDeco(displayText: 'Color', vertInset: 10),
+      child: UITemplates.buttonDeco(
+          displayText: 'color_button_deco_displaytext'.tr(), vertInset: 10),
     );
   }
 }

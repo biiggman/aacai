@@ -1,4 +1,5 @@
 import 'package:aacademic/firebase/validator.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:aacademic/firebase/fire_auth.dart';
 import 'package:aacademic/utils/UI_templates.dart';
@@ -30,7 +31,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         backgroundColor: const Color.fromARGB(255, 225, 225, 225),
         //top bar
         appBar: AppBar(
-            title: const Text('Forgot Password'),
+            title: Text("forgot_pw_appbar_title".tr()),
             titleTextStyle: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
@@ -52,8 +53,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                         validator: (value) => Validator.validateEmail(
                           email: value,
                         ),
-                        decoration:
-                            UITemplates.textFieldDeco(hintText: "Email"),
+                        decoration: UITemplates.textFieldDeco(
+                            hintText: "forgot_pw_deco_hint".tr()),
                       ),
                       const SizedBox(height: 5),
                       const SizedBox(height: 16.0),
@@ -79,7 +80,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                 }
                               },
                               child: UITemplates.buttonDeco(
-                                  displayText: "Reset Password", vertInset: 24),
+                                  displayText:
+                                      "forgot_pw_button_deco_text".tr(),
+                                  vertInset: 24),
                             ),
                     ],
                   ),
