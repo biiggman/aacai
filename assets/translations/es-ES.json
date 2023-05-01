@@ -75,11 +75,6 @@
     "validator_pwNumber": "La contraseña debe contener al menos un número",
     "validator_pwSpecial": "La contraseña debe contener al menos un carácter especial",
 
-    "delete_item": "¿Eliminar elemento?",
-    "delete_caution": "Al hacer esto, se eliminará el elemento junto con todos sus datos.",
-    "delete_FolSuccess": "¡Carpeta eliminada con éxito! ¡Tire hacia abajo para refrescar!",
-    "delete_ButSuccess": "¡Botón eliminado con éxito! ¡Tire hacia abajo para refrescar!",
-
     "settings_themepage_top": "Ajustes",
     "settings_themepage_header": "Temas",
     "settings_themepage_def_theme": "AAC.AI Temas",
