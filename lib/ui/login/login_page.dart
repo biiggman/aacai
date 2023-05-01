@@ -226,7 +226,7 @@ class _LoginPageState extends State<LoginPage> {
                                                 }
                                               }
                                             },
-                                            child: UITemplates.buttonDeco(
+                                            child: buttonDeco(
                                                 displayText:
                                                     "login_signin_prompt".tr(),
                                                 vertInset: 24),

@@ -79,7 +79,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                   });
                                 }
                               },
-                              child: UITemplates.buttonDeco(
+                              child: buttonDeco(
                                   displayText:
                                       "forgot_pw_button_deco_text".tr(),
                                   vertInset: 24),

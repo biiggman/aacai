@@ -187,7 +187,7 @@ class _PasswordResetPageState extends State<PasswordResetPage> {
                                   });
                                 }
                               },
-                              child: UITemplates.buttonDeco(
+                              child: buttonDeco(
                                   displayText: "pw_rstpage_change_prompt".tr(),
                                   vertInset: 24),
                             ),

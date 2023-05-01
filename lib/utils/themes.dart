@@ -7,11 +7,21 @@ enum ThemeType { LIGHT, DARK, PRO, TRI, ACHROMA }
 class MyThemes {
   static const THEME_KEY = "theme_key";
 
+//Text theme declarations, passed depending on the overall brightness of the theme
+  static const TextTheme darkTextTheme = TextTheme(
+      labelLarge: TextStyle(color: Colors.white),
+      labelSmall: TextStyle(color: Colors.white));
+
+  static const TextTheme lightTextTheme = TextTheme(
+      labelLarge: TextStyle(color: Colors.black),
+      labelSmall: TextStyle(color: Colors.black));
+
   static final ThemeData lightTheme = ThemeData(
 //Standard properties are done up here, before the object declarations.
       primaryColor: const Color(0xff6A145D),
       brightness: Brightness.light,
       highlightColor: Colors.white,
+      textTheme: lightTextTheme,
 
 //Alterations to overarching appbar theme are done in this object.
       appBarTheme: const AppBarTheme(
@@ -19,6 +29,14 @@ class MyThemes {
         shape: BeveledRectangleBorder(),
         titleTextStyle: TextStyle(color: Colors.white),
         //toolbarTextStyle:
+      ),
+//changes to dialog boxes.
+      dialogTheme: const DialogTheme(
+        titleTextStyle: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 20,
+          color: Color(0xff6A145D),
+        ),
       ),
 
 //BNB theme properties.
@@ -111,29 +129,47 @@ class MyThemes {
           const DividerThemeData(thickness: 2, color: Color(0xff6A145D)));
 
   static final ThemeData darkTheme = ThemeData(
-      primaryColor: Colors.grey,
-      brightness: Brightness.dark,
-      highlightColor: Colors.white,
-      scaffoldBackgroundColor: Colors.black54,
-      dialogBackgroundColor: Colors.black54,
-      textSelectionTheme:
-          const TextSelectionThemeData(selectionColor: Colors.grey),
-      textTheme: darkTextTheme);
+    primaryColor: Colors.grey,
+    primaryColorDark: Colors.black,
+    primaryColorLight: Colors.white,
+    brightness: Brightness.dark,
+    highlightColor: Colors.white,
+    scaffoldBackgroundColor: Colors.black54,
+    dialogBackgroundColor: Colors.black54,
+    textSelectionTheme:
+        const TextSelectionThemeData(selectionColor: Colors.grey),
+    textTheme: darkTextTheme,
 
-  static const TextTheme darkTextTheme =
-      TextTheme(labelLarge: TextStyle(color: Colors.black));
+    //changes to dialog boxes.
+    dialogTheme: const DialogTheme(
+      titleTextStyle: TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: 20,
+        color: Colors.white,
+      ),
+    ),
+  );
 
   static final ThemeData protanopiaTheme = ThemeData(
       primaryColor: const Color(0xff4A4940),
       brightness: Brightness.light,
       highlightColor: Colors.white,
+      textTheme: lightTextTheme,
 
 //Alterations to overarching appbar theme are done in this object.
       appBarTheme: const AppBarTheme(
         color: Color(0xff4A4940),
         shape: BeveledRectangleBorder(),
         titleTextStyle: TextStyle(color: Colors.black),
-        //toolbarTextStyle:
+      ),
+
+      //changes to dialog boxes.
+      dialogTheme: const DialogTheme(
+        titleTextStyle: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 20,
+          color: Color(0xff4A4940),
+        ),
       ),
 
 //BNB theme properties.
@@ -205,6 +241,7 @@ class MyThemes {
       primaryColor: const Color(0xff553e3e),
       brightness: Brightness.light,
       highlightColor: Colors.white,
+      textTheme: lightTextTheme,
 
       //Alterations to overarching appbar theme are done in this object.
       appBarTheme: const AppBarTheme(
@@ -212,6 +249,15 @@ class MyThemes {
         shape: BeveledRectangleBorder(),
         titleTextStyle: TextStyle(color: Colors.black),
         //toolbarTextStyle:
+      ),
+
+      //changes to dialog boxes.
+      dialogTheme: const DialogTheme(
+        titleTextStyle: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 20,
+          color: Color(0xff553e3e),
+        ),
       ),
 
       //BNB theme properties.
@@ -283,6 +329,7 @@ class MyThemes {
       primaryColor: const Color(0xff434343),
       brightness: Brightness.light,
       highlightColor: Colors.white,
+      textTheme: lightTextTheme,
 
       //Alterations to overarching appbar theme are done in this object.
       appBarTheme: const AppBarTheme(
@@ -290,6 +337,15 @@ class MyThemes {
         shape: BeveledRectangleBorder(),
         titleTextStyle: TextStyle(color: Colors.black),
         //toolbarTextStyle:
+      ),
+
+      //changes to dialog boxes.
+      dialogTheme: const DialogTheme(
+        titleTextStyle: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 20,
+          color: Color(0xff434343),
+        ),
       ),
 
       //BNB theme properties.

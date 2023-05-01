@@ -81,7 +81,7 @@ class _EmailResetPageState extends State<EmailResetPage> {
                                   });
                                 }
                               },
-                              child: UITemplates.buttonDeco(
+                              child: buttonDeco(
                                   displayText: "email_rstpage_title".tr(),
                                   vertInset: 24),
                             ),

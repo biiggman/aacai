@@ -178,7 +178,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                       }
                                     }
                                   },
-                                  child: UITemplates.buttonDeco(
+                                  child: buttonDeco(
                                       displayText: "register_signup_deco".tr(),
                                       vertInset: 24),
                                 ),
