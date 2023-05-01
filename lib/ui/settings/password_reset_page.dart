@@ -37,15 +37,13 @@ class _PasswordResetPageState extends State<PasswordResetPage> {
         _focusNewPassword.unfocus();
       },
       child: Scaffold(
-        //page background color
-        backgroundColor: const Color.fromARGB(255, 225, 225, 225),
         //top bar
         appBar: AppBar(
             title: Text('pw_rstpage_title'.tr()),
             titleTextStyle: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-                color: Colors.white)),
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            )),
         body: Padding(
           padding: const EdgeInsets.all(24.0),
           child: Center(
@@ -66,7 +64,6 @@ class _PasswordResetPageState extends State<PasswordResetPage> {
                         ),
                         decoration: InputDecoration(
                             hintText: "pw_rstpage_currentpw".tr(),
-                            hintStyle: const TextStyle(color: Colors.white),
                             //Icon button toggles password visibility
                             suffixIcon: IconButton(
                               padding:
@@ -89,10 +86,6 @@ class _PasswordResetPageState extends State<PasswordResetPage> {
                                 color: Colors.red,
                               ),
                             ),
-                            focusedBorder: const OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Color(0xff6A145D))),
-                            fillColor: const Color(0xffABC99B),
                             filled: true),
                       ),
                       const SizedBox(height: 5),
@@ -106,7 +99,6 @@ class _PasswordResetPageState extends State<PasswordResetPage> {
                         ),
                         decoration: InputDecoration(
                             hintText: "pw_rstpage_newpw".tr(),
-                            hintStyle: const TextStyle(color: Colors.white),
                             //Icon button toggles password visibility
                             suffixIcon: IconButton(
                               padding:
@@ -129,10 +121,6 @@ class _PasswordResetPageState extends State<PasswordResetPage> {
                                 color: Colors.red,
                               ),
                             ),
-                            focusedBorder: const OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Color(0xff6A145D))),
-                            fillColor: const Color(0xffABC99B),
                             filled: true),
                       ),
                       const SizedBox(height: 16.0),

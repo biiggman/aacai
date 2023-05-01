@@ -150,6 +150,18 @@ class MyThemes {
         color: Colors.white,
       ),
     ),
+    colorScheme: const ColorScheme(
+        background: Colors.black54,
+        brightness: Brightness.dark,
+        error: Colors.red,
+        onBackground: Colors.white,
+        onError: Colors.white,
+        onPrimary: Colors.white,
+        onSecondary: Colors.white,
+        onSurface: Colors.white,
+        primary: Colors.grey,
+        secondary: Colors.black,
+        surface: Colors.black54),
   );
 
   static final ThemeData protanopiaTheme = ThemeData(
