@@ -469,7 +469,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                   decoration: UITemplates
                                                                       .textFieldDeco(
                                                                           hintText:
-                                                                              'Select Folder'),
+                                                                              'main_select_fodler'.tr()),
                                                                   value:
                                                                       _selectedFolder,
                                                                   items:
@@ -599,7 +599,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                         FireAuth
                                                                             .customSnackBar(
                                                                   content:
-                                                                      'Button added! Pull down to refresh',
+                                                                      'main_button_add_true'.tr(),
                                                                   color: Colors
                                                                       .green,
                                                                 ));
@@ -640,7 +640,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                         FireAuth
                                                                             .customSnackBar(
                                                                   content:
-                                                                      'Button added! Pull down to refresh',
+                                                                      'main_folder_add_true'.tr(),
                                                                   color: Colors
                                                                       .green,
                                                                 ));
@@ -718,16 +718,16 @@ class _MyHomePageState extends State<MyHomePage> {
                           maxLines: null,
                           autocorrect: true,
                           expands: true,
-                          decoration: const InputDecoration(
-                              hintText: "Text to Speech",
-                              hintStyle: TextStyle(color: Colors.white),
-                              enabledBorder: OutlineInputBorder(
+                          decoration: InputDecoration(
+                              hintText: 'main_tts_hint'.tr(),
+                              hintStyle: const TextStyle(color: Colors.white),
+                              enabledBorder: const OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.white),
                               ),
-                              focusedBorder: OutlineInputBorder(
+                              focusedBorder: const OutlineInputBorder(
                                   borderSide:
                                       BorderSide(color: Color(0xff6A145D))),
-                              fillColor: Color(0xffABC99B),
+                              fillColor: const Color(0xffABC99B),
                               filled: true),
                         ),
                       ),
@@ -1003,25 +1003,25 @@ class _MyHomePageState extends State<MyHomePage> {
             bottomNavigationBar: BottomNavigationBar(
               type: BottomNavigationBarType.fixed,
               key: navKey,
-              items: const <BottomNavigationBarItem>[
+              items: <BottomNavigationBarItem>[
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.add),
-                  label: 'Add',
+                  icon: const Icon(Icons.add),
+                  label: 'main_add_btn'.tr(),
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.keyboard),
-                  label: 'Keyboard',
+                  icon: const Icon(Icons.keyboard),
+                  label: 'navBar_keyboard'.tr(),
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.home),
-                  label: 'Home',
+                  icon: const Icon(Icons.home),
+                  label: 'navBar_home'.tr(),
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.camera),
-                  label: 'Camera',
+                  icon: const Icon(Icons.camera),
+                  label: 'navBar_Camera'.tr(),
                 ),
                 BottomNavigationBarItem(
-                    icon: Icon(Icons.settings), label: 'Settings'),
+                    icon: const Icon(Icons.settings), label: 'navBar_Settings'.tr()),
               ],
               onTap: _onItemTapped,
               currentIndex: 2,

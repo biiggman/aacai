@@ -29,6 +29,41 @@
     "register_pw_verify_pos": "Contraseña meets requirements",
     "register_signup_deco": "Inscribirse",
 
+    "register_pwChecker_sixChar": "Al menos 6 caracteres",
+    "regiser_pwChecker_lower": "1 letra minúscula",
+    "regiser_pwChecker_upper": "1 Uppercase letter",
+    "regiser_pwChecker_number": "1 letra mayúscula",
+    "regiser_pwChecker_special": "1 carácter especial",
+
+    "fireAuth_snackbar_pwWeak": "La contraseña proporcionada es demasiado débil.",
+    "fireAuth_snackbar_pwExist": "La cuenta ya existe para ese correo electrónico",
+    "fireAuth_snackbar_accNo": "No se encontró ninguna cuenta para ese correo electrónico",
+    "fireAuth_snackbar_pwWrong": "Contraseña incorrecta proporcionada",
+    "fireAuth_snackbar_accExist": "Ya existe una cuenta con una credencial diferente",
+    "fireAuth_snackbar_credError": "Ocurrió un error al acceder a las credenciales. Intentar otra vez.",
+    "fireAuth_snackbar_gooError": "Se produjo un error al utilizar el inicio de sesión de Google. Intentar otra vez.",
+    "fireAuth_snackbar_signOError": "Error al cerrar sesión. Intentar otra vez.",
+    "fireAuth_snackbar_pwEmail": "Correo electrónico de restablecimiento de contraseña enviado",
+    "fireAuth_snackbar_pwChange": "¡Contraseña cambiada!",
+    "fireAuth_snackbar_pwChangeErr": "Error al cambiar la contraseña, verifique la contraseña actual",
+    "fireAuth_snackbar_emailChange": "¡El correo electrónico cambió!",
+    "fireAuth_snackbar_emailChangeErr": "Error al cambiar el correo electrónico, inténtalo de nuevo",
+
+    "validator_nameEmp": "El nombre no puede estar vacío",
+    "validator_emailEmp": "El correo electrónico no puede estar vacío",
+    "validator_validEmail": "Introduzca un correo electrónico válido",
+    "validator_pwEmpty": "La contraseña no puede estar vacía",
+    "validator_pwSix": "Introduzca una contraseña de al menos 6 caracteres",
+    "validator_pwUpper": "La contraseña debe contener al menos una letra mayúscula",
+    "validator_pwLower": "La contraseña debe contener al menos una letra minúscula",
+    "validator_pwNumber": "La contraseña debe contener al menos un número",
+    "validator_pwSpecial": "La contraseña debe contener al menos un carácter especial",
+
+    "delete_item": "¿Eliminar elemento?",
+    "delete_caution": "Al hacer esto, se eliminará el elemento junto con todos sus datos.",
+    "delete_FolSuccess": "¡Carpeta eliminada con éxito! ¡Tire hacia abajo para refrescar!",
+    "delete_ButSuccess": "¡Botón eliminado con éxito! ¡Tire hacia abajo para refrescar!",
+
     "settings_themepage_top": "Ajustes",
     "settings_themepage_header": "Temas",
     "settings_themepage_def_theme": "AAC.AI Temas",
@@ -37,24 +72,31 @@
     "settings_themepage_dark_theme_active": "¡Tema Oscuro Activado!",
     "settings_themepage_pro_theme": "Protanopia Tema",
     "settings_themepage_pro_theme_active": "¡Tema Protanopia Activado!",
-    "settings_themepage_tri_theme": "Tritanopia Theme",
+    "settings_themepage_tri_theme": "Tritanopia Tema",
     "settings_themepage_tri_theme_active": "¡Tema Tritanopia Activado!",
-    "settings_themepage_achro_theme": "Achromatopsia Theme",
+    "settings_themepage_achro_theme": "Achromatopsia Tema",
     "settings_themepage_achro_theme_active": "¡Tema Achromatopsia Activado!",
 
     "settings_pwresetpage_top": "Ajustes",
-    "settings_pwresetpage_header": "Change Password",
-    "settings_pwresetpage_tile": "Password Reset",
+    "settings_pwresetpage_header": "Cambiar la contraseña",
+    "settings_pwresetpage_current": "Contraseña actual",
+    "settings_pwresetpage_new": "Nueva contraseña",
+    "settings_pwresetpage_success": "La nueva contraseña cumple con los requisitos",
+    "settings_pwresetpage_change": "Cambiar la contraseña",
+    "settings_pwresetpage_tile": "Restablecimiento de contraseña",
 
     "settings_emailrstpage_top": "Ajustes",
-    "settings_emailrstpage_header": "Change Email",
-    "settings_emailrstpage_tile": "Email Reset",
+    "settings_emailrstpage_header": "Cambiar e-mail",
+    "settings_emailrstpage_new": "Nuevo Email",
+    "settings_emailrstpage_tile": "Restablecimiento de correo electrónico",
 
     "settings_gridviewpage_top": "Ajustes",
     "settings_gridviewpage_portrait_header": "Retrato",
+    "settings_gridviewpage_portrait_1x1_true": "¡Columnas verticales establecidas en 1!",
     "settings_gridviewpage_portrait_2x2_true": "¡Columnas de retrato establecidas en 2!",
     "settings_gridviewpage_portrait_3x3_true": "¡Columnas de retrato establecidas en 3!",
     "settings_gridviewpage_landscape_header": "Horizontales",
+    "settings_gridviewpage_landscape_1x1_true": "¡Filas de paisaje establecidas en 1!",
     "settings_gridviewpage_landscape_2x2_true": "¡Filas horizontales establecidas en 2!",
     "settings_gridviewpage_landscape_3x3_true": "¡Filas horizontales establecidas en 2!",
 
@@ -77,6 +119,8 @@
     "settings_legal_about": "Acerca",
     "Settings_legal_priv_pol": "Política de Privacidad",
 
+    "settings_about": "AAC.AI es una aplicación AAC (Comunicación Alternativa Aumentativa) gratuita y rica en funciones que está disponible en iOS y Android. \n\nEsta aplicación está dirigida a niños con discapacidades que les impiden la comunicación verbal, incluidos los trastornos del lenguaje, el habla, la fluidez infantil y la comunicación social. \n\nAAC.AI permite que el usuario se comunique con una serie de imágenes utilizando un tablero de imágenes totalmente personalizable y brinda la capacidad de explorar el mundo que lo rodea utilizando la detección de objetos en tiempo real con la tecnología de YoloV2-Tiny. \n\nEsta aplicación fue creada para el proyecto insignia de Ingeniería de Software en la Universidad Estatal de Sam Houston",
+
     "imageboard_utils": "",
 
     "main_tts_hint": "Text to Speech",
@@ -88,11 +132,17 @@
     "main_camera_img_src": "Rollo de la Cámara",
     "main_button_add_false": "Por favor termine de hacer selecciones",
     "main_button_add_true": "¡Botón añadido! Tire hacia abajo para refrescar",
+    "main_folder_add_true": "¡Carpeta añadida! Tire hacia abajo para refrescar",
     "main_add_btn": "Agregar",
     "main_cancel_btn": "Cancelar",
     "main_del_prompt": "¿Botón Eliminar?",
     "main_del_prompt_confirm": "¿Está seguro de que desea eliminar este elemento? Se eliminará de forma permanente junto con todo su contenido.",
     "main_del_prompt_acc": "Aceptar",
-    "main_del_prompt_rej": "Cancelar" 
+    "main_del_prompt_rej": "Cancelar", 
+
+    "navBar_keyboard": "Teclado",
+    "navBar_home": "Hogar",
+    "navBar_Camera": "Cámara",
+    "navBar_Settings": "Ajustes"
 
 }

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -70,14 +71,14 @@ class FireAuth {
       if (e.code == 'weak-password') {
         ScaffoldMessenger.of(context).showSnackBar(
           FireAuth.customSnackBar(
-            content: 'The password provided is too weak',
+            content: 'fireAuth_snackbar_pwWeak'.tr(),
             color: Colors.red,
           ),
         );
       } else if (e.code == 'email-already-in-use') {
         ScaffoldMessenger.of(context).showSnackBar(
           FireAuth.customSnackBar(
-            content: 'Account already exists for that email',
+            content: 'fireAuth_snackbar_pwExist'.tr(),
             color: Colors.red,
           ),
         );
@@ -107,14 +108,14 @@ class FireAuth {
       if (e.code == 'user-not-found') {
         ScaffoldMessenger.of(context).showSnackBar(
           FireAuth.customSnackBar(
-            content: 'No account found for that email',
+            content: 'fireAuth_snackbar_accNo'.tr(),
             color: Colors.red,
           ),
         );
       } else if (e.code == 'wrong-password') {
         ScaffoldMessenger.of(context).showSnackBar(
           FireAuth.customSnackBar(
-            content: 'Incorrect password provided',
+            content: 'fireAuth_snackbar_pwWrong'.tr(),
             color: Colors.red,
           ),
         );
@@ -276,7 +277,7 @@ class FireAuth {
             ScaffoldMessenger.of(context).showSnackBar(
               FireAuth.customSnackBar(
                 content:
-                    'An account already exists with a different credential',
+                    'fireAuth_snackbar_accExist'.tr(),
                 color: Colors.red,
               ),
             );
@@ -285,7 +286,7 @@ class FireAuth {
             ScaffoldMessenger.of(context).showSnackBar(
               FireAuth.customSnackBar(
                 content:
-                    'Error occurred while accessing credentials. Try again.',
+                    'fireAuth_snackbar_credError'.tr(),
                 color: Colors.red,
               ),
             );
@@ -294,7 +295,7 @@ class FireAuth {
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar(
             FireAuth.customSnackBar(
-              content: 'Error occurred using Google Sign In. Try again.',
+              content: 'fireAuth_snackbar_gooError'.tr(),
               color: Colors.red,
             ),
           );
@@ -317,7 +318,7 @@ class FireAuth {
       ScaffoldMessenger.of(context).removeCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(
         FireAuth.customSnackBar(
-          content: 'Error signing out. Try again.',
+          content: 'fireAuth_snackbar_signOError'.tr(),
           color: Colors.red,
         ),
       );
@@ -346,14 +347,14 @@ class FireAuth {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
       ScaffoldMessenger.of(context).showSnackBar(
         FireAuth.customSnackBar(
-          content: 'Password reset email sent',
+          content: 'fireAuth_snackbar_pwEmail'.tr(),
           color: Colors.green,
         ),
       );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         ScaffoldMessenger.of(context).showSnackBar(FireAuth.customSnackBar(
-          content: 'No account found for that email',
+          content: 'fireAuth_snackbar_accNo'.tr(),
           color: Colors.red,
         ));
       }
@@ -372,14 +373,14 @@ class FireAuth {
       {
         ScaffoldMessenger.of(context).removeCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(FireAuth.customSnackBar(
-          content: 'Password changed!',
+          content: 'fireAuth_snackbar_pwChange'.tr(),
           color: Colors.green,
         ));
       }
     } else {
       ScaffoldMessenger.of(context).removeCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(FireAuth.customSnackBar(
-        content: 'Error changing password, please check current password',
+        content: 'fireAuth_snackbar_pwChangeErr'.tr(),
         color: Colors.red,
       ));
     }
@@ -413,14 +414,14 @@ class FireAuth {
       {
         ScaffoldMessenger.of(context).removeCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(FireAuth.customSnackBar(
-          content: 'Email changed!',
+          content: 'fireAuth_snackbar_emailChange'.tr(),
           color: Colors.green,
         ));
       }
     } catch (e) {
       ScaffoldMessenger.of(context).removeCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(FireAuth.customSnackBar(
-        content: 'Error changing Email, please try again',
+        content: 'fireAuth_snackbar_emailChangeErr'.tr(),
         color: Colors.red,
       ));
     }

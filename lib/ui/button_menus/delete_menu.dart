@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -72,23 +73,23 @@ class _DeleteMenuState extends State<DeleteMenu> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Delete Item?'),
-      content: const Text(
-          'Doing this will delete the item along with all of its data'),
+      title: Text('delete_item'.tr()),
+      content: Text(
+          'delete_caution'.tr()),
       actions: <Widget>[
         TextButton(
-          child: const Text('CANCEL'),
+          child: Text('main_cancel_btn'.tr()),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
         TextButton(
-          child: const Text('ACCEPT'),
+          child: Text('main_del_prompt_acc'.tr()),
           onPressed: () {
             deleteButton();
             Navigator.of(context).pop();
             ScaffoldMessenger.of(context).showSnackBar(FireAuth.customSnackBar(
-              content: widget.isFolder == true ? 'Folder successfully deleted! Pull down to refresh!': 'Button successfully deleted! Pull down to refresh!',
+              content: widget.isFolder == true ? 'delete_FolSuccess'.tr(): 'delete_ButSuccess'.tr(),
               color: Colors.green,
             ));
           },

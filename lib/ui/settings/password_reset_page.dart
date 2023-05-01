@@ -1,4 +1,5 @@
 import 'package:aacademic/firebase/validator.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:aacademic/firebase/fire_auth.dart';
 import 'package:aacademic/utils/UI_templates.dart';
@@ -40,7 +41,7 @@ class _PasswordResetPageState extends State<PasswordResetPage> {
         backgroundColor: const Color.fromARGB(255, 225, 225, 225),
         //top bar
         appBar: AppBar(
-            title: const Text('Change Password'),
+            title: Text('settings_pwresetpage_header'.tr()),
             titleTextStyle: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
@@ -64,7 +65,7 @@ class _PasswordResetPageState extends State<PasswordResetPage> {
                           password: value,
                         ),
                         decoration: InputDecoration(
-                            hintText: "Current Password",
+                            hintText: 'settings_pwresetpage_current'.tr(),
                             hintStyle: const TextStyle(color: Colors.white),
                             //Icon button toggles password visibility
                             suffixIcon: IconButton(
@@ -104,7 +105,7 @@ class _PasswordResetPageState extends State<PasswordResetPage> {
                           password: value,
                         ),
                         decoration: InputDecoration(
-                            hintText: "New Password",
+                            hintText: 'settings_pwresetpage_new'.tr(),
                             hintStyle: const TextStyle(color: Colors.white),
                             //Icon button toggles password visibility
                             suffixIcon: IconButton(
@@ -150,7 +151,7 @@ class _PasswordResetPageState extends State<PasswordResetPage> {
                         onSuccess: () {
                           ScaffoldMessenger.of(context).showSnackBar(
                             FireAuth.customSnackBar(
-                              content: 'New password meets requirements',
+                              content: 'settings_pwresetpage_success'.tr(),
                               color: Colors.green,
                             ),
                           );
@@ -187,7 +188,7 @@ class _PasswordResetPageState extends State<PasswordResetPage> {
                                 }
                               },
                               child: UITemplates.buttonDeco(
-                                  displayText: "Change Password",
+                                  displayText: 'settings_pwresetpage_change'.tr(),
                                   vertInset: 24),
                             ),
                     ],

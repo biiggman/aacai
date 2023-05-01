@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pw_validator/Resource/Strings.dart';
 
@@ -65,13 +66,13 @@ class UITemplates {
 //custom strings class for pw validator
 class customStrings implements FlutterPwValidatorStrings {
   @override
-  final String atLeast = 'At least 6 characters';
+  final String atLeast = 'register_pwChecker_sixChar'.tr();
   @override
-  final String normalLetters = "1 Lowercase letter";
+  final String normalLetters = 'regiser_pwChecker_lower'.tr();
   @override
-  final String uppercaseLetters = '1 Uppercase letter';
+  final String uppercaseLetters = 'regiser_pwChecker_upper'.tr();
   @override
-  final String numericCharacters = '1 Numeric character';
+  final String numericCharacters = 'regiser_pwChecker_number'.tr();
   @override
-  final String specialCharacters = '1 Special character';
+  final String specialCharacters = 'regiser_pwChecker_special'.tr();
 }

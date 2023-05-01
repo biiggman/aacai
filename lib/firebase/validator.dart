@@ -1,3 +1,5 @@
+import 'package:easy_localization/easy_localization.dart';
+
 class Validator {
   static String? validateName({required String? name}) {
     if (name == null) {
@@ -5,7 +7,7 @@ class Validator {
     }
 
     if (name.isEmpty) {
-      return 'Name can\'t be empty';
+      return 'validator_nameEmp'.tr();
     }
 
     return null;
@@ -20,9 +22,9 @@ class Validator {
         r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
 
     if (email.isEmpty) {
-      return 'Email can\'t be empty';
+      return 'validator_emailEmp'.tr();
     } else if (!emailRegExp.hasMatch(email)) {
-      return 'Enter a valid email';
+      return 'validator_validEmail'.tr();
     }
 
     return null;
@@ -34,17 +36,17 @@ class Validator {
     }
 
     if (password.isEmpty) {
-      return 'Password can\'t be empty';
+      return 'validator_pwEmpty'.tr();
     } else if (password.length < 6) {
-      return 'Enter a password of at least 6 characters';
+      return 'validator_pwSix'.tr();
     } else if (!RegExp(r'[A-Z]').hasMatch(password)) {
-      return 'Password must contain at least one uppercase letter';
+      return 'validator_pwUpper'.tr();
     } else if (!RegExp(r'[a-z]').hasMatch(password)) {
-      return 'Password must contain at least one lowercase letter';
+      return 'validator_pwLower'.tr();
     } else if (!RegExp(r'\d').hasMatch(password)) {
-      return 'Password must contain at least one number';
+      return 'validator_pwNumber'.tr();
     } else if (!RegExp(r'[!@#\$%\^&\*\(\)]').hasMatch(password)) {
-      return 'Password must contain at least one special character';
+      return 'validator_pwSpecial'.tr();
     }
 
     return null;

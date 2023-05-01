@@ -1,4 +1,5 @@
 import 'package:aacademic/firebase/validator.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:aacademic/firebase/fire_auth.dart';
 import 'package:aacademic/utils/UI_templates.dart';
@@ -32,7 +33,7 @@ class _EmailResetPageState extends State<EmailResetPage> {
         backgroundColor: const Color.fromARGB(255, 225, 225, 225),
         //top bar
         appBar: AppBar(
-            title: const Text('Change Email'),
+            title: Text('settings_emailrstpage_header'.tr()),
             titleTextStyle: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
@@ -55,7 +56,7 @@ class _EmailResetPageState extends State<EmailResetPage> {
                           email: value,
                         ),
                         decoration:
-                            UITemplates.textFieldDeco(hintText: "New Email"),
+                            UITemplates.textFieldDeco(hintText: 'settings_emailrstpage_new'.tr()),
                       ),
                       const SizedBox(height: 32),
                       _isProcessing
@@ -81,7 +82,7 @@ class _EmailResetPageState extends State<EmailResetPage> {
                                 }
                               },
                               child: UITemplates.buttonDeco(
-                                  displayText: "Change Email", vertInset: 24),
+                                  displayText: 'settings_emailrstpage_header'.tr(), vertInset: 24),
                             ),
                     ],
                   ),
