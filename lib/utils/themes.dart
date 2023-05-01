@@ -10,10 +10,12 @@ class MyThemes {
 //Text theme declarations, passed depending on the overall brightness of the theme
   static const TextTheme darkTextTheme = TextTheme(
       labelLarge: TextStyle(color: Colors.white),
+      labelMedium: TextStyle(color: Colors.white),
       labelSmall: TextStyle(color: Colors.white));
 
   static const TextTheme lightTextTheme = TextTheme(
       labelLarge: TextStyle(color: Colors.black),
+      labelMedium: TextStyle(color: Colors.black),
       labelSmall: TextStyle(color: Colors.black));
 
   static final ThemeData lightTheme = ThemeData(

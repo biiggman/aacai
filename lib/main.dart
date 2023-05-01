@@ -799,7 +799,7 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             Text(
               name,
-              style: const TextStyle(fontSize: 16, color: Colors.black),
+              style: const TextStyle(fontSize: 16),
             ),
           ],
         )
@@ -843,7 +843,7 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             Text(
               name,
-              style: const TextStyle(fontSize: 16, color: Colors.black),
+              style: const TextStyle(fontSize: 16),
             ),
           ],
         )
