@@ -7,7 +7,6 @@ import 'package:aacademic/ui/imageboard_ui.dart/custom_appbar.dart';
 import 'package:aacademic/camera/camera_page.dart';
 import 'package:aacademic/firebase/fire_auth.dart';
 import 'package:aacademic/firebase/validator.dart';
-import 'package:aacademic/ui/imageboard_ui.dart/custom_appbar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:aacademic/ui/login/login_page.dart';
 import 'package:aacademic/ui/settings/settings_page.dart';
@@ -23,6 +22,7 @@ import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:aacademic/firebase/firebase_options.dart';
 import 'package:aacademic/utils/imageboard_utils.dart';
+import 'package:flutter_pw_validator/Resource/Strings.dart';
 import 'package:provider/provider.dart';
 
 //current language selected
@@ -212,11 +212,6 @@ class _MyHomePageState extends State<MyHomePage> {
                       title: Text(
                         'main_add_hint'.tr(),
                         textAlign: TextAlign.center,
-                      ),
-                      titleTextStyle: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                        color: Color(0xff6A145D),
                       ),
                       content: Padding(
                           padding: const EdgeInsets.all(5),
@@ -507,13 +502,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                                               });
                                                             });
                                                           },
-                                                          child: UITemplates
-                                                              .buttonDeco(
-                                                                  displayText:
-                                                                      "main_camera_img_src"
-                                                                          .tr(),
-                                                                  vertInset:
-                                                                      10),
+                                                          child: buttonDeco(
+                                                              displayText:
+                                                                  "main_camera_img_src"
+                                                                      .tr(),
+                                                              vertInset: 10),
                                                         ),
                                                         const SizedBox(
                                                             height: 10),
@@ -649,13 +642,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                                               }
                                                             }
                                                           },
-                                                          child: UITemplates
-                                                              .buttonDeco(
-                                                                  displayText:
-                                                                      'main_add_btn'
-                                                                          .tr(),
-                                                                  vertInset:
-                                                                      10),
+                                                          child: buttonDeco(
+                                                              displayText:
+                                                                  'main_add_btn'
+                                                                      .tr(),
+                                                              vertInset: 10),
                                                         ),
                                                       ),
                                                       const SizedBox(width: 10),
@@ -670,13 +661,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                                             _isFolderChecked =
                                                                 false;
                                                           },
-                                                          child: UITemplates
-                                                              .buttonDeco(
-                                                                  displayText:
-                                                                      'main_cancel_btn'
-                                                                          .tr(),
-                                                                  vertInset:
-                                                                      10),
+                                                          child: buttonDeco(
+                                                              displayText:
+                                                                  'main_cancel_btn'
+                                                                      .tr(),
+                                                              vertInset: 10),
                                                         ),
                                                       ),
                                                     ],
@@ -810,7 +799,7 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             Text(
               name,
-              style: const TextStyle(fontSize: 16, color: Colors.black),
+              style: const TextStyle(fontSize: 16),
             ),
           ],
         )
@@ -854,7 +843,7 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             Text(
               name,
-              style: const TextStyle(fontSize: 16, color: Colors.black),
+              style: const TextStyle(fontSize: 16),
             ),
           ],
         )

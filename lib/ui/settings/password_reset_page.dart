@@ -1,5 +1,6 @@
 import 'package:aacademic/firebase/validator.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:aacademic/firebase/fire_auth.dart';
 import 'package:aacademic/utils/UI_templates.dart';
@@ -41,7 +42,7 @@ class _PasswordResetPageState extends State<PasswordResetPage> {
         backgroundColor: const Color.fromARGB(255, 225, 225, 225),
         //top bar
         appBar: AppBar(
-            title: Text('settings_pwresetpage_header'.tr()),
+            title: Text('pw_rstpage_title'.tr()),
             titleTextStyle: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
@@ -65,7 +66,7 @@ class _PasswordResetPageState extends State<PasswordResetPage> {
                           password: value,
                         ),
                         decoration: InputDecoration(
-                            hintText: 'settings_pwresetpage_current'.tr(),
+                            hintText: "pw_rstpage_currentpw".tr(),
                             hintStyle: const TextStyle(color: Colors.white),
                             //Icon button toggles password visibility
                             suffixIcon: IconButton(
@@ -105,7 +106,7 @@ class _PasswordResetPageState extends State<PasswordResetPage> {
                           password: value,
                         ),
                         decoration: InputDecoration(
-                            hintText: 'settings_pwresetpage_new'.tr(),
+                            hintText: "pw_rstpage_newpw".tr(),
                             hintStyle: const TextStyle(color: Colors.white),
                             //Icon button toggles password visibility
                             suffixIcon: IconButton(
@@ -151,7 +152,7 @@ class _PasswordResetPageState extends State<PasswordResetPage> {
                         onSuccess: () {
                           ScaffoldMessenger.of(context).showSnackBar(
                             FireAuth.customSnackBar(
-                              content: 'settings_pwresetpage_success'.tr(),
+                              content: 'pw_rstpage_newpw_meet_req_true'.tr(),
                               color: Colors.green,
                             ),
                           );
@@ -187,8 +188,8 @@ class _PasswordResetPageState extends State<PasswordResetPage> {
                                   });
                                 }
                               },
-                              child: UITemplates.buttonDeco(
-                                  displayText: 'settings_pwresetpage_change'.tr(),
+                              child: buttonDeco(
+                                  displayText: "pw_rstpage_change_prompt".tr(),
                                   vertInset: 24),
                             ),
                     ],

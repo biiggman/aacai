@@ -2,6 +2,13 @@
     "color_button_title": "Seleccionar el Color",
     "color_button_deco_displaytext": "Color",
 
+    "del_menu_prompt": "¿Eliminar Elemento?",
+    "del_menu_warning": "Al hacer esto, se eliminará el elemento junto con todos sus datos.",
+    "del_menu_cancel_btn": "CANCELAR",
+    "del_menu_accept_btn": "ACEPTAR",
+    "del_menu_folder_delete": "¡Carpeta eliminada con éxito! ¡Tire hacia abajo para refrescar!",
+    "del_menu_button_delete": "¡Botón eliminado con éxito! ¡Tire hacia abajo para refrescar!",
+
     "forgot_pw_appbar_title": "Restablecer la Contraseña",
     "forgot_pw_deco_hint": "Correo Electrónico",
     "forgot_pw_button_deco_text": "Restablecer la Contraseña",
@@ -9,7 +16,7 @@
     "login_welcome_header": "Bienvenido",
     "login_email_hinttext": "Correo Electrónico",
     "login_password_hinttext": "Contraseña",
-    "login_forgot_pw": "¿Olvidado tu contraseña?",
+    "login_forgot_pw": "¿Olvidado tu Contraseña?",
     "login_signin_prompt": "Iniciar Sesión",
     "login_continue_prompt": "O continuar con",
     "login_noacc_prompt": "¿No tienes una cuenta?",
@@ -22,11 +29,20 @@
     "profile_signout": "Desconectar",
     "profile_home_nav": "Ir a Casa",
 
+    "email_rstpage_title": "Cambiar Correo Electrónico",
+    "email_rstpage_newval_hint": "Nuevo Correo Electrónico",
+
+    "pw_rstpage_title": "Cambiar la Contraseña",
+    "pw_rstpage_currentpw": "Contraseña Actual",
+    "pw_rstpage_newpw": "Nueva Contraseña",
+    "pw_rstpage_newpw_meet_req_true": "La nueva contraseña cumple con los requisitos",
+    "pw_rstpage_change_prompt": "Cambiar la Contraseña",
+
     "register_title": "Registro",
     "register_name_deco": "Nombre",
-    "register_email_deco": "Correo electrónico",
+    "register_email_deco": "Correo Electrónico",
     "register_pw_hint": "Contraseña",
-    "register_pw_verify_pos": "Contraseña meets requirements",
+    "register_pw_verify_pos": "Contraseña cumple con los requisitos",
     "register_signup_deco": "Inscribirse",
 
     "register_pwChecker_sixChar": "Al menos 6 caracteres",
@@ -86,9 +102,9 @@
     "settings_pwresetpage_tile": "Restablecimiento de contraseña",
 
     "settings_emailrstpage_top": "Ajustes",
-    "settings_emailrstpage_header": "Cambiar e-mail",
     "settings_emailrstpage_new": "Nuevo Email",
-    "settings_emailrstpage_tile": "Restablecimiento de correo electrónico",
+    "settings_emailrstpage_header": "Cambiar Correo Electrónico",
+    "settings_emailrstpage_tile": "Restablecimiento de Correo Electrónico",
 
     "settings_gridviewpage_top": "Ajustes",
     "settings_gridviewpage_portrait_header": "Retrato",

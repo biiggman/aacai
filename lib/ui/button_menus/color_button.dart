@@ -54,7 +54,7 @@ class _ColorButtonState extends State<ColorButton> {
           },
         );
       },
-      child: UITemplates.buttonDeco(
+      child: buttonDeco(
           displayText: 'color_button_deco_displaytext'.tr(), vertInset: 10),
     );
   }
