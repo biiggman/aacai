@@ -47,6 +47,7 @@ class _DeleteMenuState extends State<DeleteMenu> {
         }
       });
     }
+    //delete if button is within a folder
     if (widget.isFolder == false && widget.folderID != "") {
       print('IN A FOLDER');
       print(widget.folderID);
@@ -60,6 +61,7 @@ class _DeleteMenuState extends State<DeleteMenu> {
           .doc(widget.id)
           .delete();
     }
+    //regular delete button from imageboard root
     if (widget.isFolder == false && widget.folderID == "") {
       print('ON IMAGEBOARD');
       await FirebaseFirestore.instance

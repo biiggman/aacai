@@ -18,6 +18,8 @@ class _CameraPageState extends State<CameraPage> {
   late List recognitionsList = [];
   bool predicting = false;
 
+
+  //initializes camera on startup
   initCamera() {
     cameraController =
         CameraController(widget.cameras[0], ResolutionPreset.max);
@@ -31,6 +33,7 @@ class _CameraPageState extends State<CameraPage> {
     });
   }
 
+  //runs model
   runModel() async {
     if (predicting) return;
     predicting = true;
@@ -44,7 +47,9 @@ class _CameraPageState extends State<CameraPage> {
         imageWidth: cameraImage.width,
         imageMean: 0,
         imageStd: 255,
+        //number of each label that can be in 1 frame
         numResultsPerClass: 2,
+        //%confidence
         threshold: 0.6,
       ))!;
 
@@ -60,6 +65,7 @@ class _CameraPageState extends State<CameraPage> {
     }
   }
 
+  //loads model from asset folder
   Future loadModel() async {
     Tflite.close();
     await Tflite.loadModel(
@@ -69,6 +75,8 @@ class _CameraPageState extends State<CameraPage> {
   }
 
    @override
+  
+  //disposes everything when camera is closed (hopefully crash is fixed)
   void dispose() {
     super.dispose();
 
@@ -84,6 +92,7 @@ class _CameraPageState extends State<CameraPage> {
     Tflite.close();
   }
 
+  //loadModel and initCamera are ran whenever camera is turned on
   @override
   void initState() {
     super.initState();

@@ -54,6 +54,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
       centerTitle: false,
       automaticallyImplyLeading: false,
       actions: widget.buttons.isNotEmpty
+      //icons only appear when a button is selected
           ? <Widget>[
               IconButton(
                 onPressed: _speakSentence,

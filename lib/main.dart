@@ -85,9 +85,7 @@ class MyApp extends StatelessWidget {
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,
-      home: //const LoginPage()
-
-          //ROUTE FOR HOMEPAGE THAT CHECKS FOR LOGIN. NEEDS ROUTE TO ACCOUNT IN SETTINGS TO AVOID SOFTLOCK OUT OF LOGIN PAGE
+      home: //ROUTE FOR HOMEPAGE THAT CHECKS FOR LOGIN. IF LOGGED IN BOOTS TO HOMEPAGE. IF NOT, BOOTS TO LOGIN PAGE
           FutureBuilder(
               future: FirebaseAuth.instance.authStateChanges().first,
               builder: (context, AsyncSnapshot<User?> snapshot) {
@@ -132,7 +130,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Color? buttonColor;
   File? _selectedImage;
   String? _selectedFolder;
-  
+
   //buttonUtils class
   ButtonUtils buttonUtils = ButtonUtils();
 
@@ -198,6 +196,7 @@ class _MyHomePageState extends State<MyHomePage> {
     switch (index) {
       case 0:
         {
+          //ADD MENU
           ImageboardUtils imageboardUtils = ImageboardUtils();
           showDialog(
               context: context,
@@ -460,6 +459,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                   }
                                                                 }
                                                               }
+                                                              //drop down menu for folder
                                                               return DropdownButtonFormField(
                                                                   decoration: UITemplates.textFieldDeco(
                                                                       hintText:
@@ -678,6 +678,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               )))),
                 );
               }).then((_) {
+            //when dialog box is closed, resets these variables
             setState(() {
               _selectedImage = null;
               _isButtonChecked = false;
@@ -689,6 +690,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
       case 1:
         {
+          //KEYBOARD
           showModalBottomSheet<void>(
               context: context,
               isScrollControlled: true,
@@ -722,6 +724,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               filled: true),
                         ),
                       ),
+                      //enter button
                       IconButton(
                           onPressed: () {
                             TextToSpeech.speak(_textEditingController.text);
@@ -732,12 +735,14 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ));
               }).then((_) {
+            //when text is entered, the text in the box is cleared. same for exiting the dialog
             _textEditingController.clear();
           });
         }
         break;
 
       case 2:
+        //"home" button. all it does is set the selected folder back to null
         setState(() {
           _selectedFolderButtons = [];
         });

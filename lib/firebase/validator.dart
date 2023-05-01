@@ -35,6 +35,7 @@ class Validator {
       return null;
     }
 
+    //input validation for password
     if (password.isEmpty) {
       return 'validator_pwEmpty'.tr();
     } else if (password.length < 6) {
