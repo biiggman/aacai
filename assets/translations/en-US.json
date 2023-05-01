@@ -2,6 +2,13 @@
     "color_button_title": "Select Color",
     "color_button_deco_displaytext": "Color",
 
+    "del_menu_prompt": "Delete Item?",
+    "del_menu_warning": "Doing this will delete the item along with all of its data",
+    "del_menu_cancel_btn": "CANCEL",
+    "del_menu_accept_btn": "ACCEPT",
+    "del_menu_folder_delete": "Folder successfully deleted! Pull down to refresh!",
+    "del_menu_button_delete": "Button successfully deleted! Pull down to refresh!",
+
     "forgot_pw_appbar_title": "Forgot Password",
     "forgot_pw_deco_hint": "Email",
     "forgot_pw_button_deco_text": "Reset Password",
@@ -21,6 +28,15 @@
     "email_verify_btn": "verify email",
     "profile_signout": "Sign out",
     "profile_home_nav": "Go to Home",
+
+    "email_rstpage_title": "Change Email",
+    "email_rstpage_newval_hint": "New Email",
+
+    "pw_rstpage_title": "Change Password",
+    "pw_rstpage_currentpw": "Current Password",
+    "pw_rstpage_newpw": "New Password",
+    "pw_rstpage_newpw_meet_req_true": "New password meets requirements",
+    "pw_rstpage_change_prompt": "Change Password",
 
     "register_title": "Register",
     "register_name_deco": "Name",
