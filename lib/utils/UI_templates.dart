@@ -22,7 +22,7 @@ class UITemplates {
         filled: true*/
         )));
   }
-
+/*
 //general button decoration
   static Container buttonDeco(
       {required String displayText, required double vertInset}) {
@@ -42,6 +42,7 @@ class UITemplates {
       ),
     );
   }
+*/
 
   //square tile decoration for google login button
   static Container squareTile({required String imagePath}) {
@@ -76,4 +77,32 @@ class customStrings implements FlutterPwValidatorStrings {
   final String numericCharacters = '1 Numeric character';
   @override
   final String specialCharacters = '1 Special character';
+}
+
+class buttonDeco extends StatelessWidget {
+  const buttonDeco(
+      {super.key, required this.displayText, required this.vertInset});
+
+  final String displayText;
+  final double vertInset;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: vertInset),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8.0),
+          color: Theme.of(context).primaryColorDark),
+      child: Center(
+        child: Text(
+          displayText,
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
+        ),
+      ),
+    );
+  }
 }
