@@ -93,7 +93,7 @@ class buttonDeco extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: vertInset),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8.0),
-          color: Theme.of(context).primaryColorDark),
+          color: Theme.of(context).primaryColor),
       child: Center(
         child: Text(
           displayText,
