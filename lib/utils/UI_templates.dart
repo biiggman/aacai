@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pw_validator/Resource/Strings.dart';
 
@@ -6,7 +7,6 @@ class UITemplates {
   static InputDecoration textFieldDeco({required String hintText}) {
     return (InputDecoration(
         hintText: hintText,
-        hintStyle: const TextStyle(color: Colors.white),
         enabledBorder: const OutlineInputBorder(
             borderSide: BorderSide(color: Colors.white)),
         errorBorder: OutlineInputBorder(
@@ -14,31 +14,7 @@ class UITemplates {
           borderSide: const BorderSide(
             color: Colors.red,
           ),
-        ),
-        focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Color(0xff6A145D))),
-        fillColor: const Color(0xffABC99B),
-        filled: true));
-  }
-
-//general button decoration
-  static Container buttonDeco(
-      {required String displayText, required double vertInset}) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: vertInset),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8.0), color: Color(0xff6A145D)),
-      child: Center(
-        child: Text(
-          displayText,
-          style: const TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-          ),
-        ),
-      ),
-    );
+        )));
   }
 
   //square tile decoration for google login button
@@ -65,13 +41,41 @@ class UITemplates {
 //custom strings class for pw validator
 class customStrings implements FlutterPwValidatorStrings {
   @override
-  final String atLeast = 'At least 6 characters';
+  final String atLeast = 'register_pwChecker_sixChar'.tr();
   @override
-  final String normalLetters = "1 Lowercase letter";
+  final String normalLetters = 'regiser_pwChecker_lower'.tr();
   @override
-  final String uppercaseLetters = '1 Uppercase letter';
+  final String uppercaseLetters = 'regiser_pwChecker_upper'.tr();
   @override
-  final String numericCharacters = '1 Numeric character';
+  final String numericCharacters = 'regiser_pwChecker_number'.tr();
   @override
-  final String specialCharacters = '1 Special character';
+  final String specialCharacters = 'regiser_pwChecker_special'.tr();
+}
+
+class buttonDeco extends StatelessWidget {
+  const buttonDeco(
+      {super.key, required this.displayText, required this.vertInset});
+
+  final String displayText;
+  final double vertInset;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: vertInset),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8.0),
+          color: Theme.of(context).primaryColor),
+      child: Center(
+        child: Text(
+          displayText,
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
+        ),
+      ),
+    );
+  }
 }

@@ -8,6 +8,7 @@ class ColorButton extends StatefulWidget {
 
   final Function(Color) onColorSelected;
 
+  //color button widget requires a color
   const ColorButton(
       {super.key, required this.color, required this.onColorSelected});
 
@@ -18,6 +19,7 @@ class ColorButton extends StatefulWidget {
 class _ColorButtonState extends State<ColorButton> {
   Color? _color;
 
+  //sets variable color to whatever color the widget is
   @override
   void initState() {
     super.initState();
@@ -54,7 +56,7 @@ class _ColorButtonState extends State<ColorButton> {
           },
         );
       },
-      child: UITemplates.buttonDeco(
+      child: buttonDeco(
           displayText: 'color_button_deco_displaytext'.tr(), vertInset: 10),
     );
   }

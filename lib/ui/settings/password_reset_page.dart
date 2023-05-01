@@ -1,4 +1,6 @@
 import 'package:aacademic/firebase/validator.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:aacademic/firebase/fire_auth.dart';
 import 'package:aacademic/utils/UI_templates.dart';
@@ -36,15 +38,13 @@ class _PasswordResetPageState extends State<PasswordResetPage> {
         _focusNewPassword.unfocus();
       },
       child: Scaffold(
-        //page background color
-        backgroundColor: const Color.fromARGB(255, 225, 225, 225),
         //top bar
         appBar: AppBar(
-            title: const Text('Change Password'),
+            title: Text('pw_rstpage_title'.tr()),
             titleTextStyle: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-                color: Colors.white)),
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            )),
         body: Padding(
           padding: const EdgeInsets.all(24.0),
           child: Center(
@@ -64,8 +64,7 @@ class _PasswordResetPageState extends State<PasswordResetPage> {
                           password: value,
                         ),
                         decoration: InputDecoration(
-                            hintText: "Current Password",
-                            hintStyle: const TextStyle(color: Colors.white),
+                            hintText: "pw_rstpage_currentpw".tr(),
                             //Icon button toggles password visibility
                             suffixIcon: IconButton(
                               padding:
@@ -88,10 +87,6 @@ class _PasswordResetPageState extends State<PasswordResetPage> {
                                 color: Colors.red,
                               ),
                             ),
-                            focusedBorder: const OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Color(0xff6A145D))),
-                            fillColor: const Color(0xffABC99B),
                             filled: true),
                       ),
                       const SizedBox(height: 5),
@@ -104,8 +99,7 @@ class _PasswordResetPageState extends State<PasswordResetPage> {
                           password: value,
                         ),
                         decoration: InputDecoration(
-                            hintText: "New Password",
-                            hintStyle: const TextStyle(color: Colors.white),
+                            hintText: "pw_rstpage_newpw".tr(),
                             //Icon button toggles password visibility
                             suffixIcon: IconButton(
                               padding:
@@ -128,10 +122,6 @@ class _PasswordResetPageState extends State<PasswordResetPage> {
                                 color: Colors.red,
                               ),
                             ),
-                            focusedBorder: const OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Color(0xff6A145D))),
-                            fillColor: const Color(0xffABC99B),
                             filled: true),
                       ),
                       const SizedBox(height: 16.0),
@@ -150,7 +140,7 @@ class _PasswordResetPageState extends State<PasswordResetPage> {
                         onSuccess: () {
                           ScaffoldMessenger.of(context).showSnackBar(
                             FireAuth.customSnackBar(
-                              content: 'New password meets requirements',
+                              content: 'pw_rstpage_newpw_meet_req_true'.tr(),
                               color: Colors.green,
                             ),
                           );
@@ -186,8 +176,8 @@ class _PasswordResetPageState extends State<PasswordResetPage> {
                                   });
                                 }
                               },
-                              child: UITemplates.buttonDeco(
-                                  displayText: "Change Password",
+                              child: buttonDeco(
+                                  displayText: "pw_rstpage_change_prompt".tr(),
                                   vertInset: 24),
                             ),
                     ],

@@ -50,8 +50,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    MyThemes.lightTheme;
-
     //  final appleSignInAvailable =
     //     Provider.of<AppleSignInAvailable>(context, listen: false);
 
@@ -63,8 +61,6 @@ class _LoginPageState extends State<LoginPage> {
               _focusPassword.unfocus();
             },
             child: Scaffold(
-              //page background color
-              backgroundColor: const Color.fromARGB(255, 225, 225, 225),
               //top bar
               appBar: AppBar(
                   title: Text('login_welcome_header'.tr()),
@@ -111,8 +107,20 @@ class _LoginPageState extends State<LoginPage> {
                                           Validator.validateEmail(
                                         email: value,
                                       ),
-                                      decoration: UITemplates.textFieldDeco(
-                                          hintText: "login_email_hinttext".tr()),
+                                      decoration: InputDecoration(
+                                          hintText: "login_email_hinttext".tr(),
+                                          enabledBorder:
+                                              const OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: Colors.white)),
+                                          errorBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(6.0),
+                                            borderSide: const BorderSide(
+                                              color: Colors.red,
+                                            ),
+                                          ),
+                                          filled: true),
                                     ),
                                     const SizedBox(height: 5),
                                     //password textfield
@@ -125,9 +133,8 @@ class _LoginPageState extends State<LoginPage> {
                                         password: value,
                                       ),
                                       decoration: InputDecoration(
-                                          hintText: "login_password_hinttext".tr(),
-                                          hintStyle: const TextStyle(
-                                              color: Colors.white),
+                                          hintText:
+                                              "login_password_hinttext".tr(),
                                           //Icon button toggles password visibility
                                           suffixIcon: IconButton(
                                             padding: const EdgeInsetsDirectional
@@ -153,12 +160,6 @@ class _LoginPageState extends State<LoginPage> {
                                               color: Colors.red,
                                             ),
                                           ),
-                                          focusedBorder:
-                                              const OutlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color:
-                                                          Color(0xff6A145D))),
-                                          fillColor: const Color(0xffABC99B),
                                           filled: true),
                                     ),
                                     const SizedBox(height: 5),
@@ -177,8 +178,8 @@ class _LoginPageState extends State<LoginPage> {
                                           },
                                           child: Text(
                                             'login_forgot_pw'.tr(),
-                                            style:
-                                                const TextStyle(color: Colors.grey),
+                                            style: const TextStyle(
+                                                color: Colors.grey),
                                           ),
                                         ),
                                       ],
@@ -225,8 +226,9 @@ class _LoginPageState extends State<LoginPage> {
                                                 }
                                               }
                                             },
-                                            child: UITemplates.buttonDeco(
-                                                displayText: "login_signin_prompt".tr(),
+                                            child: buttonDeco(
+                                                displayText:
+                                                    "login_signin_prompt".tr(),
                                                 vertInset: 24),
                                           ),
 
@@ -235,23 +237,18 @@ class _LoginPageState extends State<LoginPage> {
                                     Row(
                                       children: [
                                         const Expanded(
-                                          child: Divider(
-                                            thickness: 2,
-                                            color: Color(0xff6A145D),
-                                          ),
+                                          child: Divider(),
                                         ),
                                         Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: Text(
                                             'login_continue_prompt'.tr(),
-                                            style:
-                                                const TextStyle(color: Colors.grey),
+                                            style: const TextStyle(
+                                                color: Colors.grey),
                                           ),
                                         ),
                                         const Expanded(
-                                          child: Divider(
-                                              thickness: 2,
-                                              color: Color(0xff6A145D)),
+                                          child: Divider(),
                                         ),
                                       ],
                                     ),

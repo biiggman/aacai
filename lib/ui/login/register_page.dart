@@ -37,7 +37,6 @@ class _RegisterPageState extends State<RegisterPage> {
         _focusPassword.unfocus();
       },
       child: Scaffold(
-        backgroundColor: const Color.fromARGB(255, 225, 225, 225),
         //top bar
         appBar: AppBar(
             title: Text('register_title'.tr()),
@@ -110,10 +109,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                     color: Colors.red,
                                   ),
                                 ),
-                                focusedBorder: const OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Color(0xff6A145D))),
-                                fillColor: const Color(0xffABC99B),
                                 filled: true),
                           ),
                           //password status validator
@@ -178,7 +173,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                       }
                                     }
                                   },
-                                  child: UITemplates.buttonDeco(
+                                  child: buttonDeco(
                                       displayText: "register_signup_deco".tr(),
                                       vertInset: 24),
                                 ),

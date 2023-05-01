@@ -141,7 +141,7 @@ class _GridviewPageState extends State<GridviewPage> {
                       ScaffoldMessenger.of(context).removeCurrentSnackBar();
                       ScaffoldMessenger.of(context)
                           .showSnackBar(FireAuth.customSnackBar(
-                        content: 'Portrait columns set to 1!',
+                        content: "settings_gridviewpage_portrait_1x1_true".tr(),
                         color: Colors.green,
                       ));
                     }),
@@ -184,7 +184,8 @@ class _GridviewPageState extends State<GridviewPage> {
                       ScaffoldMessenger.of(context).removeCurrentSnackBar();
                       ScaffoldMessenger.of(context)
                           .showSnackBar(FireAuth.customSnackBar(
-                        content: 'Landscape rows set to 1!',
+                        content:
+                            "settings_gridviewpage_landscape_1x1_true".tr(),
                         color: Colors.green,
                       ));
                     }),
@@ -243,20 +244,6 @@ class _LanguagePageState extends State<LanguagePage> {
               tiles: <SettingsTile>[
                 SettingsTile.navigation(
                   leading: const Icon(Icons.language),
-                  title: Text('settings_languagepage_es_ES_btn'.tr()),
-                  onPressed: (BuildContext context) {
-                    context.setLocale(const Locale('es', 'ES'));
-                    langCtrlVariable.onLanguageChanged();
-                    ScaffoldMessenger.of(context).removeCurrentSnackBar();
-                    ScaffoldMessenger.of(context)
-                        .showSnackBar(FireAuth.customSnackBar(
-                      content: 'settings_languagepage_es_ES_true'.tr(),
-                      color: Colors.green,
-                    ));
-                  },
-                ),
-                SettingsTile.navigation(
-                  leading: const Icon(Icons.language),
                   title: Text('settings_languagepage_en_US_btn'.tr()),
                   onPressed: (BuildContext context) {
                     context.setLocale(const Locale('en', 'US'));
@@ -267,8 +254,29 @@ class _LanguagePageState extends State<LanguagePage> {
                       content: 'settings_languagepage_en_US_true'.tr(),
                       color: Colors.green,
                     ));
+                    setState(() {
+                      currentLanguage = "en-US";
+                    });
                   },
                 ),
+                SettingsTile.navigation(
+                  leading: const Icon(Icons.language),
+                  title: Text('settings_languagepage_es_ES_btn'.tr()),
+                  onPressed: (BuildContext context) {
+                    context.setLocale(const Locale('es', 'ES'));
+                    langCtrlVariable.onLanguageChanged();
+                    ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(FireAuth.customSnackBar(
+                      content: 'settings_languagepage_es_ES_true'.tr(),
+                      color: Colors.green,
+                    ));
+
+                    setState(() {
+                      currentLanguage = "es-ES";
+                    });
+                  },
+                )
               ])
         ]));
   }
@@ -315,53 +323,53 @@ class _SettingsPageState extends State<SettingsPage> {
       body: SettingsList(
         sections: [
           if (_isLoggedIn)
-          SettingsSection(
-            title: Text('settings_acct_header'.tr()),
-            tiles: <SettingsTile>[
-              SettingsTile.navigation(
-                leading: const Icon(Icons.vpn_key),
-                trailing: const Icon(Icons.chevron_right),
-                title: Text('settings_acct_pwreset_nav'.tr()),
-                onPressed: (BuildContext context) {
-                  Navigator.of(context).push(CupertinoPageRoute(
-                    builder: (context) => const PasswordResetPage(),
-                  ));
-                },
-              ),
-              SettingsTile.navigation(
-                leading: const Icon(Icons.account_circle),
-                trailing: const Icon(Icons.chevron_right),
-                title: Text('settings_acct_emailreset_nav'.tr()),
-                onPressed: (BuildContext context) {
-                  Navigator.push(
-                      context,
-                      CupertinoPageRoute(
-                          builder: ((context) => const EmailResetPage())));
-                },
-              ),
-              SettingsTile.navigation(
-                leading: const Icon(Icons.logout),
-                trailing: const Icon(Icons.chevron_right),
-                title: Text('settings_acct_logout'.tr()),
-                onPressed: (BuildContext context) async {
-                  if (user != null) {
-                    setState(() {
-                      _isSigningOut = true;
-                    });
-                    await FirebaseAuth.instance.signOut();
-                    setState(() {
-                      _isSigningOut = false;
-                    });
-                    Navigator.of(context).pushReplacement(
-                      CupertinoPageRoute(
-                        builder: (context) => const LoginPage(),
-                      ),
-                    );
-                  }
-                },
-              ),
-            ],
-          ),
+            SettingsSection(
+              title: Text('settings_acct_header'.tr()),
+              tiles: <SettingsTile>[
+                SettingsTile.navigation(
+                  leading: const Icon(Icons.vpn_key),
+                  trailing: const Icon(Icons.chevron_right),
+                  title: Text('settings_acct_pwreset_nav'.tr()),
+                  onPressed: (BuildContext context) {
+                    Navigator.of(context).push(CupertinoPageRoute(
+                      builder: (context) => const PasswordResetPage(),
+                    ));
+                  },
+                ),
+                SettingsTile.navigation(
+                  leading: const Icon(Icons.account_circle),
+                  trailing: const Icon(Icons.chevron_right),
+                  title: Text('settings_acct_emailreset_nav'.tr()),
+                  onPressed: (BuildContext context) {
+                    Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                            builder: ((context) => const EmailResetPage())));
+                  },
+                ),
+                SettingsTile.navigation(
+                  leading: const Icon(Icons.logout),
+                  trailing: const Icon(Icons.chevron_right),
+                  title: Text('settings_acct_logout'.tr()),
+                  onPressed: (BuildContext context) async {
+                    if (user != null) {
+                      setState(() {
+                        _isSigningOut = true;
+                      });
+                      await FirebaseAuth.instance.signOut();
+                      setState(() {
+                        _isSigningOut = false;
+                      });
+                      Navigator.of(context).pushReplacement(
+                        CupertinoPageRoute(
+                          builder: (context) => const LoginPage(),
+                        ),
+                      );
+                    }
+                  },
+                ),
+              ],
+            ),
           SettingsSection(
             title: Text('settings_page_top'.tr()),
             tiles: <SettingsTile>[
@@ -414,11 +422,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       applicationLegalese: '©2023 AAC.AI',
                       children: [
                         const SizedBox(height: 24),
-                        const Text(
-                            '''AAC.AI is a free and feature-rich AAC (Augmentative Alternative Communication) application that is available on both iOS and Android. 
-                        \nThis application is targeted at kids with disabilities that prevent them from verbal communication, including language, speech, child-onset fluency, and social communications disorders. 
-                        \nAAC.AI allows the user to communicate with a series of images using a fully customizable imageboard and provides the ability to explore the world around them using Real Time Object Detection powered by YoloV2-Tiny. 
-                        \nThis application was created for the flagship Software Engineering project at Sam Houston State University'''),
+                        Text('settings_about'.tr()),
                         const Divider(color: Colors.black),
                       ],
                     );

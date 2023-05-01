@@ -7,7 +7,6 @@ import 'package:aacademic/ui/imageboard_ui.dart/custom_appbar.dart';
 import 'package:aacademic/camera/camera_page.dart';
 import 'package:aacademic/firebase/fire_auth.dart';
 import 'package:aacademic/firebase/validator.dart';
-import 'package:aacademic/ui/imageboard_ui.dart/custom_appbar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:aacademic/ui/login/login_page.dart';
 import 'package:aacademic/ui/settings/settings_page.dart';
@@ -23,6 +22,7 @@ import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:aacademic/firebase/firebase_options.dart';
 import 'package:aacademic/utils/imageboard_utils.dart';
+import 'package:flutter_pw_validator/Resource/Strings.dart';
 import 'package:provider/provider.dart';
 
 //current language selected
@@ -85,9 +85,7 @@ class MyApp extends StatelessWidget {
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,
-      home: //const LoginPage()
-
-          //ROUTE FOR HOMEPAGE THAT CHECKS FOR LOGIN. NEEDS ROUTE TO ACCOUNT IN SETTINGS TO AVOID SOFTLOCK OUT OF LOGIN PAGE
+      home: //ROUTE FOR HOMEPAGE THAT CHECKS FOR LOGIN. IF LOGGED IN BOOTS TO HOMEPAGE. IF NOT, BOOTS TO LOGIN PAGE
           FutureBuilder(
               future: FirebaseAuth.instance.authStateChanges().first,
               builder: (context, AsyncSnapshot<User?> snapshot) {
@@ -198,6 +196,7 @@ class _MyHomePageState extends State<MyHomePage> {
     switch (index) {
       case 0:
         {
+          //ADD MENU
           ImageboardUtils imageboardUtils = ImageboardUtils();
           showDialog(
               context: context,
@@ -212,11 +211,6 @@ class _MyHomePageState extends State<MyHomePage> {
                       title: Text(
                         'main_add_hint'.tr(),
                         textAlign: TextAlign.center,
-                      ),
-                      titleTextStyle: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                        color: Color(0xff6A145D),
                       ),
                       content: Padding(
                           padding: const EdgeInsets.all(5),
@@ -465,11 +459,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                   }
                                                                 }
                                                               }
+                                                              //drop down menu for folder
                                                               return DropdownButtonFormField(
-                                                                  decoration: UITemplates
-                                                                      .textFieldDeco(
-                                                                          hintText:
-                                                                              'Select Folder'),
+                                                                  decoration: UITemplates.textFieldDeco(
+                                                                      hintText:
+                                                                          'main_select_fodler'
+                                                                              .tr()),
                                                                   value:
                                                                       _selectedFolder,
                                                                   items:
@@ -507,13 +502,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                                               });
                                                             });
                                                           },
-                                                          child: UITemplates
-                                                              .buttonDeco(
-                                                                  displayText:
-                                                                      "main_camera_img_src"
-                                                                          .tr(),
-                                                                  vertInset:
-                                                                      10),
+                                                          child: buttonDeco(
+                                                              displayText:
+                                                                  "main_camera_img_src"
+                                                                      .tr(),
+                                                              vertInset: 10),
                                                         ),
                                                         const SizedBox(
                                                             height: 10),
@@ -599,7 +592,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                         FireAuth
                                                                             .customSnackBar(
                                                                   content:
-                                                                      'Button added! Pull down to refresh',
+                                                                      'main_button_add_true'
+                                                                          .tr(),
                                                                   color: Colors
                                                                       .green,
                                                                 ));
@@ -640,20 +634,19 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                         FireAuth
                                                                             .customSnackBar(
                                                                   content:
-                                                                      'Button added! Pull down to refresh',
+                                                                      'main_folder_add_true'
+                                                                          .tr(),
                                                                   color: Colors
                                                                       .green,
                                                                 ));
                                                               }
                                                             }
                                                           },
-                                                          child: UITemplates
-                                                              .buttonDeco(
-                                                                  displayText:
-                                                                      'main_add_btn'
-                                                                          .tr(),
-                                                                  vertInset:
-                                                                      10),
+                                                          child: buttonDeco(
+                                                              displayText:
+                                                                  'main_add_btn'
+                                                                      .tr(),
+                                                              vertInset: 10),
                                                         ),
                                                       ),
                                                       const SizedBox(width: 10),
@@ -668,13 +661,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                                             _isFolderChecked =
                                                                 false;
                                                           },
-                                                          child: UITemplates
-                                                              .buttonDeco(
-                                                                  displayText:
-                                                                      'main_cancel_btn'
-                                                                          .tr(),
-                                                                  vertInset:
-                                                                      10),
+                                                          child: buttonDeco(
+                                                              displayText:
+                                                                  'main_cancel_btn'
+                                                                      .tr(),
+                                                              vertInset: 10),
                                                         ),
                                                       ),
                                                     ],
@@ -687,6 +678,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               )))),
                 );
               }).then((_) {
+            //when dialog box is closed, resets these variables
             setState(() {
               _selectedImage = null;
               _isButtonChecked = false;
@@ -698,6 +690,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
       case 1:
         {
+          //KEYBOARD
           showModalBottomSheet<void>(
               context: context,
               isScrollControlled: true,
@@ -718,19 +711,20 @@ class _MyHomePageState extends State<MyHomePage> {
                           maxLines: null,
                           autocorrect: true,
                           expands: true,
-                          decoration: const InputDecoration(
-                              hintText: "Text to Speech",
-                              hintStyle: TextStyle(color: Colors.white),
-                              enabledBorder: OutlineInputBorder(
+                          decoration: InputDecoration(
+                              hintText: 'main_tts_hint'.tr(),
+                              hintStyle: const TextStyle(color: Colors.white),
+                              enabledBorder: const OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.white),
                               ),
-                              focusedBorder: OutlineInputBorder(
+                              focusedBorder: const OutlineInputBorder(
                                   borderSide:
                                       BorderSide(color: Color(0xff6A145D))),
-                              fillColor: Color(0xffABC99B),
+                              fillColor: const Color(0xffABC99B),
                               filled: true),
                         ),
                       ),
+                      //enter button
                       IconButton(
                           onPressed: () {
                             TextToSpeech.speak(_textEditingController.text);
@@ -741,12 +735,14 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ));
               }).then((_) {
+            //when text is entered, the text in the box is cleared. same for exiting the dialog
             _textEditingController.clear();
           });
         }
         break;
 
       case 2:
+        //"home" button. all it does is set the selected folder back to null
         setState(() {
           _selectedFolderButtons = [];
         });
@@ -755,12 +751,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
       case 3:
         {
+          //camera, waits till camera is available
           await availableCameras().then((value) => Navigator.push(context,
               CupertinoPageRoute(builder: (_) => CameraPage(cameras: value))));
         }
         break;
 
       case 4:
+      //settings page
         Navigator.of(context).push(CupertinoPageRoute(
           builder: (context) => const SettingsPage(),
         ));
@@ -808,7 +806,7 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             Text(
               name,
-              style: const TextStyle(fontSize: 16, color: Colors.black),
+              style: const TextStyle(fontSize: 16),
             ),
           ],
         )
@@ -827,12 +825,15 @@ class _MyHomePageState extends State<MyHomePage> {
     RawMaterialButton button = RawMaterialButton(
       onPressed: () {
         print(folderId);
+        //links folder to buttons in said folder
         List<RawMaterialButton>? folderButtons = folderButtonsMap[folderId];
         print(folderButtons);
+        //changes imageboard filter to show buttons in the folder
         onFolderSelect(folderButtons ?? []);
         TextToSpeech.speak(name);
       },
       onLongPress: () {
+        //delete dialog
         showDialog(
             context: context,
             builder: (BuildContext context) {
@@ -852,7 +853,7 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             Text(
               name,
-              style: const TextStyle(fontSize: 16, color: Colors.black),
+              style: const TextStyle(fontSize: 16),
             ),
           ],
         )
@@ -870,6 +871,7 @@ class _MyHomePageState extends State<MyHomePage> {
         .orderBy('image_color', descending: true)
         .get();
 
+    //list for buttons
     List<RawMaterialButton> buttons = [];
 
     for (var doc in imageboardRef.docs) {
@@ -959,8 +961,9 @@ class _MyHomePageState extends State<MyHomePage> {
       int aColorValue = (a.shape as RoundedRectangleBorder).side.color.value;
       int bColorValue = (b.shape as RoundedRectangleBorder).side.color.value;
 
-      return aColorValue.compareTo(bColorValue);
+      return aColorValue.compareTo(aColorValue);
     });
+
     setState(() {
       _buttons = buttons;
     });
@@ -1002,25 +1005,26 @@ class _MyHomePageState extends State<MyHomePage> {
             bottomNavigationBar: BottomNavigationBar(
               type: BottomNavigationBarType.fixed,
               key: navKey,
-              items: const <BottomNavigationBarItem>[
+              items: <BottomNavigationBarItem>[
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.add),
-                  label: 'Add',
+                  icon: const Icon(Icons.add),
+                  label: 'main_add_btn'.tr(),
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.keyboard),
-                  label: 'Keyboard',
+                  icon: const Icon(Icons.keyboard),
+                  label: 'navBar_keyboard'.tr(),
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.home),
-                  label: 'Home',
+                  icon: const Icon(Icons.home),
+                  label: 'navBar_home'.tr(),
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.camera),
-                  label: 'Camera',
+                  icon: const Icon(Icons.camera),
+                  label: 'navBar_Camera'.tr(),
                 ),
                 BottomNavigationBarItem(
-                    icon: Icon(Icons.settings), label: 'Settings'),
+                    icon: const Icon(Icons.settings),
+                    label: 'navBar_Settings'.tr()),
               ],
               onTap: _onItemTapped,
               currentIndex: 2,

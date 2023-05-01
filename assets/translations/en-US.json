@@ -2,6 +2,13 @@
     "color_button_title": "Select Color",
     "color_button_deco_displaytext": "Color",
 
+    "del_menu_prompt": "Delete Item?",
+    "del_menu_warning": "Doing this will delete the item along with all of its data",
+    "del_menu_cancel_btn": "CANCEL",
+    "del_menu_accept_btn": "ACCEPT",
+    "del_menu_folder_delete": "Folder successfully deleted! Pull down to refresh!",
+    "del_menu_button_delete": "Button successfully deleted! Pull down to refresh!",
+
     "forgot_pw_appbar_title": "Forgot Password",
     "forgot_pw_deco_hint": "Email",
     "forgot_pw_button_deco_text": "Reset Password",
@@ -22,12 +29,56 @@
     "profile_signout": "Sign out",
     "profile_home_nav": "Go to Home",
 
+    "email_rstpage_title": "Change Email",
+    "email_rstpage_newval_hint": "New Email",
+
+    "pw_rstpage_title": "Change Password",
+    "pw_rstpage_currentpw": "Current Password",
+    "pw_rstpage_newpw": "New Password",
+    "pw_rstpage_newpw_meet_req_true": "New password meets requirements",
+    "pw_rstpage_change_prompt": "Change Password",
+
     "register_title": "Register",
     "register_name_deco": "Name",
     "register_email_deco": "Email",
     "register_pw_hint": "Password",
     "register_pw_verify_pos": "Password meets requirements",
     "register_signup_deco": "Sign Up",
+
+    "register_pwChecker_sixChar": "At least 6 characters",
+    "regiser_pwChecker_lower": "1 Lowercase letter",
+    "regiser_pwChecker_upper": "1 Uppercase letter",
+    "regiser_pwChecker_number": "1 Numeric character",
+    "regiser_pwChecker_special": "1 Special character",
+
+    "fireAuth_snackbar_pwWeak": "The password provided is too weak",
+    "fireAuth_snackbar_pwExist": "Account already exists for that email",
+    "fireAuth_snackbar_accNo": "No account found for that email",
+    "fireAuth_snackbar_pwWrong": "Incorrect password provided",
+    "fireAuth_snackbar_accExist": "An account already exists with a different credential",
+    "fireAuth_snackbar_credError": "Error occurred while accessing credentials. Try again.",
+    "fireAuth_snackbar_gooError": "Error occurred using Google Sign In. Try again.",
+    "fireAuth_snackbar_signOError": "Error signing out. Try again.",
+    "fireAuth_snackbar_pwEmail": "Password reset email sent",
+    "fireAuth_snackbar_pwChange": "Password changed!",
+    "fireAuth_snackbar_pwChangeErr": "Error changing password, please check current password",
+    "fireAuth_snackbar_emailChange": "Email changed!",
+    "fireAuth_snackbar_emailChangeErr": "Error changing Email, please try again",
+
+    "validator_nameEmp": "Name can't be empty",
+    "validator_emailEmp": "Email can't be empty",
+    "validator_validEmail": "Enter a valid email",
+    "validator_pwEmpty": "Password can't be empty",
+    "validator_pwSix": "Enter a password of at least 6 characters",
+    "validator_pwUpper": "Password must contain at least one uppercase letter",
+    "validator_pwLower": "Password must contain at least one lowercase letter",
+    "validator_pwNumber": "Password must contain at least one number",
+    "validator_pwSpecial": "Password must contain at least one special character",
+
+    "delete_item": "Delete Item?",
+    "delete_caution": "Doing this will delete the item along with all of its data",
+    "delete_FolSuccess": "Folder successfully deleted! Pull down to refresh!",
+    "delete_ButSuccess": "Button successfully deleted! Pull down to refresh!",
 
     "settings_themepage_top": "Settings",
     "settings_themepage_header": "Themes",
@@ -44,17 +95,24 @@
 
     "settings_pwresetpage_top": "Settings",
     "settings_pwresetpage_header": "Change Password",
+    "settings_pwresetpage_current": "Current Password",
+    "settings_pwresetpage_new": "New Password",
+    "settings_pwresetpage_success": "New password meets requirements",
+    "settings_pwresetpage_change": "Change Password",
     "settings_pwresetpage_tile": "Password Reset",
 
     "settings_emailrstpage_top": "Settings",
     "settings_emailrstpage_header": "Change Email",
+    "settings_emailrstpage_new": "New Email",
     "settings_emailrstpage_tile": "Email Reset",
 
     "settings_gridviewpage_top": "Settings",
     "settings_gridviewpage_portrait_header": "Portrait",
+    "settings_gridviewpage_portrait_1x1_true": "Portrait columns set to 1!",
     "settings_gridviewpage_portrait_2x2_true": "Portrait columns set to 2!",
     "settings_gridviewpage_portrait_3x3_true": "Portrait columns set to 3!",
     "settings_gridviewpage_landscape_header": "Landscape",
+    "settings_gridviewpage_landscape_1x1_true": "Landscape rows set to 1!",
     "settings_gridviewpage_landscape_2x2_true": "Landscape rows set to 2!",
     "settings_gridviewpage_landscape_3x3_true": "Landscape rows set to 3!",
 
@@ -77,9 +135,13 @@
     "settings_legal_about": "About",
     "Settings_legal_priv_pol": "Privacy Policy",
 
+    "settings_about": "AAC.AI is a free and feature-rich AAC (Augmentative Alternative Communication) application that is available on both iOS and Android. \nThis application is targeted at kids with disabilities that prevent them from verbal communication, including language, speech, child-onset fluency, and social communications disorders. \n\nAAC.AI allows the user to communicate with a series of images using a fully customizable imageboard and provides the ability to explore the world around them using Real Time Object Detection powered by YoloV2-Tiny. \n\nThis application was created for the flagship Software Engineering project at Sam Houston State University",
+
+    
+
     "imageboard_utils": "",
 
-    "main_tts_hint": "Text to Speech -DEFUNCT- ",
+    "main_tts_hint": "Text to Speech",
     "main_add_hint": "Add a New Button or Folder",
     "main_template_hint": "Name",
     "main_btnadd_btn": "Button",
@@ -88,11 +150,21 @@
     "main_camera_img_src": "Camera Roll",
     "main_button_add_false": "Please finish making selections",
     "main_button_add_true": "Button added! Pull down to refresh",
+    "main_folder_add_true": "Folder added! Pull down to refresh",
     "main_add_btn": "Add",
     "main_cancel_btn": "Cancel",
     "main_del_prompt": "Delete Button?",
     "main_del_prompt_confirm": "Are you sure you want to delete this item? It will be permanently deleted along with all of its contents.",
     "main_del_prompt_acc": "Accept",
-    "main_del_prompt_rej": "Cancel" 
+    "main_del_prompt_rej": "Cancel",
+
+    "navBar_keyboard": "Keyboard",
+    "navBar_home": "Home",
+    "navBar_Camera": "Camera",
+    "navBar_Settings": "Settings"
+
+
+
+    
 
 }
