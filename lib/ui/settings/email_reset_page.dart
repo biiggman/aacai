@@ -29,15 +29,11 @@ class _EmailResetPageState extends State<EmailResetPage> {
         _focusNewEmail.unfocus();
       },
       child: Scaffold(
-        //page background color
-        backgroundColor: const Color.fromARGB(255, 225, 225, 225),
         //top bar
         appBar: AppBar(
             title: Text('email_rstpage_title'.tr()),
-            titleTextStyle: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-                color: Colors.white)),
+            titleTextStyle:
+                const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
         body: Padding(
           padding: const EdgeInsets.all(24.0),
           child: Center(

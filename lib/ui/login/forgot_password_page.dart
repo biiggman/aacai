@@ -27,15 +27,13 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         _focusEmail.unfocus();
       },
       child: Scaffold(
-        //page background color
-        backgroundColor: const Color.fromARGB(255, 225, 225, 225),
         //top bar
         appBar: AppBar(
             title: Text('forgot_pw_appbar_title'.tr()),
             titleTextStyle: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-                color: Colors.white)),
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            )),
         body: Padding(
           padding: const EdgeInsets.all(24.0),
           child: Center(
