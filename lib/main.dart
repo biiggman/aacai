@@ -132,7 +132,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Color? buttonColor;
   File? _selectedImage;
   String? _selectedFolder;
-
+  
   //buttonUtils class
   ButtonUtils buttonUtils = ButtonUtils();
 
@@ -466,10 +466,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                 }
                                                               }
                                                               return DropdownButtonFormField(
-                                                                  decoration: UITemplates
-                                                                      .textFieldDeco(
-                                                                          hintText:
-                                                                              'main_select_fodler'.tr()),
+                                                                  decoration: UITemplates.textFieldDeco(
+                                                                      hintText:
+                                                                          'main_select_fodler'
+                                                                              .tr()),
                                                                   value:
                                                                       _selectedFolder,
                                                                   items:
@@ -599,7 +599,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                         FireAuth
                                                                             .customSnackBar(
                                                                   content:
-                                                                      'main_button_add_true'.tr(),
+                                                                      'main_button_add_true'
+                                                                          .tr(),
                                                                   color: Colors
                                                                       .green,
                                                                 ));
@@ -640,7 +641,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                         FireAuth
                                                                             .customSnackBar(
                                                                   content:
-                                                                      'main_folder_add_true'.tr(),
+                                                                      'main_folder_add_true'
+                                                                          .tr(),
                                                                   color: Colors
                                                                       .green,
                                                                 ));
@@ -1021,7 +1023,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   label: 'navBar_Camera'.tr(),
                 ),
                 BottomNavigationBarItem(
-                    icon: const Icon(Icons.settings), label: 'navBar_Settings'.tr()),
+                    icon: const Icon(Icons.settings),
+                    label: 'navBar_Settings'.tr()),
               ],
               onTap: _onItemTapped,
               currentIndex: 2,
