@@ -751,12 +751,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
       case 3:
         {
+          //camera, waits till camera is available
           await availableCameras().then((value) => Navigator.push(context,
               CupertinoPageRoute(builder: (_) => CameraPage(cameras: value))));
         }
         break;
 
       case 4:
+      //settings page
         Navigator.of(context).push(CupertinoPageRoute(
           builder: (context) => const SettingsPage(),
         ));
@@ -823,12 +825,15 @@ class _MyHomePageState extends State<MyHomePage> {
     RawMaterialButton button = RawMaterialButton(
       onPressed: () {
         print(folderId);
+        //links folder to buttons in said folder
         List<RawMaterialButton>? folderButtons = folderButtonsMap[folderId];
         print(folderButtons);
+        //changes imageboard filter to show buttons in the folder
         onFolderSelect(folderButtons ?? []);
         TextToSpeech.speak(name);
       },
       onLongPress: () {
+        //delete dialog
         showDialog(
             context: context,
             builder: (BuildContext context) {
@@ -866,6 +871,7 @@ class _MyHomePageState extends State<MyHomePage> {
         .orderBy('image_color', descending: true)
         .get();
 
+    //list for buttons
     List<RawMaterialButton> buttons = [];
 
     for (var doc in imageboardRef.docs) {
