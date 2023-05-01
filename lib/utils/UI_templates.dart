@@ -7,6 +7,8 @@ class UITemplates {
   static InputDecoration textFieldDeco({required String hintText}) {
     return (InputDecoration(
         hintText: hintText,
+        enabledBorder: const OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.white)),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(6.0),
           borderSide: const BorderSide(
