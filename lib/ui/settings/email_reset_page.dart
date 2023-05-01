@@ -1,5 +1,6 @@
 import 'package:aacademic/firebase/validator.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:aacademic/firebase/fire_auth.dart';
 import 'package:aacademic/utils/UI_templates.dart';

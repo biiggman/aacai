@@ -23,7 +23,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
   //speaks list as a sentence
   void _speakSentence() {
     setState(() {
-      String sentence = widget.buttonsName.join(' ');
+      String sentence = widget.buttonsName.join(', ');
       TextToSpeechSentence.speak(sentence);
     });
   }
@@ -54,6 +54,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
       centerTitle: false,
       automaticallyImplyLeading: false,
       actions: widget.buttons.isNotEmpty
+      //icons only appear when a button is selected
           ? <Widget>[
               IconButton(
                 onPressed: _speakSentence,
