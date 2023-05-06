@@ -54,16 +54,8 @@ void main() async {
         fallbackLocale: const Locale('en', 'US'),
         child: const MyApp(),
       )
-      /*ChangeNotifierProvider<ThemeModel>(
-      create: ((context) => ThemeModel()),
-      child: EasyLocalization(
-        supportedLocales: const [Locale('en', 'US'), Locale('es', 'ES')],
-        path: 'assets/translations/',
-        fallbackLocale: const Locale('en', 'US'),
-        child: const MyApp(),*/
-      ));
-
-  //const MyApp());
+    )
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -302,6 +294,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                       BorderRadius
                                                                           .circular(
                                                                               8.0)),
+                                                              //does not allow both folder and button
+                                                              //to be checked at the same time
                                                               value:
                                                                   _isButtonChecked,
                                                               onChanged: (bool?
@@ -368,6 +362,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                       BorderRadius
                                                                           .circular(
                                                                               8.0)),
+                                                              //does not allow both folder and button
+                                                              //to be checked at the same time
                                                               value:
                                                                   _isFolderChecked,
                                                               onChanged: (bool?
@@ -766,17 +762,21 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  //create button parameters
+  //logic for creating a button based on data the user inputs
   RawMaterialButton createButton(String name, String location, Color color,
       bool inFolder, String DocID, String folderID) {
     RawMaterialButton button = RawMaterialButton(
       key: Key(name),
       onPressed: () {
+        //when a button is pressed, a copy of the copy is created in addButtonToList
+        //and added to a list to work with the button stringing feature
         setState(() {
           buttonUtils.addButtonToList(name, location, color);
           TextToSpeech.speak(name);
         });
       },
+      //delete menu is shown when a button is long pressed. this is the same for
+      //folders
       onLongPress: () {
         showDialog(
             context: context,
@@ -815,6 +815,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return button;
   }
 
+  //logic for creating a folder based on the data the user inputs
   RawMaterialButton createFolder(
       String name,
       Color color,
@@ -862,7 +863,9 @@ class _MyHomePageState extends State<MyHomePage> {
     return button;
   }
 
+  //logic for populating the imageboard with buttons from the database
   Future<void> populateButtons() async {
+    //iterates through all buttons that will not be in a folder
     QuerySnapshot<Map<String, dynamic>> imageboardRef = await FirebaseFirestore
         .instance
         .collection('user-information')
@@ -886,8 +889,10 @@ class _MyHomePageState extends State<MyHomePage> {
       Color buttonColor = Color(colorValue);
       bool inFolder = false;
 
+      //button is created from data in database
       RawMaterialButton imageButton = createButton(buttonName, buttonLocation,
           buttonColor, inFolder = false, doc.id, "");
+      //buttons added to imageboard list
       buttons.add(imageButton);
     }
 
@@ -903,6 +908,7 @@ class _MyHomePageState extends State<MyHomePage> {
     //data map of buttons within a respected folder
     Map<String, List<RawMaterialButton>> folderButtonsMap = {};
 
+    //iterates through each folder a user has
     for (var folderDoc in folderRef.docs) {
       if (folderDoc.id == 'initial') {
         continue;
@@ -946,13 +952,16 @@ class _MyHomePageState extends State<MyHomePage> {
         Color buttonColor = Color(colorValue);
         bool isFolder = false;
 
+        //folder is being created based off data in database
         RawMaterialButton imageButton = createButton(buttonName, buttonLocation,
             buttonColor, isFolder, imageDoc.id, folderDoc.id);
         folderButtons.add(imageButton);
       }
 
+      //buttons in a folder are being tied to the parent folder
       folderButtonsMap[folderDoc.id] = folderButtons;
 
+      //folder button added to buttons list to be displayed on imageboard
       buttons.add(folderButton);
     }
 
@@ -964,6 +973,7 @@ class _MyHomePageState extends State<MyHomePage> {
       return aColorValue.compareTo(aColorValue);
     });
 
+    //updates the list of buttons (changes when folder is pressed and when refresh)
     setState(() {
       _buttons = buttons;
     });
@@ -971,6 +981,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    //willpopscope makes it so the user cannot go back to the previous page
+    //after coming to the imageboard. stops users from going back to login page
     return WillPopScope(
         onWillPop: () async => false,
         child: OrientationBuilder(builder: ((context, orientation) {
@@ -988,6 +1000,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: _loading
                         ? const CircularProgressIndicator()
                         : GridView.count(
+                          //decides grid orientation based on phone orientation
                             scrollDirection: orientation == Orientation.portrait
                                 ? Axis.vertical
                                 : Axis.horizontal,
@@ -1000,6 +1013,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                 orientation == Orientation.portrait ? 20 : 5,
                             padding: const EdgeInsets.all(15),
                             children: _selectedFolderButtons.isNotEmpty
+                            //if a folder is selected, the grid will only populate
+                            //with the buttons in that folder. if no folder is selected
+                            //grid will populate with all buttons not in folders
+                            //and folders
                                 ? _selectedFolderButtons
                                 : _buttons))),
             bottomNavigationBar: BottomNavigationBar(

@@ -283,7 +283,7 @@ class _LanguagePageState extends State<LanguagePage> {
 }
 
 //************************************************************** */
-
+//settings layout
 class _SettingsPageState extends State<SettingsPage> {
   String? data;
   bool _isLoggedIn = false;

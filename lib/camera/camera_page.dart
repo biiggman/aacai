@@ -18,9 +18,9 @@ class _CameraPageState extends State<CameraPage> {
   late List recognitionsList = [];
   bool predicting = false;
 
-
   //initializes camera on startup
   initCamera() {
+    //sets resolution to max, then starts image stream and runs model on stream
     cameraController =
         CameraController(widget.cameras[0], ResolutionPreset.max);
     cameraController.initialize().then((value) {
@@ -54,12 +54,12 @@ class _CameraPageState extends State<CameraPage> {
       ))!;
 
       setState(() {
-        // update the state with new recognitions list and stop predicting
+        //update the state with new recognitions list and stop predicting
         recognitionsList;
         predicting = false;
       });
     } catch (e) {
-      // handle any exceptions and stop predicting
+      //handle any exceptions and stop predicting
       print("Failed to run model: $e");
       predicting = false;
     }
@@ -74,12 +74,14 @@ class _CameraPageState extends State<CameraPage> {
     );
   }
 
-   @override
-  
+  @override
+
   //disposes everything when camera is closed (hopefully crash is fixed)
   void dispose() {
     super.dispose();
 
+    //turns off camera controller if currently running before stopping model
+    //this was added to fix a crash that would happen after leaving the page
     if (cameraController != null && cameraController.value.isInitialized) {
       try {
         cameraController.stopImageStream();
@@ -110,13 +112,16 @@ class _CameraPageState extends State<CameraPage> {
     Color colorPick = Colors.pink;
 
     return recognitionsList.map((result) {
+      //maps over list and creates a position widget for each recognition
       return Positioned(
+          //finds position of object and scales box based on screen size
           left: result["rect"]["x"] * factorX,
           top: result["rect"]["y"] * factorY,
           width: result["rect"]["w"] * factorX,
           height: result["rect"]["h"] * factorY,
           child: GestureDetector(
             onTap: () {
+              //speaks name of object when tapping on box
               TextToSpeech.speak(result["detectedClass"]);
             },
             child: Container(
@@ -125,6 +130,7 @@ class _CameraPageState extends State<CameraPage> {
                 border: Border.all(color: Colors.pink, width: 2.0),
               ),
               child: Text(
+                //displays object class and confidence level
                 "${result['detectedClass']} ${(result['confidenceInClass'] * 100).toStringAsFixed(0)}%",
                 style: TextStyle(
                   background: Paint()..color = colorPick,
@@ -140,6 +146,7 @@ class _CameraPageState extends State<CameraPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    //will be populated with boxes later
     List<Widget> list = [];
 
     list.add(
@@ -151,6 +158,8 @@ class _CameraPageState extends State<CameraPage> {
         child: SizedBox(
           height: size.height - 100,
           child: (!cameraController.value.isInitialized)
+              //if camera is not initialized (error) then will only pop up a black screen
+              //if camera is initialized then will preview camera screen
               ? Container()
               : AspectRatio(
                   aspectRatio: cameraController.value.aspectRatio,
@@ -160,8 +169,10 @@ class _CameraPageState extends State<CameraPage> {
       ),
     );
 
+    //show boxes
     list.addAll(displayBoxesAroundRecognizedObjects(size));
 
+    //back button and default UI stuff to make sure content fits screen
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.black,
